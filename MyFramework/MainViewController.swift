@@ -23,11 +23,11 @@ class MainViewController: UIViewController,AGSMapViewLayerDelegate {
 
 extension MainViewController {
     fileprivate func SetupUI(){
-        self.SetupMapView()
-        self.SetupBottomBar()
+        self.setupMapView()
+        self.setupBottomBar()
     }
     
-    private func SetupMapView(){
+    private func setupMapView(){
         
         SCGISUtility.registerESRI()
         mapView.frame = CGRect(x: 0, y: 0, width: kScreenWidth, height: kScrennHeight - kMainBottomTabBarHeight)
@@ -41,25 +41,25 @@ extension MainViewController {
 
         self.view.addSubview(mapView)
         
-        SetupLayerButton(pView : mapView)
-        SetupAddEventButton(pView : mapView)
+        setupLayerButton(pView : mapView)
+        setupAddEventButton(pView : mapView)
     }
     
-    private func SetupLayerButton(pView : UIView){
+    private func setupLayerButton(pView : UIView){
         let btn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: 120, width: 40, height: 40))
         btn.backgroundColor = .white
         btn.layer.borderColor = UIColor.black.cgColor
         pView.addSubview(btn)
     }
     
-    private func SetupAddEventButton(pView : UIView){
+    private func setupAddEventButton(pView : UIView){
         let btn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: 180, width: 40, height: 40))
         btn.backgroundColor = .white
         btn.layer.borderColor = UIColor.black.cgColor
         pView.addSubview(btn)
     }
     
-    private func SetupBottomBar(){
+    private func setupBottomBar(){
         let frame = CGRect(x: 0, y: kScrennHeight - kMainBottomTabBarHeight, width: kScreenWidth, height: kMainBottomTabBarHeight)
         
         let titles = ["任务","案件","我的"]
