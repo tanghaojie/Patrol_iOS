@@ -25,6 +25,7 @@ extension MainViewController {
     fileprivate func SetupUI(){
         self.setupMapView()
         self.setupBottomBar()
+       
     }
     
     private func setupMapView(){
