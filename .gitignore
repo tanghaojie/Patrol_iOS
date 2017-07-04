@@ -22,9 +22,10 @@ xcuserdata/
 *.xccheckout
 *.xcscmblueprint
 SCGCFrameworkV30.framework
+project.pbxproj
 
-
-## Obj-C/Swift specific
+#o
+ Obj-C/Swift specific
 *.hmap
 *.ipa
 *.dSYM.zip
