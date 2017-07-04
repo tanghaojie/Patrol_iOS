@@ -44,6 +44,7 @@ extension MainViewController {
         setupLayerButton(pView : mapView)
         setupAddEventButton(pView : mapView)
         setupLocationButton(pView: mapView)
+        
     }
     
     private func setupLayerButton(pView : UIView){
