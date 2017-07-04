@@ -23,6 +23,7 @@ xcuserdata/
 *.xcscmblueprint
 SCGCFrameworkV30.framework
 
+
 ## Obj-C/Swift specific
 *.hmap
 *.ipa
