@@ -43,6 +43,7 @@ extension MainViewController {
         
         setupLayerButton(pView : mapView)
         setupAddEventButton(pView : mapView)
+        setupLocationButton(pView: mapView)
     }
     
     private func setupLayerButton(pView : UIView){
@@ -54,6 +55,13 @@ extension MainViewController {
     
     private func setupAddEventButton(pView : UIView){
         let btn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: 180, width: 40, height: 40))
+        btn.backgroundColor = .white
+        btn.layer.borderColor = UIColor.black.cgColor
+        pView.addSubview(btn)
+    }
+    
+    private func setupLocationButton(pView : UIView){
+        let btn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: pView.frame.height - 40 - 20, width: 40, height: 40))
         btn.backgroundColor = .white
         btn.layer.borderColor = UIColor.black.cgColor
         pView.addSubview(btn)
@@ -71,6 +79,7 @@ extension MainViewController {
     }
 }
 
+//map
 extension MainViewController{
     func mapViewDidLoad(_ mapView: AGSMapView!) {
     
