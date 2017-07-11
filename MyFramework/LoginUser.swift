@@ -16,4 +16,5 @@ class LoginUser{
     var username : String?
     var rolename : String?
     var protraiurl : String?
+    var config : Config?
 }

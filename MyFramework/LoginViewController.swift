@@ -71,6 +71,8 @@ extension LoginViewController{
 extension LoginViewController: LoginDelegate{
     
     fileprivate func loginButtonClick(){
+//        self.present(MainViewController(), animated: true, completion: nil)
+//        return
         let user = username.text
         let pass = password.text
         
@@ -204,6 +206,13 @@ extension LoginViewController{
                         
                         self.activity.stopAnimating()
                         self.view.isUserInteractionEnabled = true
+                        
+                        loginUser?.config = Config(id: id!)
+                        if(!((loginUser?.config?.success)!)){
+                            let msg = loginUser?.config?.msg
+                            self.alertAndLog(msg: msg!, showTime: 0.5, log: msg!)
+                            return
+                        }
                         
                         self.saveDefaultUsernamePassword(username: user!, password: pass!)
                         self.present(MainViewController(), animated: true, completion: nil)

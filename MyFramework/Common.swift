@@ -21,7 +21,6 @@ extension UIColor{
     }
 }
 
-
 let kDBName = "appDB.sqlite"
 
 let kTableName_User = "T_User"
@@ -31,6 +30,7 @@ let kSql_SelectUserTableLast = "select * from '" + kTableName_User + "' order by
 func getInsertOrReplaceSql(username : String,password : String) -> String{
     return "insert or replace into '" + kTableName_User + "' (user,pass)values ('" + username + "','" + password + "')"
 }
+
 
 
 

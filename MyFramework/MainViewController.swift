@@ -12,6 +12,7 @@ import UIKit
 class MainViewController: UIViewController,AGSMapViewLayerDelegate {
     
     var mapView: AGSMapView! = AGSMapView()
+    var manager: LAXLocationManager = LAXLocationManager.init()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +46,6 @@ extension MainViewController {
         setupLayerButton(pView : mapView)
         setupAddEventButton(pView : mapView)
         setupLocationButton(pView: mapView)
-        
     }
     
     private func setupLayerButton(pView : UIView){
@@ -66,7 +66,12 @@ extension MainViewController {
         let btn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: pView.frame.height - 40 - 20, width: 40, height: 40))
         btn.backgroundColor = .white
         btn.layer.borderColor = UIColor.black.cgColor
+        btn.addTarget(self, action: #selector(locationButtonClicked), for: .touchUpInside)
         pView.addSubview(btn)
+    }
+    
+    func locationButtonClicked(){
+        
     }
     
     private func setupBottomBar(){

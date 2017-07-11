@@ -13,21 +13,28 @@ class TaskViewController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let leftBarBtn = UIBarButtonItem(title: "返回", style: .plain, target: self, action: #selector(TaskViewController.backToPrevious))
+        let sb = UIStoryboard(name: "TaskSB", bundle: nil)
+        let vc = sb.instantiateViewController(withIdentifier: "TaskSBViewController") as! TaskSBViewController
+        self.pushViewController(vc, animated: true)
+        
+        //let taskMain = TaskMainViewController()
+        //self.pushViewController(taskMain, animated: true)
+        
+        //let leftBarBtn = UIBarButtonItem(title: "返回", style: .plain, target: self, action: #selector(TaskViewController.backToPrevious))
         //self.navigationItem.leftBarButtonItem = leftBarBtn
-        
-        let v1=UIViewController()
-        v1.view.backgroundColor = .red
-        v1.navigationItem.leftBarButtonItem=leftBarBtn
-        self.pushViewController(v1, animated: true)
-        
-        let v2=UIViewController()
-        v2.view.backgroundColor = .blue
-        self.pushViewController(v2, animated: true)
-        
-        let v3=UIViewController()
-        v3.view.backgroundColor = .green
-        self.pushViewController(v3, animated: true)
+//        
+//        let v1=UIViewController()
+//        v1.view.backgroundColor = .red
+//        v1.navigationItem.leftBarButtonItem=leftBarBtn
+//        self.pushViewController(v1, animated: true)
+//        
+//        let v2=UIViewController()
+//        v2.view.backgroundColor = .blue
+//        self.pushViewController(v2, animated: true)
+//        
+//        let v3=UIViewController()
+//        v3.view.backgroundColor = .green
+//        self.pushViewController(v3, animated: true)
         
         
         
