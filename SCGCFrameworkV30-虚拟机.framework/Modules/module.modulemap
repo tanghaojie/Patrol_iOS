@@ -1,0 +1,6 @@
+framework module SCGCFrameworkV30 {
+  umbrella header "SCGCFrameworkV30.h"
+
+  export *
+  module * { export * }
+}
