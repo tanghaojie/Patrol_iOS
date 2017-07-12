@@ -13,6 +13,9 @@ let url_Login = "\(url_Main)/api/user/login"
 let url_Regist = "\(url_Main)/api/user/regist"
 let url_RegistUsernameUniqueCheck = "\(url_Main)/api/user/validateusername"
 let url_Config = "\(url_Main)/api/config/GetGroupConfig"
+let url_CurrentTask = "\(url_Main)/api/task/CurrentTask"
+let url_CreateTask = "\(url_Main)/api/task/CreateTask"
+let url_EndTask = "\(url_Main)/api/task/EndTask"
 
 let kShortTimeoutInterval = 5
 

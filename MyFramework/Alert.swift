@@ -16,6 +16,10 @@ let msg_PleaseEnterConfirmPassword = "请输入确认密码"
 let msg_PasswordDifferentBetweenInputs = "两次输入的密码不同"
 let msg_PleaseEnterRealname = "请输入姓名"
 let msg_PleaseEnterPhone = "请输入手机号"
+
+let msg_PleaseEnterTaskName = "请输入任务名"
+let msg_PleaseSelectTaskType = "请选择任务类型"
+
 let msg_ConnectTimeout = "连接超时"
 let msg_PleaseCheckNetworkSetting = "请检查网络设置"
 let msg_ServerNoResponse = "服务器未响应"

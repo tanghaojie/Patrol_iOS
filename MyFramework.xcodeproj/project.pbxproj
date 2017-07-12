@@ -45,6 +45,7 @@
 		6B93CED41F0E427E004E0890 /* TaskSB.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B93CED31F0E427E004E0890 /* TaskSB.storyboard */; };
 		6B93CED61F0E4384004E0890 /* TaskSBViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B93CED51F0E4384004E0890 /* TaskSBViewController.swift */; };
 		6B9585EF1F14A70A001A24A2 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9585EE1F14A70A001A24A2 /* Config.swift */; };
+		6B9585F11F15C424001A24A2 /* TaskModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9585F01F15C424001A24A2 /* TaskModel.swift */; };
 		6BAAD82C1EFCA62800FFE413 /* Web.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BAAD82B1EFCA62800FFE413 /* Web.swift */; };
 		6BAAD82E1EFCA75D00FFE413 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BAAD82D1EFCA75D00FFE413 /* Log.swift */; };
 		6BB823851EFBA32800468956 /* Regist.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6BB823841EFBA32800468956 /* Regist.storyboard */; };
@@ -108,9 +109,9 @@
 		6B93CED31F0E427E004E0890 /* TaskSB.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TaskSB.storyboard; sourceTree = "<group>"; };
 		6B93CED51F0E4384004E0890 /* TaskSBViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskSBViewController.swift; sourceTree = "<group>"; };
 		6B9585EE1F14A70A001A24A2 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		6B9585F01F15C424001A24A2 /* TaskModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskModel.swift; sourceTree = "<group>"; };
 		6BAAD82B1EFCA62800FFE413 /* Web.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Web.swift; sourceTree = "<group>"; };
 		6BAAD82D1EFCA75D00FFE413 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
-		6BB823831EFB9B1E00468956 /* test.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = test.playground; sourceTree = "<group>"; };
 		6BB823841EFBA32800468956 /* Regist.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Regist.storyboard; sourceTree = "<group>"; };
 		6BB823861EFBA83800468956 /* RegistViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistViewController.swift; sourceTree = "<group>"; };
 		6BB823881EFBBEB400468956 /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
@@ -192,6 +193,7 @@
 			children = (
 				6B2B08601F02337000B99B5C /* T_User.swift */,
 				6B6C62211F04EB38000FC91B /* RegistModel.swift */,
+				6B9585F01F15C424001A24A2 /* TaskModel.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -262,7 +264,6 @@
 			isa = PBXGroup;
 			children = (
 				6B1BDEA81EEBB9C600B29DA8 /* test.storyboard */,
-				6BB823831EFB9B1E00468956 /* test.playground */,
 			);
 			name = Other;
 			sourceTree = "<group>";
@@ -448,6 +449,7 @@
 				6BB823871EFBA83800468956 /* RegistViewController.swift in Sources */,
 				6B5590461EF12078008149FD /* LoginViewController.swift in Sources */,
 				6BAAD82E1EFCA75D00FFE413 /* Log.swift in Sources */,
+				6B9585F11F15C424001A24A2 /* TaskModel.swift in Sources */,
 				6B2B08611F02337000B99B5C /* T_User.swift in Sources */,
 				6BF046EE1EF2296F006C362E /* TaskViewController.swift in Sources */,
 				6B72E4071F0639340041EAD4 /* Validate.swift in Sources */,

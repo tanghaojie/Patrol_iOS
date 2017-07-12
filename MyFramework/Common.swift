@@ -15,6 +15,15 @@ let kMainBottomTabBarHeight : CGFloat = 40
 
 let kDateTimeFormate = "yyyy-MM-dd HH:mm:ss"
 
+func getDateFormatter(dateFormatter : String) -> DateFormatter{
+    let kFormatter = DateFormatter()
+    kFormatter.timeZone = TimeZone(identifier: "UTC")
+    kFormatter.locale = Locale(identifier: "zh_CN")
+    kFormatter.dateFormat = dateFormatter
+    return kFormatter
+}
+
+
 extension UIColor{
     convenience init(red : CGFloat, green : CGFloat, blue : CGFloat){
         self.init(red: red/255, green: green/255, blue: blue/255, alpha: 1)
