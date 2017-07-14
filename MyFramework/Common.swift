@@ -13,6 +13,9 @@ let kScreenWidth = UIScreen.main.bounds.width
 let kScrennHeight = UIScreen.main.bounds.height
 let kMainBottomTabBarHeight : CGFloat = 40
 
+let kTimeZone = TimeZone.current
+let kTimeInteval = TimeInterval(Double(kTimeZone.secondsFromGMT()))
+
 let kDateTimeFormate = "yyyy-MM-dd HH:mm:ss"
 
 func getDateFormatter(dateFormatter : String) -> DateFormatter{

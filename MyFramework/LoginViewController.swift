@@ -26,10 +26,10 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        loginUser = nil
+        loginInfo = nil
         setLoginButtonEnable()
         if(isFirstApear){
-            //autoLogin()
+            autoLogin()
             isFirstApear = false
         }
     }
@@ -198,18 +198,18 @@ extension LoginViewController{
                         let username = data["username"].string
                         let portraiturl = data["portraiturl"].string
                         
-                        loginUser = LoginUser()
-                        loginUser?.id = id
-                        loginUser?.realname = realname
-                        loginUser?.username = username
-                        loginUser?.protraiurl = portraiturl
+                        loginInfo = LoginInfo()
+                        loginInfo?.userId = id
+                        loginInfo?.realname = realname
+                        loginInfo?.username = username
+                        loginInfo?.protraiurl = portraiturl
                         
                         self.activity.stopAnimating()
                         self.view.isUserInteractionEnabled = true
                         
-                        loginUser?.config = Config(id: id!)
-                        if(!((loginUser?.config?.success)!)){
-                            let msg = loginUser?.config?.msg
+                        loginInfo?.config = Config(id: id!)
+                        if(!((loginInfo?.config?.success)!)){
+                            let msg = loginInfo?.config?.msg
                             self.alertAndLog(msg: msg!, showTime: 0.5, log: msg!)
                             return
                         }

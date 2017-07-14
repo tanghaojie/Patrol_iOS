@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import CoreLocation
 
-class LAXLocationManager:CLLocationManager, CLLocationManagerDelegate {
+class LAXLocationManager: CLLocationManager, CLLocationManagerDelegate {
     
     private var successBlock: ((_ address: String) -> Void)?
     private var failBlock: ((_ error: String) -> Void)?
@@ -18,7 +18,7 @@ class LAXLocationManager:CLLocationManager, CLLocationManagerDelegate {
     override init() {
         super.init()
         self.delegate = self
-        self.desiredAccuracy = kCLLocationAccuracyBest
+        self.desiredAccuracy = kCLLocationAccuracyBestForNavigation
     }
     
     convenience init(getLocation success: @escaping (_ address: String) -> Void, failed: @escaping (_ error: String) -> Void) {

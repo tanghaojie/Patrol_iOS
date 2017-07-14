@@ -44,9 +44,9 @@ class TaskSBViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if((loginUser?.config?.taskType.count)! > 0){
+        if((loginInfo?.config?.taskType.count)! > 0){
             if(taskType.title(for: .normal) == nil && !self.taskModel.isStarted){
-                let code = loginUser?.config?.taskType[0].code
+                let code = loginInfo?.config?.taskType[0].code
                 setSelection(taskTypeCode: code!)
                 taskTypeTableView.isHidden = true
             }
@@ -62,7 +62,7 @@ class TaskSBViewController: UIViewController {
     }
     
     @IBAction func stopTaskTouchUpInSide(_ sender: Any) {
-        endTask()
+        endBtnTouchUpInSide()
     }
     
     func backButtonAction(){
@@ -83,14 +83,15 @@ extension TaskSBViewController{
     
     
     fileprivate func checkTaskIsStarted(){
-        let request = getCurrentTaskRequest(userId: (loginUser?.id)!)
+        let request = TaskSBViewController.getCurrentTaskRequest(userId: (loginInfo?.userId)!)
         currentTaskAsyncConnect(urlRequest: request)
     }
 
-    private func getCurrentTaskRequest(userId: Int) -> URLRequest{
+    static func getCurrentTaskRequest(userId: Int) -> URLRequest{
         var urlRequest = URLRequest(url: URL(string: url_CurrentTask)!)
         urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)
         urlRequest.httpMethod = HttpMethod.Post.rawValue
+        
         urlRequest.httpBody = ("id=" + String(userId)).data(using: String.Encoding.utf8)
         urlRequest.httpShouldHandleCookies = true
         return urlRequest
@@ -193,7 +194,7 @@ extension TaskSBViewController{
 //        let second = Int(df.string(from: self.taskModel.startTime!))
 //        let secondOfCurrentDay = hour! * 3600 + minute! * 60 + second!
         
-        let uid : Int = (loginUser?.id!)!
+        let uid : Int = (loginInfo?.userId!)!
         
         let body = "uid=\(uid)&taskname=\(self.taskModel.taskName ?? "")&tasktype=\(self.taskModel.taskTypeCode ?? "")&starttime=\(sDate)&remark=\(self.taskModel.remark ?? "")"
         urlRequest.httpBody = body.data(using: String.Encoding.utf8)
@@ -264,7 +265,7 @@ extension TaskSBViewController{
     }
     
     
-    fileprivate func endTask(){
+    fileprivate func endBtnTouchUpInSide(){
         let request = getEndTaskRequest()
         endTaskAsyncConnect(urlRequest: request)
     }
@@ -277,7 +278,7 @@ extension TaskSBViewController{
         let df = getDateFormatter(dateFormatter: kDateTimeFormate)
         let sendDate = df.string(from: Date())
         
-        let uid : Int = (loginUser?.id!)!
+        let uid : Int = (loginInfo?.userId!)!
         let tid : Int = (self.taskModel.taskid)!
         
         let body = "uid=\(uid)&tid=\(tid)&endtime=\(sendDate)&remark=\(self.taskModel.remark ?? "")"
@@ -421,6 +422,10 @@ extension TaskSBViewController{
             
             taskStart.isHidden = true
             taskStop.isHidden = false
+            
+            loginInfo?.taskId = model.taskid
+            
+            MLocationManager.instance.startUpdatingLocation()
         }else{
             taskName.text = model.taskName
             taskName.isEnabled = true
@@ -438,6 +443,10 @@ extension TaskSBViewController{
             
             taskStart.isHidden = false
             taskStop.isHidden = true
+            
+            loginInfo?.taskId = nil
+            
+            MLocationManager.instance.stopUpdatingLocation()
         }
     }
     
@@ -449,7 +458,6 @@ extension TaskSBViewController{
         let zone = TimeZone.current
         self.taskModel.startTime = Date()
         self.taskModel.startTime?.addTimeInterval(TimeInterval(Double(zone.secondsFromGMT())))
-        //self.taskModel.startTime.
         if(self.taskModel.remark == nil){
             self.taskModel.remark = ""
         }
@@ -495,7 +503,7 @@ extension TaskSBViewController: UITableViewDataSource , UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (loginUser?.config?.taskType.count)!
+        return (loginInfo?.config?.taskType.count)!
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -504,7 +512,7 @@ extension TaskSBViewController: UITableViewDataSource , UITableViewDelegate{
             cell = UITableViewCell(style: .default, reuseIdentifier: "cellid")
         }
         cell?.backgroundColor = UIColor(red: 225, green: 225, blue: 225)
-        let item = loginUser?.config?.taskType[indexPath.row]
+        let item = loginInfo?.config?.taskType[indexPath.row]
         cell?.textLabel?.text = item?.alias
         cell?.textLabel?.textAlignment = .center
         
@@ -512,14 +520,14 @@ extension TaskSBViewController: UITableViewDataSource , UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let item = loginUser?.config?.taskType[indexPath.row]
+        let item = loginInfo?.config?.taskType[indexPath.row]
         self.taskModel.taskTypeCode = item?.code
         self.taskType.setTitle((item?.alias)!, for: .normal)
         switchTable()
     }
     
     func setSelection(taskTypeCode : String){
-        let index = loginUser?.config?.taskType.index(where: { (iTType) -> Bool in
+        let index = loginInfo?.config?.taskType.index(where: { (iTType) -> Bool in
             return iTType.code == taskTypeCode
         })
         if let iindex = index{

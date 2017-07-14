@@ -23,7 +23,7 @@ class CustomTabbarView: UIView {
         
         self.backgroundColor = UIColor(red: 230, green: 230, blue: 230)
         
-        SetupUI()
+        setupUI()
       
     }
     
@@ -34,11 +34,12 @@ class CustomTabbarView: UIView {
 }
 
 extension CustomTabbarView {
-    fileprivate func SetupUI(){
-        SetupLabels()
+    
+    fileprivate func setupUI(){
+        setupLabels()
     }
     
-    private func SetupLabels(){
+    private func setupLabels(){
         
         let W = self.frame.width/CGFloat(self.titles.count)
         let H = self.frame.height
@@ -66,7 +67,7 @@ extension CustomTabbarView {
     
     @objc private func buttonClick(btn : UIButton){
         let btnIndex = btn.tag
-        print("button click" + String(btnIndex))
+        //print("button click" + String(btnIndex))
         if(btnIndex < self.jumps.count){
             let jump = self.jumps[btnIndex]
             if(jump != nil){

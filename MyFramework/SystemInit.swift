@@ -19,7 +19,7 @@ public func SystemInit(){
         exit(0)
     }
     
-    loginUser = nil
+    loginInfo = nil
     HTTPCookieStorage.shared.cookieAcceptPolicy = .always
 }
 

@@ -16,6 +16,7 @@ let url_Config = "\(url_Main)/api/config/GetGroupConfig"
 let url_CurrentTask = "\(url_Main)/api/task/CurrentTask"
 let url_CreateTask = "\(url_Main)/api/task/CreateTask"
 let url_EndTask = "\(url_Main)/api/task/EndTask"
+let url_UploadPoints = "\(url_Main)/api/track/UploadPoints"
 
 let kShortTimeoutInterval = 5
 
