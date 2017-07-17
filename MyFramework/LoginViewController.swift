@@ -71,8 +71,6 @@ extension LoginViewController{
 extension LoginViewController: LoginDelegate{
     
     fileprivate func loginButtonClick(){
-//        self.present(MainViewController(), animated: true, completion: nil)
-//        return
         let user = username.text
         let pass = password.text
         
@@ -88,7 +86,7 @@ extension LoginViewController: LoginDelegate{
             
             loginInfo?.config = Config(id: -1)
             
-            self.saveDefaultUsernamePassword(username: user!, password: pass!)
+            //self.saveDefaultUsernamePassword(username: user!, password: pass!)
             self.present(MainViewController(), animated: true, completion: nil)
             return
         }

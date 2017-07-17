@@ -28,7 +28,7 @@ class MLocationManager: CLLocationManager , CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-         
+        
         print("did update location")
 //        if let lastLocation = locations.last {
 //            let coordinate = lastLocation.coordinate
