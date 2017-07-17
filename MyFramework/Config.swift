@@ -103,7 +103,7 @@ class Config{
 }
 
 class TaskType{
-    static let taskTypeCode = "0001010001000001"
+    static let taskTypeCode = "0001010100000000"
 
     init(code : String, alias : String){
         self.code = code
@@ -114,7 +114,7 @@ class TaskType{
 }
 
 class EventType{
-    static let eventTypeCode = "0001010001000002"
+    static let eventTypeCode = "0001010200000000"
 
     init(code : String, alias : String){
         self.code = code
@@ -125,7 +125,7 @@ class EventType{
 }
 
 class EventLevel{
-    static let eventLevelCode = "0001010001000003"
+    static let eventLevelCode = "0001010300000000"
     
     init(code : String, alias : String){
         self.code = code

@@ -51,8 +51,8 @@ extension MainViewController {
 
         self.view.addSubview(mapView)
         
-        setupLayerButton(pView : mapView)
-        setupAddEventButton(pView : mapView)
+        //setupLayerButton(pView : mapView)
+        //setupAddEventButton(pView : mapView)
         setupLocationButton(pView: mapView)
     }
     
@@ -72,8 +72,10 @@ extension MainViewController {
     
     private func setupLocationButton(pView : UIView){
         let btn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: pView.frame.height - 40 - 20, width: 40, height: 40))
-        btn.backgroundColor = .white
+        btn.backgroundColor = .clear
         btn.layer.borderColor = UIColor.black.cgColor
+        let img = UIImage(named: "location")
+        btn.setImage(img, for: .normal)
         btn.addTarget(self, action: #selector(locationButtonClicked), for: .touchUpInside)
         pView.addSubview(btn)
     }
@@ -89,8 +91,8 @@ extension MainViewController {
     private func setupBottomBar(){
         let frame = CGRect(x: 0, y: kScrennHeight - kMainBottomTabBarHeight, width: kScreenWidth, height: kMainBottomTabBarHeight)
         
-        let titles = ["任务","案件","我的"]
-        let images = ["btnImgTest"]
+        let titles = ["任务","事件","我的"]
+        let images = ["task","event","my"]
         let jumps : Array<(()->())?>  = [ jumpToTask , jumpToEvent , jumpToHome  ]
         
         let customTBV = CustomTabbarView(frame: frame, titles: titles , images : images ,jumps : jumps)
@@ -208,6 +210,7 @@ extension MainViewController{
                             if(data?.isEmpty)!{
                                 return
                             }
+                            print("fire success \(Date().addingTimeInterval(kTimeInteval))")
                             let json = JSON(data : data!)
                             let nStatus = json["status"].int
                             let nMsg = json["msg"].string
@@ -221,8 +224,6 @@ extension MainViewController{
     }
     
     @objc fileprivate func timer1Fire(){
-        print(self.mapView.mapScale)
-        
         if loginInfo?.taskId != nil{
             let coordinate = location.location
             if let coor = coordinate {
