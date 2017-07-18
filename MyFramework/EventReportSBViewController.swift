@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+//main
 class EventReportSBViewController: UIViewController {
 
     @IBOutlet var scrollView: UIScrollView!
@@ -25,15 +25,23 @@ class EventReportSBViewController: UIViewController {
     @IBOutlet weak var eventDate: UIDatePicker!
     @IBOutlet weak var eventDetail: UITextView!
     @IBOutlet weak var eventImage: UICollectionView!
+    @IBOutlet weak var commit: UIButton!
     
     fileprivate let navigationTitle_Default = "事件上报"
     fileprivate let navigationTitle_Loading = "加载中"
-    let titleActivity = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
-    let titleLabel = UILabel()
+    fileprivate let defaultAddImageAccessibilityIdentifier = "de_add_image_iden"
+    fileprivate let collectionViewCellIdentifier = "collectionViewCellIdentifier"
+    fileprivate let titleActivity = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+    fileprivate let titleLabel = UILabel()
+    fileprivate let defaultAddImage = UIImage(named: "addImage")
+    fileprivate let collectionViewCellHeight = 85
+    fileprivate let collectionViewCellWidth = 85
+    fileprivate let maxImageCount = 9
     
-    var defaultModel = EventModel(uid: nil, eventId: nil, eventName: nil, eventTypeCode: nil, eventLevelCode: nil, location: nil, address: nil, date: nil, remark: nil)
-    let eventModel = EventModel(uid: nil, eventId: nil, eventName: nil, eventTypeCode: nil, eventLevelCode: nil, location: nil, address: nil, date: nil, remark: nil)
+    //var defaultModel = EventModel(uid: nil, eventId: nil, eventName: nil, eventTypeCode: nil, eventLevelCode: nil, location: nil, address: nil, date: nil, remark: nil,images: nil)
+    let eventModel = EventModel(uid: nil, eventId: nil, eventName: nil, eventTypeCode: nil, eventLevelCode: nil, location: nil, address: nil, date: nil, remark: nil,images: nil)
     
+    //for save self.eventImage collectionViewCell and for display data   ps. an add image button image is also in the array
     var imageArray: NSMutableArray = NSMutableArray()
     
     override func viewDidLoad() {
@@ -44,6 +52,7 @@ class EventReportSBViewController: UIViewController {
         self.eventLevelTableView.delegate = self
         self.eventLevelTableView.dataSource = self
         self.eventImage.delegate = self
+        self.eventImage.dataSource = self
 
         setupUI()
     }
@@ -64,12 +73,10 @@ class EventReportSBViewController: UIViewController {
                 switchEventTypeTableView(isHidden: true)
             }
         }
-        
-        
     }
     
     @IBAction func commitTouchUpInSide(_ sender: Any) {
-        
+        commitTouchUpInSide()
     }
 
     @IBAction func eventTypeTouchUpInSide(_ sender: Any) {
@@ -84,15 +91,93 @@ class EventReportSBViewController: UIViewController {
         eventDate.date = Date()
     }
     
+}
+//func
+extension EventReportSBViewController {
+    
+    fileprivate func commitTouchUpInSide() {
+        setLoading(isLoading: true)
+        setModel()
+        if !checkInput() {
+            setLoading(isLoading: false)
+            return
+        }
+        
+        
+        setLoading(isLoading: false)
+    }
+    
+    private func setModel(){
+        eventModel.eventName = eventName.text
+        if eventModel.location == nil {
+            eventModel.location = MLocationManager.instance.location?.coordinate
+        }
+        eventModel.address = strLocation.text
+        eventModel.date = eventDate.date.addingTimeInterval(TimeInterval(TimeZone.current.secondsFromGMT()))
+        eventModel.remark = eventDetail.text
+        let images: NSMutableArray = NSMutableArray()
+        if imageArray.count > 1 {
+            for item in imageArray {
+                let nImage = item as? UIImage
+                if let image = nImage {
+                    if image.accessibilityIdentifier != defaultAddImageAccessibilityIdentifier {
+                        images.add(image)
+                    }
+                }
+            }
+        }
+        eventModel.images = images.count > 0 ? images : nil
+    }
+    
+    private func checkInput() -> Bool {
+        if self.eventModel.eventName == nil || (self.eventModel.eventName?.isEmpty)! {
+            AlertWithNoButton(view: self, title: msg_PleaseEnterEventName, message: nil, preferredStyle: .alert, showTime: 1)
+            self.eventName.becomeFirstResponder()
+            return false
+        }
+        if self.eventModel.eventTypeCode == nil || (self.eventModel.eventTypeCode?.isEmpty)! {
+            AlertWithNoButton(view: self, title: msg_PleaseSelectEventType, message: nil, preferredStyle: .alert, showTime: 1)
+            return false
+        }
+        if self.eventModel.eventLevelCode == nil || (self.eventModel.eventLevelCode?.isEmpty)! {
+            AlertWithNoButton(view: self, title: msg_PleaseSelectEventLevel, message: nil, preferredStyle: .alert, showTime: 1)
+            return false
+        }
+        if self.eventModel.location == nil {
+            AlertWithNoButton(view: self, title: msg_PleaseSelectEventLocation, message: nil, preferredStyle: .alert, showTime: 1)
+            return false
+        }
+        return true
+    }
+    
+    private func setLoading(isLoading: Bool){
+        if isLoading {
+            self.view.isUserInteractionEnabled = false
+            titleActivity.startAnimating()
+            titleLabel.text = navigationTitle_Loading
+        } else {
+            self.view.isUserInteractionEnabled = true
+            titleActivity.stopAnimating()
+            titleLabel.text = navigationTitle_Default
+        }
+    }
     
 }
-
+//ui
 extension EventReportSBViewController {
     
     fileprivate func setupUI(){
+        
         setupBackButton()
         setupScrollView()
         setupTitle()
+        setupInitBtnImage()
+        setupCollectionView()
+    }
+    
+    private func setupCollectionView(){
+        self.eventImage.register(UICollectionViewCell.self, forCellWithReuseIdentifier: collectionViewCellIdentifier)
+        addLongPressListener()
     }
     
     private func setupScrollView(){
@@ -106,7 +191,7 @@ extension EventReportSBViewController {
         //scrollView.delegate = self
         scrollView.scrollsToTop = true
         scrollView.keyboardDismissMode = .onDrag
-        scrollView.contentSize = CGSize(width: kScreenWidth, height: 700)
+        scrollView.contentSize = CGSize(width: kScreenWidth, height: 900)
     }
     
     private func setupBackButton(){
@@ -151,9 +236,8 @@ extension EventReportSBViewController {
         }
     }
     
-    
 }
-
+//tableview
 extension EventReportSBViewController: UITableViewDataSource , UITableViewDelegate {
     
     fileprivate func switchEventTypeTableView(isHidden: Bool? = nil){
@@ -273,25 +357,125 @@ extension EventReportSBViewController: UITableViewDataSource , UITableViewDelega
     }
     
 }
-
+//collectionview
 extension EventReportSBViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    fileprivate func setupInitBtnImage() {
+        defaultAddImage?.accessibilityIdentifier = defaultAddImageAccessibilityIdentifier
+        imageArray.add(defaultAddImage as Any)
+        self.eventImage.reloadData()
+    }
+    
+    internal func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imageArray.count
+    internal func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        let count = imageArray.count
+        let countPerRow = floor(self.eventImage.frame.width / CGFloat(collectionViewCellWidth))
+        let rowCount = Int(ceil(CGFloat(count) / countPerRow))
+        let height = rowCount * collectionViewCellHeight
+        if self.eventImage.frame.height != CGFloat(height) {
+            self.eventImage.frame = CGRect(x: self.eventImage.frame.minX, y: self.eventImage.frame.minY, width: self.eventImage.frame.width, height: CGFloat(height))
+            self.commit.frame = CGRect(x: self.commit.frame.minX, y: self.eventImage.frame.maxY + 10, width: self.commit.frame.width, height: self.commit.frame.height)
+        }
+        return count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collectionViewCellIdentifier", for: indexPath)
+    internal func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionViewCellIdentifier, for: indexPath)
         let image = imageArray[indexPath.row] as? UIImage
-        
-        let imageView = UIImageView(image: image)
+
+        let imageView = UIImageView(frame: CGRect(x: 1, y: 1, width: 80, height: 80))
+        imageView.backgroundColor = self.eventImage.backgroundColor
+        imageView.image = image
+        imageView.center = cell.contentView.center
         cell.contentView.addSubview(imageView)
         return cell
     }
     
-}
+    internal func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let nImage = imageArray[indexPath.row] as? UIImage
+        if let image = nImage {
+            if image.accessibilityIdentifier == defaultAddImageAccessibilityIdentifier {
+                addImageAction()
+            }
+        }
+    }
+    
+    fileprivate func addLongPressListener(){
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.collectionViewLongPress))
+        longPress.minimumPressDuration = 1
+        self.eventImage.addGestureRecognizer(longPress)
+    }
+    
+    internal func collectionViewLongPress(longPressGestureRecognizer: UILongPressGestureRecognizer){
+        if longPressGestureRecognizer.state == UIGestureRecognizerState.began {
+            let actionController = UIAlertController(title: "", message: "警告", preferredStyle: .actionSheet)
+            let location = longPressGestureRecognizer.location(in: self.eventImage)
+            let nIndexPath = self.eventImage.indexPathForItem(at: location)
+            if nIndexPath != nil{
+                let image = self.imageArray[nIndexPath!.row] as? UIImage
+                if image != nil {
+                    if image?.accessibilityIdentifier != defaultAddImageAccessibilityIdentifier {
+                        let actionDel = UIAlertAction(title: "删除", style: .default){ (_) -> Void in
+                            self.imageArray.remove(image as Any)
+                            self.eventImage.reloadData()
+                        }
+                        let actionCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+                        actionController.addAction(actionDel)
+                        actionController.addAction(actionCancel)
+                        self.navigationController?.present(actionController, animated: true, completion: nil)
+                    }
+                }
+            }
+        }
+    }
 
+}
+//imagePickerController
+extension EventReportSBViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    fileprivate func addImageAction(){
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        
+        let actionController = UIAlertController(title: "提示", message: "拍照或从相册选择", preferredStyle: .actionSheet)
+        let actionAlbum = UIAlertAction(title: "从相册选择", style: .default){ (action) -> Void in
+            picker.sourceType = .savedPhotosAlbum
+            self.navigationController?.present(picker, animated: true, completion: nil)
+        }
+        let actionCamera = UIAlertAction(title: "拍照", style: .default){ (action) -> Void in
+            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                picker.sourceType = .camera
+                self.navigationController?.present(picker, animated: true, completion: nil)
+            } else {
+                AlertWithNoButton(view: self, title: "", message: "不支持拍照", preferredStyle: .alert, showTime: 1)
+            }
+        }
+        let actionCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+        
+        actionController.addAction(actionAlbum)
+        actionController.addAction(actionCamera)
+        actionController.addAction(actionCancel)
+        
+        self.navigationController?.present(actionController, animated: true, completion: nil)
+    }
+    
+    internal func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+        imageArray.removeLastObject()
+        imageArray.add(image)
+        if imageArray.count < maxImageCount {
+            imageArray.add(defaultAddImage as Any)
+        }
+        
+        picker.dismiss(animated: true, completion: nil)
+        self.eventImage.reloadData()
+    }
+    
+    internal func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+}

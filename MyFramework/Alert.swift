@@ -20,6 +20,11 @@ let msg_PleaseEnterPhone = "请输入手机号"
 let msg_PleaseEnterTaskName = "请输入任务名"
 let msg_PleaseSelectTaskType = "请选择任务类型"
 
+let msg_PleaseEnterEventName = "请输入事件名"
+let msg_PleaseSelectEventType = "请选择事件类型"
+let msg_PleaseSelectEventLevel = "请选择事件级别"
+let msg_PleaseSelectEventLocation = "请选择事件所在位置"
+
 let msg_ConnectTimeout = "连接超时"
 let msg_PleaseCheckNetworkSetting = "请检查网络设置"
 let msg_ServerNoResponse = "服务器未响应"
