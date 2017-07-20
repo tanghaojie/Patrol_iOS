@@ -17,16 +17,19 @@ class EventModel{
     var address: String?
     var date:Date?
     var remark: String?
+    var images: [UIImage]?
+    
 
-    init(uid: Int?,eventId: Int?, eventName: String?,eventTypeCode: String?,eventLevelCode: String?, location: CLLocationCoordinate2D?, address: String?, date: Date?, remark: String?){
-        self.uid=uid
-        self.eventId=eventId
-        self.eventName=eventName
-        self.eventTypeCode=eventTypeCode
-        self.eventLevelCode=eventLevelCode
-        self.location=location
-        self.address=address
-        self.date=date
-        self.remark=remark
+    init(uid: Int?,eventId: Int?, eventName: String?,eventTypeCode: String?,eventLevelCode: String?, location: CLLocationCoordinate2D?, address: String?, date: Date?, remark: String?, images: [UIImage]?){
+        self.uid = uid
+        self.eventId = eventId
+        self.eventName = eventName
+        self.eventTypeCode = eventTypeCode
+        self.eventLevelCode = eventLevelCode
+        self.location = location
+        self.address = address
+        self.date = date
+        self.remark = remark
+        self.images = images
     }
 }

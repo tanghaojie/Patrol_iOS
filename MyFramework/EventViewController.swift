@@ -13,9 +13,7 @@ class EventViewController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let sb = UIStoryboard(name: "EventReportSB", bundle: nil)
-        let vc = sb.instantiateViewController(withIdentifier: "EventReportSBViewController") as! EventReportSBViewController
-        self.pushViewController(vc, animated: true)
+
     }
 
 }

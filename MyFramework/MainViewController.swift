@@ -52,7 +52,7 @@ extension MainViewController {
         self.view.addSubview(mapView)
         
         //setupLayerButton(pView : mapView)
-        //setupAddEventButton(pView : mapView)
+        setupAddEventButton(pView : mapView)
         setupLocationButton(pView: mapView)
     }
     
@@ -65,9 +65,16 @@ extension MainViewController {
     
     private func setupAddEventButton(pView : UIView){
         let btn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: 180, width: 40, height: 40))
-        btn.backgroundColor = .white
+        btn.backgroundColor = .red
         btn.layer.borderColor = UIColor.black.cgColor
+        //let img = UIImage(named: "location")
+        //btn.setImage(img, for: .normal)
+        btn.addTarget(self, action: #selector(addEventButtonClicked), for: .touchUpInside)
         pView.addSubview(btn)
+    }
+    
+    func addEventButtonClicked() {
+        self.present(EventReportViewController(), animated: true, completion: nil)
     }
     
     private func setupLocationButton(pView : UIView){
@@ -138,7 +145,7 @@ extension MainViewController{
                 }
                 let json = JSON(data : data!)
                 let nStatus = json["status"].int
-                let nMsg = json["msg"].string
+//                let nMsg = json["msg"].string
                 let ndata = json["data"]
                 if let status = nStatus{
                     if(status != 0){
@@ -211,9 +218,9 @@ extension MainViewController{
                                 return
                             }
                             print("fire success \(Date().addingTimeInterval(kTimeInteval))")
-                            let json = JSON(data : data!)
-                            let nStatus = json["status"].int
-                            let nMsg = json["msg"].string
+//                            let json = JSON(data : data!)
+//                            let nStatus = json["status"].int
+//                            let nMsg = json["msg"].string
                         }
                     })
                 } catch let error {

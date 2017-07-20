@@ -196,7 +196,8 @@ extension TaskSBViewController{
         
         let uid : Int = (loginInfo?.userId!)!
         
-        let body = "uid=\(uid)&taskname=\(self.taskModel.taskName ?? "")&tasktype=\(self.taskModel.taskTypeCode ?? "")&starttime=\(sDate)&remark=\(self.taskModel.remark ?? "")"
+        let xx=self.taskModel.remark ?? ""
+        let body = "uid=\(uid)&taskname=\(self.taskModel.taskName ?? "")&tasktype=\(self.taskModel.taskTypeCode ?? "")&starttime=\(sDate)&remark=\(xx)"
         urlRequest.httpBody = body.data(using: String.Encoding.utf8)
         urlRequest.httpShouldHandleCookies = true
         return urlRequest
