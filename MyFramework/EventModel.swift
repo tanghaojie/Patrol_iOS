@@ -17,10 +17,10 @@ class EventModel{
     var address: String?
     var date:Date?
     var remark: String?
-    var images: NSMutableArray?
+    var images: [UIImage]?
     
 
-    init(uid: Int?,eventId: Int?, eventName: String?,eventTypeCode: String?,eventLevelCode: String?, location: CLLocationCoordinate2D?, address: String?, date: Date?, remark: String?, images: NSMutableArray?){
+    init(uid: Int?,eventId: Int?, eventName: String?,eventTypeCode: String?,eventLevelCode: String?, location: CLLocationCoordinate2D?, address: String?, date: Date?, remark: String?, images: [UIImage]?){
         self.uid = uid
         self.eventId = eventId
         self.eventName = eventName

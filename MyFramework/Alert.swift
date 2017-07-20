@@ -32,6 +32,10 @@ let msg_HttpError = "网络协议错误"
 let msg_RegistSuccess = "注册成功"
 let msg_Remind = "提示"
 let msg_OK = "确定"
+let msg_SomethingWrongTryAgain = "出现异常，请重试"
+
+let msg_Error = "错误"
+let msg_RequestError = "请求错误"
 
 
 public func AlertWithNoButton(view : UIViewController, title : String , message : String? , preferredStyle : UIAlertControllerStyle , showTime : TimeInterval){

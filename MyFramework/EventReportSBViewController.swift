@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 //main
 class EventReportSBViewController: UIViewController {
 
@@ -37,8 +38,10 @@ class EventReportSBViewController: UIViewController {
     fileprivate let collectionViewCellHeight = 85
     fileprivate let collectionViewCellWidth = 85
     fileprivate let maxImageCount = 9
+    //fileprivate let cachePath = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+    fileprivate let cachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
+    fileprivate let imagePathName = "EventImages"
     
-    //var defaultModel = EventModel(uid: nil, eventId: nil, eventName: nil, eventTypeCode: nil, eventLevelCode: nil, location: nil, address: nil, date: nil, remark: nil,images: nil)
     let eventModel = EventModel(uid: nil, eventId: nil, eventName: nil, eventTypeCode: nil, eventLevelCode: nil, location: nil, address: nil, date: nil, remark: nil,images: nil)
     
     //for save self.eventImage collectionViewCell and for display data   ps. an add image button image is also in the array
@@ -102,9 +105,161 @@ extension EventReportSBViewController {
             setLoading(isLoading: false)
             return
         }
+        let nRequest = getCreateEventRequest()
+        if let request = nRequest {
+            createEvent(request: request, complete: createEventComplete)
+        }else {
+            AlertWithNoButton(view: self, title: msg_SomethingWrongTryAgain, message: "", preferredStyle: .alert, showTime: 1)
+            setLoading(isLoading: false)
+        }
+    }
+    
+    private func createEventComplete() {
+        backButtonAction()
+    }
+    
+    private func createEvent(request: URLRequest, complete: (() -> Void)?) {
+        NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
+            if error != nil {
+                AlertWithNoButton(view: self, title: msg_Error, message: msg_RequestError, preferredStyle: .alert, showTime: 1)
+                self.setLoading(isLoading: false)
+                return
+            }
+            if (data?.isEmpty)! {
+                AlertWithNoButton(view: self, title: msg_Error, message: msg_ServerNoResponse, preferredStyle: .alert, showTime: 1)
+                self.setLoading(isLoading: false)
+                return
+            }
+            if let urlResponse = response{
+                let httpResponse = urlResponse as! HTTPURLResponse
+                let statusCode = httpResponse.statusCode
+                if statusCode != 200 {
+                    AlertWithNoButton(view: self, title: msg_Error, message: msg_HttpError, preferredStyle: .alert, showTime: 1)
+                    self.setLoading(isLoading: false)
+                    return
+                }
+                
+                print("create event success \(Date().addingTimeInterval(kTimeInteval))")
+                let json = JSON(data : data!)
+                let nStatus = json["status"].int
+                let nMsg = json["msg"].string
+                let data = json["data"]
+                
+                if let status = nStatus{
+                    if(status != 0){
+                        if let msg = nMsg{
+                            AlertWithUIAlertAction(view: self, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
+                        }
+                        self.setLoading(isLoading: false)
+                        return
+                    }
+                    if data != JSON.null  {
+                        let eventId = data["id"].int
+                        if let images = self.eventModel.images {
+                            if images.count > 0 {
+                                let thisEventDir = self.saveImages(eventId: eventId!, images: images)
+                                self.uploadImages(eventDir: thisEventDir)
+                            }
+                        }
+                        if complete != nil {
+                            complete!()
+                        }
+                    }else {
+                        //application will not running here in normal situation
+                    }
+                }else{
+                    // running there must be webapi error
+                }
+            }
+            self.setLoading(isLoading: false)
+        })
+    }
+    
+    private func uploadImages(eventDir: String) {
+        var images: [UIImage] = [UIImage]()
+        let enumerator = FileManager.default.enumerator(atPath: eventDir)
+        while let path = enumerator?.nextObject() as? String {
+            let nImage = UIImage(named: "\(eventDir)/\(path)")
+            if let image = nImage {
+                images.append(image)
+            }
+        }
+        if images.count > 0 {
+            let dirName = URL(fileURLWithPath: eventDir).lastPathComponent
+            let uid_eid = dirName.components(separatedBy: "_")
+            if uid_eid.count < 2 {
+                return
+            }
+            let eid = uid_eid[1]
+            let date = getDateFormatter(dateFormatter: "yyyy-MM-dd+HH:mm:ss").string(from: Date().addingTimeInterval(kTimeInteval))
+            Image.instance.uploadImages(images: images, prid: eid, typenum: "1", actualtime: date, eventImagesUploadComplete: eventImagesUploadCompleted)
+        }
+    }
+    
+    private func saveImages(eventId: Int, images: [UIImage]) -> String {
+        let uid = loginInfo?.userId
+        let directoryName = "\(uid ?? -1)_\(eventId)"
+        var fullDir = cachePath?.appending("/\(imagePathName)")
+        fullDir = fullDir?.appending("/\(directoryName)")
+        Image.instance.saveImages(path: fullDir!, images: images, compressFunc: Image.instance.wechatCompressImage(originalImg:))
         
+        return fullDir!
+    }
+    
+    internal func eventImagesUploadCompleted(eventId: Int) {
+        let uid = loginInfo?.userId
+        let directoryName = "\(uid ?? -1)_\(eventId)"
+        var fullDir = cachePath?.appending("/\(imagePathName)")
+        fullDir = fullDir?.appending("/\(directoryName)")
+        var x = ObjCBool(true)
+        if FileManager.default.fileExists(atPath: fullDir!, isDirectory: &x) {
+            try! FileManager.default.copyItem(atPath: fullDir!, toPath: "\(fullDir!)_")
+        }
+    }
+    
+    private func getCreateEventRequest() -> URLRequest? {
+        var urlRequest = URLRequest(url: URL(string: url_CreateEvent)!)
+        urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)
+        urlRequest.httpMethod = HttpMethod.Post.rawValue
+   
+        let jsonDic = getRequestData()
+        do{
+            let jsonData = try JSONSerialization.data(withJSONObject: jsonDic, options: .prettyPrinted)
+            urlRequest.httpBody = jsonData
+            urlRequest.httpShouldHandleCookies = true
+            urlRequest.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+            
+            return urlRequest
+        }catch {
+            printLog(message: "Create event. json data wrong\(error)")
+            return nil
+        }
+    }
+    
+    private func getRequestData() -> Dictionary<String,Any> {
+        var jsonDic = Dictionary<String,Any>()
+        jsonDic["uid"] = loginInfo?.userId
+        jsonDic["eventname"] = self.eventModel.eventName
+        jsonDic["typecode"] = self.eventModel.eventTypeCode
+        jsonDic["levelcode"] = self.eventModel.eventLevelCode
+        if let location = self.eventModel.location {
+            jsonDic["location"] = getLocationDictionary(location: location)
+        }
+        jsonDic["address"] = self.eventModel.address
+        jsonDic["statecode"] = nil
+        if let d = self.eventModel.date {
+            jsonDic["actualtime"] = getDateFormatter(dateFormatter: kDateTimeFormate).string(from: d)
+        }
+        jsonDic["remark"] = self.eventModel.remark
         
-        setLoading(isLoading: false)
+        return jsonDic
+    }
+    
+    private func getLocationDictionary(location: CLLocationCoordinate2D) -> Dictionary<String,Any> {
+        var locationDic = Dictionary<String,Any>()
+        locationDic["x"] = location.longitude
+        locationDic["y"] = location.latitude
+        return locationDic
     }
     
     private func setModel(){
@@ -115,13 +270,13 @@ extension EventReportSBViewController {
         eventModel.address = strLocation.text
         eventModel.date = eventDate.date.addingTimeInterval(TimeInterval(TimeZone.current.secondsFromGMT()))
         eventModel.remark = eventDetail.text
-        let images: NSMutableArray = NSMutableArray()
+        var images = [UIImage]()
         if imageArray.count > 1 {
             for item in imageArray {
                 let nImage = item as? UIImage
                 if let image = nImage {
                     if image.accessibilityIdentifier != defaultAddImageAccessibilityIdentifier {
-                        images.add(image)
+                        images.append(image)
                     }
                 }
             }
@@ -160,6 +315,10 @@ extension EventReportSBViewController {
             titleActivity.stopAnimating()
             titleLabel.text = navigationTitle_Default
         }
+    }
+    
+    private func getImagePath() -> String {
+        return "\(cachePath ?? "")/\(imagePathName)"
     }
     
 }
@@ -439,7 +598,7 @@ extension EventReportSBViewController: UIImagePickerControllerDelegate, UINaviga
     fileprivate func addImageAction(){
         let picker = UIImagePickerController()
         picker.delegate = self
-        
+
         let actionController = UIAlertController(title: "提示", message: "拍照或从相册选择", preferredStyle: .actionSheet)
         let actionAlbum = UIAlertAction(title: "从相册选择", style: .default){ (action) -> Void in
             picker.sourceType = .savedPhotosAlbum
@@ -479,3 +638,5 @@ extension EventReportSBViewController: UIImagePickerControllerDelegate, UINaviga
     }
     
 }
+
+
