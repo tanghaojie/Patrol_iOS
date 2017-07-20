@@ -2,6 +2,7 @@
   "images" : [
     {
       "idiom" : "iphone",
+      "filename" : "addImage.png",
       "scale" : "1x"
     },
     {

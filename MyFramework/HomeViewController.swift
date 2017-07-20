@@ -8,12 +8,12 @@
 
 import UIKit
 
-class HomeViewController: UIViewController {
+class HomeViewController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.view.backgroundColor = .gray
+
+        self.pushViewController(MyViewController(), animated: true)
     }
     
 

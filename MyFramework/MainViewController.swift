@@ -65,10 +65,9 @@ extension MainViewController {
     
     private func setupAddEventButton(pView : UIView){
         let btn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: 180, width: 40, height: 40))
-        btn.backgroundColor = .red
-        btn.layer.borderColor = UIColor.black.cgColor
-        //let img = UIImage(named: "location")
-        //btn.setImage(img, for: .normal)
+        btn.backgroundColor = .clear
+        let img = UIImage(named: "eventReport")
+        btn.setImage(img, for: .normal)
         btn.addTarget(self, action: #selector(addEventButtonClicked), for: .touchUpInside)
         pView.addSubview(btn)
     }
@@ -79,8 +78,9 @@ extension MainViewController {
     
     private func setupLocationButton(pView : UIView){
         let btn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: pView.frame.height - 40 - 20, width: 40, height: 40))
-        btn.backgroundColor = .clear
-        btn.layer.borderColor = UIColor.black.cgColor
+        btn.backgroundColor = .white
+        btn.layer.cornerRadius = 20
+        btn.layer.masksToBounds = true
         let img = UIImage(named: "location")
         btn.setImage(img, for: .normal)
         btn.addTarget(self, action: #selector(locationButtonClicked), for: .touchUpInside)

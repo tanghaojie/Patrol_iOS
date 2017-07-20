@@ -17,6 +17,8 @@
 		6B1BDEAD1EEBC64100B29DA8 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1BDEAC1EEBC64100B29DA8 /* Common.swift */; };
 		6B227C251F1EEC0500D180A1 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B227C241F1EEC0500D180A1 /* Image.swift */; };
 		6B227C2A1F20908300D180A1 /* EventReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B227C291F20908300D180A1 /* EventReportViewController.swift */; };
+		6B227C2C1F20B0DC00D180A1 /* EventOverViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B227C2B1F20B0DC00D180A1 /* EventOverViewViewController.swift */; };
+		6B227C2E1F20B23800D180A1 /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B227C2D1F20B23800D180A1 /* MyViewController.swift */; };
 		6B2B08611F02337000B99B5C /* T_User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2B08601F02337000B99B5C /* T_User.swift */; };
 		6B55903E1EEE8894008149FD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B55903D1EEE8894008149FD /* HomeViewController.swift */; };
 		6B5590441EF12053008149FD /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B5590431EF12053008149FD /* Login.storyboard */; };
@@ -90,6 +92,8 @@
 		6B1BDEAC1EEBC64100B29DA8 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		6B227C241F1EEC0500D180A1 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		6B227C291F20908300D180A1 /* EventReportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventReportViewController.swift; sourceTree = "<group>"; };
+		6B227C2B1F20B0DC00D180A1 /* EventOverViewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventOverViewViewController.swift; sourceTree = "<group>"; };
+		6B227C2D1F20B23800D180A1 /* MyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
 		6B2B08601F02337000B99B5C /* T_User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = T_User.swift; sourceTree = "<group>"; };
 		6B55903D1EEE8894008149FD /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		6B5590431EF12053008149FD /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
@@ -336,6 +340,7 @@
 			children = (
 				6B227C281F20903500D180A1 /* Report */,
 				6BF046F81EF23128006C362E /* EventViewController.swift */,
+				6B227C2B1F20B0DC00D180A1 /* EventOverViewViewController.swift */,
 			);
 			name = Event;
 			sourceTree = "<group>";
@@ -344,6 +349,7 @@
 			isa = PBXGroup;
 			children = (
 				6B55903D1EEE8894008149FD /* HomeViewController.swift */,
+				6B227C2D1F20B23800D180A1 /* MyViewController.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -509,11 +515,13 @@
 				6BB823891EFBBEB500468956 /* Alert.swift in Sources */,
 				6BCA08601F1C9608003FBA70 /* EventModel.swift in Sources */,
 				6B6F52A71F00ED3800B09846 /* SQLiteManager.swift in Sources */,
+				6B227C2E1F20B23800D180A1 /* MyViewController.swift in Sources */,
 				6B227C2A1F20908300D180A1 /* EventReportViewController.swift in Sources */,
 				6B55903E1EEE8894008149FD /* HomeViewController.swift in Sources */,
 				6B9585EF1F14A70A001A24A2 /* Config.swift in Sources */,
 				6B1BDEA11EEBB64500B29DA8 /* MainViewController.swift in Sources */,
 				6B227C251F1EEC0500D180A1 /* Image.swift in Sources */,
+				6B227C2C1F20B0DC00D180A1 /* EventOverViewViewController.swift in Sources */,
 				6B93CED61F0E4384004E0890 /* TaskSBViewController.swift in Sources */,
 				6B6C62221F04EB38000FC91B /* RegistModel.swift in Sources */,
 				6BE3751E1F175B47007B95BF /* ShareData.swift in Sources */,
