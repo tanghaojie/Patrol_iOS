@@ -29,7 +29,7 @@ class EventReportSBViewController: UIViewController {
     @IBOutlet weak var commit: UIButton!
     
     fileprivate let navigationTitle_Default = "事件上报"
-    fileprivate let navigationTitle_Loading = "加载中"
+    fileprivate let navigationTitle_Loading = "请稍后"
     fileprivate let defaultAddImageAccessibilityIdentifier = "de_add_image_iden"
     fileprivate let collectionViewCellIdentifier = "collectionViewCellIdentifier"
     fileprivate let titleActivity = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
