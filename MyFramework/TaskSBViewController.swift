@@ -277,7 +277,8 @@ extension TaskSBViewController{
         urlRequest.httpMethod = HttpMethod.Post.rawValue
         
         let df = getDateFormatter(dateFormatter: kDateTimeFormate)
-        let sendDate = df.string(from: Date())
+        let endDate = Date().addingTimeInterval(TimeInterval(TimeZone.current.secondsFromGMT()))
+        let sendDate = df.string(from: endDate)
         
         let uid : Int = (loginInfo?.userId!)!
         let tid : Int = (self.taskModel.taskid)!

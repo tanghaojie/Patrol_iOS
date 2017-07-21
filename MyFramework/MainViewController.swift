@@ -98,7 +98,7 @@ extension MainViewController {
     private func setupBottomBar(){
         let frame = CGRect(x: 0, y: kScrennHeight - kMainBottomTabBarHeight, width: kScreenWidth, height: kMainBottomTabBarHeight)
         
-        let titles = ["任务","事件","我的"]
+        let titles = ["","",""]
         let images = ["task","event","my"]
         let jumps : Array<(()->())?>  = [ jumpToTask , jumpToEvent , jumpToHome  ]
         
