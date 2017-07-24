@@ -53,6 +53,7 @@
 		6B9585F11F15C424001A24A2 /* TaskModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9585F01F15C424001A24A2 /* TaskModel.swift */; };
 		6BAAD82C1EFCA62800FFE413 /* Web.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BAAD82B1EFCA62800FFE413 /* Web.swift */; };
 		6BAAD82E1EFCA75D00FFE413 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BAAD82D1EFCA75D00FFE413 /* Log.swift */; };
+		6BB187361F21D83B00E14239 /* JSON_EventList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BB187351F21D83B00E14239 /* JSON_EventList.swift */; };
 		6BB823851EFBA32800468956 /* Regist.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6BB823841EFBA32800468956 /* Regist.storyboard */; };
 		6BB823871EFBA83800468956 /* RegistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BB823861EFBA83800468956 /* RegistViewController.swift */; };
 		6BB823891EFBBEB500468956 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BB823881EFBBEB400468956 /* Alert.swift */; };
@@ -61,6 +62,7 @@
 		6BCA08601F1C9608003FBA70 /* EventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCA085F1F1C9608003FBA70 /* EventModel.swift */; };
 		6BE3751E1F175B47007B95BF /* ShareData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE3751D1F175B47007B95BF /* ShareData.swift */; };
 		6BE375211F176BF3007B95BF /* TCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE375201F176BF3007B95BF /* TCoordinate.swift */; };
+		6BE97E961F2585CB00A979E5 /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE97E951F2585CB00A979E5 /* EventTableViewCell.swift */; };
 		6BF046EE1EF2296F006C362E /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF046ED1EF2296F006C362E /* TaskViewController.swift */; };
 		6BF046F91EF23128006C362E /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF046F81EF23128006C362E /* EventViewController.swift */; };
 /* End PBXBuildFile section */
@@ -127,6 +129,7 @@
 		6B9585F01F15C424001A24A2 /* TaskModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskModel.swift; sourceTree = "<group>"; };
 		6BAAD82B1EFCA62800FFE413 /* Web.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Web.swift; sourceTree = "<group>"; };
 		6BAAD82D1EFCA75D00FFE413 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		6BB187351F21D83B00E14239 /* JSON_EventList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSON_EventList.swift; sourceTree = "<group>"; };
 		6BB823841EFBA32800468956 /* Regist.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Regist.storyboard; sourceTree = "<group>"; };
 		6BB823861EFBA83800468956 /* RegistViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistViewController.swift; sourceTree = "<group>"; };
 		6BB823881EFBBEB400468956 /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
@@ -136,6 +139,7 @@
 		6BE3751D1F175B47007B95BF /* ShareData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareData.swift; sourceTree = "<group>"; };
 		6BE3751F1F175F60007B95BF /* test.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = test.playground; sourceTree = "<group>"; };
 		6BE375201F176BF3007B95BF /* TCoordinate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCoordinate.swift; sourceTree = "<group>"; };
+		6BE97E951F2585CB00A979E5 /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		6BF046ED1EF2296F006C362E /* TaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		6BF046F81EF23128006C362E /* EventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		8AE3FC78BECFC501704B1361 /* Pods-MyFramework.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyFramework.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyFramework/Pods-MyFramework.release.xcconfig"; sourceTree = "<group>"; };
@@ -227,6 +231,7 @@
 				6B9585F01F15C424001A24A2 /* TaskModel.swift */,
 				6BE375201F176BF3007B95BF /* TCoordinate.swift */,
 				6BCA085F1F1C9608003FBA70 /* EventModel.swift */,
+				6BB187351F21D83B00E14239 /* JSON_EventList.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -341,6 +346,7 @@
 				6B227C281F20903500D180A1 /* Report */,
 				6BF046F81EF23128006C362E /* EventViewController.swift */,
 				6B227C2B1F20B0DC00D180A1 /* EventOverViewViewController.swift */,
+				6BE97E951F2585CB00A979E5 /* EventTableViewCell.swift */,
 			);
 			name = Event;
 			sourceTree = "<group>";
@@ -500,11 +506,13 @@
 				6BAAD82E1EFCA75D00FFE413 /* Log.swift in Sources */,
 				6B9585F11F15C424001A24A2 /* TaskModel.swift in Sources */,
 				6B2B08611F02337000B99B5C /* T_User.swift in Sources */,
+				6BB187361F21D83B00E14239 /* JSON_EventList.swift in Sources */,
 				6BF046EE1EF2296F006C362E /* TaskViewController.swift in Sources */,
 				6B6FBD011F1704780045E6D8 /* test.swift in Sources */,
 				6B72E4071F0639340041EAD4 /* Validate.swift in Sources */,
 				6B1BDEAD1EEBC64100B29DA8 /* Common.swift in Sources */,
 				6B6C62201F04DA83000FC91B /* LoginInfo.swift in Sources */,
+				6BE97E961F2585CB00A979E5 /* EventTableViewCell.swift in Sources */,
 				6B1BDEAB1EEBC52700B29DA8 /* CustomTabbarView.swift in Sources */,
 				6BAAD82C1EFCA62800FFE413 /* Web.swift in Sources */,
 				6BE375211F176BF3007B95BF /* TCoordinate.swift in Sources */,
