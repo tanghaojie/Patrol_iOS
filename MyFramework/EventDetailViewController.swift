@@ -20,13 +20,24 @@ class EventDetailViewController: UIViewController {
     fileprivate let navigationTitle_Loading = "加载中"
     fileprivate let titleActivity = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
     fileprivate let titleLabel = UILabel()
-    
-    fileprivate let pageSize = 10
-    
-    fileprivate var total = 0
-    fileprivate var pageNum = 1
-    //fileprivate var events: [JSON_Event] = [JSON_Event]()
 
+    fileprivate let event: JSON_Event?
+    fileprivate var data: [Any] = [Any]()
+
+    init(_ json_Event: JSON_Event?) {
+        if let event = json_Event {
+            self.event = event
+            data.append(event)
+        } else {
+            self.event = nil
+        }
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -34,6 +45,8 @@ class EventDetailViewController: UIViewController {
         
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        
+        self.tableView.mj_header.beginRefreshing()
     }
 
 
@@ -48,7 +61,7 @@ extension EventDetailViewController {
         
         setupTableView()
         setupRefreshHeader()
-        setupRefreshFooter()
+        //setupRefreshFooter()
     }
     
     private func setupTableView() {
@@ -64,7 +77,8 @@ extension EventDetailViewController {
         self.tableView.tableFooterView = UIView()
         self.registCell()
         self.tableView.backgroundColor = .yellow
-        //self.tableView.separatorStyle = UITableViewCellSeparatorStyle.none
+        self.tableView.allowsSelection = false
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyle.singleLineEtched
         self.tableView.estimatedRowHeight = 50
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.view = tableView
@@ -84,7 +98,7 @@ extension EventDetailViewController {
     internal func headerRefresh() {
         print("pull refresh")
         
-        
+        getData(eventId: (self.event?.id)!)
     }
     
     private func setupRefreshFooter() {
@@ -105,9 +119,6 @@ extension EventDetailViewController {
     
     fileprivate func endRefreshing() {
         self.tableView.mj_header.endRefreshing()
-        if self.tableView.mj_footer.state != .noMoreData {
-            self.tableView.mj_footer.endRefreshing()
-        }
     }
     
     private func setupBackButton() {
@@ -170,27 +181,117 @@ extension EventDetailViewController: UITableViewDelegate, UITableViewDataSource 
         self.tableView.register(THJTableViewCell.self, forCellReuseIdentifier: "THJCell")
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    internal func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+    internal func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return data.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "THJCell") as! THJTableViewCell
-        var s = "123456789012345"
-        for _ in 0...indexPath.row {
-            s += s
+        let any = data[indexPath.row]
+        if let event = any as? JSON_Event {
+            cell.setData(event: event)
+        } else if let process = any as? JSON_Process {
+            cell.setData(process: process)
         }
-        cell.setData(str1: s, str2: "")
         return cell
     }
     
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return CGFloat(EventTableViewCell.cellHeight)
-//    }
+}
+
+
+extension EventDetailViewController {
     
+    fileprivate func getData(eventId: Int) {
+        let request = getQueryProcessListRequest(eventId: eventId)
+        if request == nil {
+            AlertWithNoButton(view: self, title: msg_SomethingWrongTryAgain, message: "", preferredStyle: .alert, showTime: 1)
+            self.endRefreshing()
+            return
+        }
+        queryProcessList(request: request!, complete: {(data: JSON) in
+            let processList = JSON_EventProcess(data)
+            if(processList.status != 0){
+                if let msg = processList.msg {
+                    AlertWithUIAlertAction(view: self, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
+                }
+                self.endRefreshing()
+                return
+            }
+        
+            self.data.removeAll()
+            if let e = self.event {
+                self.data.append(e)
+            }
+            
+            for item in processList.datas {
+                self.data.append(item)
+            }
+
+            self.tableView.reloadData()
+            self.endRefreshing()
+        })
+    }
+    
+    private func queryProcessList(request: URLRequest, complete: ((JSON) -> Void)?) {
+        NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
+            if error != nil {
+                AlertWithNoButton(view: self, title: msg_Error, message: msg_RequestError, preferredStyle: .alert, showTime: 1)
+                self.endRefreshing()
+                return
+            }
+            if (data?.isEmpty)! {
+                AlertWithNoButton(view: self, title: msg_Error, message: msg_ServerNoResponse, preferredStyle: .alert, showTime: 1)
+                self.endRefreshing()
+                return
+            }
+            if let urlResponse = response{
+                let httpResponse = urlResponse as! HTTPURLResponse
+                let statusCode = httpResponse.statusCode
+                if statusCode != 200 {
+                    AlertWithNoButton(view: self, title: msg_Error, message: msg_HttpError, preferredStyle: .alert, showTime: 1)
+                    self.endRefreshing()
+                    return
+                }
+                
+                print("Query process list success \(Date().addingTimeInterval(kTimeInteval))")
+                let json = JSON(data : data!)
+                if let com = complete {
+                    com(json)
+                }
+            } else {
+                self.endRefreshing()
+            }
+        })
+    }
+    
+    private func getQueryProcessListRequest(eventId: Int) -> URLRequest?{
+        var urlRequest = URLRequest(url: URL(string: url_QueryProcessList)!)
+        urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)
+        urlRequest.httpMethod = HttpMethod.Post.rawValue
+        
+        let jsonDic = getQueryProcessListRequestData(eventId: eventId)
+        do{
+            let jsonData = try JSONSerialization.data(withJSONObject: jsonDic, options: .prettyPrinted)
+            urlRequest.httpBody = jsonData
+            urlRequest.httpShouldHandleCookies = true
+            urlRequest.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+            
+            return urlRequest
+        }catch {
+            printLog(message: "Create event. json data wrong\(error)")
+            return nil
+        }
+    }
+    
+    private func getQueryProcessListRequestData(eventId: Int) -> Dictionary<String,Any> {
+        var jsonDic = Dictionary<String,Any>()
+        jsonDic["id"] = eventId
+
+        return jsonDic
+    }
     
 }

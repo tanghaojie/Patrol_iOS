@@ -189,8 +189,9 @@ extension EventOverViewViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let data = events[indexPath.row]
         let navi = self.navigationController
-        navi?.pushViewController(EventDetailViewController(), animated: true)
+        navi?.pushViewController(EventDetailViewController(data), animated: true)
     }
     
 }
