@@ -9,8 +9,8 @@
 
 //URL
 
-let url_Main = "http://119.6.30.131/patrolapi"
-//let url_Main = "http://192.168.0.122/test"
+//let url_Main = "http://119.6.30.131/patrolapi"
+let url_Main = "http://192.168.0.122/test"
 
 let url_Login = "\(url_Main)/api/user/login"
 let url_Regist = "\(url_Main)/api/user/regist"

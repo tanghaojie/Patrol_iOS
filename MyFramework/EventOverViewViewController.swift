@@ -188,6 +188,11 @@ extension EventOverViewViewController: UITableViewDelegate, UITableViewDataSourc
         return CGFloat(EventTableViewCell.cellHeight)
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let navi = self.navigationController
+        navi?.pushViewController(EventDetailViewController(), animated: true)
+    }
+    
 }
 
 extension EventOverViewViewController {
@@ -253,7 +258,7 @@ extension EventOverViewViewController {
                 print("Query relation event list success \(Date().addingTimeInterval(kTimeInteval))")
                 let json = JSON(data : data!)
                 
-                let eventList = JSON_EventList(json: json)
+                let eventList = JSON_EventList(json)
                 if(eventList.status != 0){
                     if let msg = eventList.msg {
                         AlertWithUIAlertAction(view: self, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
@@ -306,3 +311,4 @@ extension EventOverViewViewController {
     }
     
 }
+

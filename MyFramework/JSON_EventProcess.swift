@@ -1,17 +1,17 @@
 //
-//  JSON_EventList.swift
+//  JSON_EventProcess.swift
 //  MyFramework
 //
-//  Created by JT on 2017/7/21.
+//  Created by JT on 2017/7/25.
 //  Copyright © 2017年 JT. All rights reserved.
 //
 
 import Foundation
 import SwiftyJSON
 
-class JSON_EventList {
+class JSON_EventProcess {
     var total: Int = 0
-    var datas: [JSON_Event] = [JSON_Event]()
+    var datas: [JSON_Process] = [JSON_Process]()
     var status: Int = -1
     var msg: String?
     
@@ -35,7 +35,7 @@ class JSON_EventList {
                 for index in 0...count - 1 {
                     let item = data[index]
                     if item != JSON.null {
-                        datas.append(JSON_Event(item))
+                        datas.append(JSON_Process(item))
                     }
                 }
             }
@@ -43,6 +43,3 @@ class JSON_EventList {
     }
     
 }
-
-
-

@@ -100,6 +100,10 @@ extension MainViewController {
         let jumps : Array<(()->())?>  = [ jumpToTask , jumpToEvent , jumpToHome  ]
         
         let customTBV = CustomTabbarView(frame: frame, titles: titles , images : images ,jumps : jumps)
+        let layer = CALayer()
+        layer.frame = CGRect(x: 0, y: 0, width: customTBV.frame.width, height: 1)
+        layer.backgroundColor = UIColor.black.cgColor
+        customTBV.layer.addSublayer(layer)
         self.view.addSubview(customTBV)
     }
 }
