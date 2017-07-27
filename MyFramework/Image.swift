@@ -146,8 +146,59 @@ class Image {
         
         return body
     }
-
     
-    
+    func getImageInfo(prid: Int, typenum: Int, complete: ((UIImage) -> Void)?) {
+        var urlRequest = URLRequest(url: URL(string: url_QueryImage)!)
+        urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)
+        urlRequest.httpMethod = HttpMethod.Post.rawValue
+        var jsonDic = Dictionary<String,Any>()
+        jsonDic["prid"] = prid
+        jsonDic["typenum"] = typenum
+        do{
+            let jsonData = try JSONSerialization.data(withJSONObject: jsonDic, options: .prettyPrinted)
+            urlRequest.httpBody = jsonData
+            urlRequest.httpShouldHandleCookies = true
+            urlRequest.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        }catch {
+            printLog(message: "Create event. json data wrong\(error)")
+            return
+        }
+        URLSession.shared.dataTask(with: urlRequest){(data1, response, error) in
+            if (data1?.isEmpty)!{
+                return
+            }
+            let json = JSON(data : data1!)
+            if json == JSON.null {
+                return
+            }
+            let data = json["data"]
+            if data == JSON.null {
+                return
+            }
+            let count = data.count
+            for index in 0...count - 1 {
+                let item = data[index]
+                if item == JSON.null {
+                    continue
+                }
+                let name = item["path"].string
+                if name == nil || (name?.isEmpty)! {
+                    continue
+                }
+                let urlStr = "\(url_Picture)?typenum=\(typenum)&prid=\(prid)&filename=\(name!)"
+                let url = URL(string: urlStr)
+                let data = try? Data(contentsOf: url!)
+                if data == nil || (data?.isEmpty)! {
+                    continue
+                }
+                let img = UIImage(data: data!)
+                if let i = img {
+                    if let com = complete {
+                        com(i)
+                    }
+                }
+            }
+        }.resume()
+    }
     
 }

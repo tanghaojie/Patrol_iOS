@@ -12,7 +12,7 @@ class EventViewController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.pushViewController(EventOverViewViewController(), animated: true)
     }
 

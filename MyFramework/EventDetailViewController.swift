@@ -1,46 +1,58 @@
 //
-//  EventOverViewViewController.swift
+//  EventDetailViewController.swift
 //  MyFramework
 //
-//  Created by JT on 2017/7/20.
+//  Created by JT on 2017/7/25.
 //  Copyright © 2017年 JT. All rights reserved.
 //
 
 import UIKit
-import MJRefresh
 import SwiftyJSON
+import MJRefresh
 
-class EventOverViewViewController: UIViewController {
+class EventDetailViewController: UIViewController {
     
     fileprivate var tableView: UITableView!
     fileprivate var tableViewHeader: MJRefreshNormalHeader!
     fileprivate var tableViewFooter: MJRefreshAutoGifFooter!
     
-    fileprivate let navigationTitle_Default = "事件"
+    fileprivate let navigationTitle_Default = "事件详情"
     fileprivate let navigationTitle_Loading = "加载中"
     fileprivate let titleActivity = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
     fileprivate let titleLabel = UILabel()
-    
-    fileprivate let pageSize = 10
-    
-    fileprivate var total = 0
-    fileprivate var pageNum = 1
-    fileprivate var events: [JSON_Event] = [JSON_Event]()
 
+    fileprivate let event: JSON_Event?
+    fileprivate var data: [Any] = [Any]()
+
+    init(_ json_Event: JSON_Event?) {
+        if let event = json_Event {
+            self.event = event
+            data.append(event)
+        } else {
+            self.event = nil
+        }
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupUI()
         
-        tableView.delegate = self
-        tableView.dataSource = self
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
         
         self.tableView.mj_header.beginRefreshing()
     }
 
+
 }
 
-extension EventOverViewViewController {
+extension EventDetailViewController {
     
     fileprivate func setupUI() {
         setupBackButton()
@@ -49,7 +61,7 @@ extension EventOverViewViewController {
         
         setupTableView()
         setupRefreshHeader()
-        setupRefreshFooter()
+        //setupRefreshFooter()
     }
     
     private func setupTableView() {
@@ -64,8 +76,11 @@ extension EventOverViewViewController {
         self.tableView.keyboardDismissMode = .onDrag
         self.tableView.tableFooterView = UIView()
         self.registCell()
-        self.tableView.backgroundColor = UIColor(red: 230, green: 230, blue: 230)
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyle.none
+        self.tableView.backgroundColor = .yellow
+        self.tableView.allowsSelection = false
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyle.singleLineEtched
+        self.tableView.estimatedRowHeight = 50
+        self.tableView.rowHeight = UITableViewAutomaticDimension
         self.view = tableView
     }
     
@@ -83,7 +98,7 @@ extension EventOverViewViewController {
     internal func headerRefresh() {
         print("pull refresh")
         
-        getData(refresh: true)
+        getData(eventId: (self.event?.id)!)
     }
     
     private func setupRefreshFooter() {
@@ -99,14 +114,11 @@ extension EventOverViewViewController {
     internal func footerRefresh() {
         print("pull load")
         
-        getData(refresh: false)
+        
     }
     
     fileprivate func endRefreshing() {
         self.tableView.mj_header.endRefreshing()
-        if self.tableView.mj_footer.state != .noMoreData {
-            self.tableView.mj_footer.endRefreshing()
-        }
     }
     
     private func setupBackButton() {
@@ -117,17 +129,17 @@ extension EventOverViewViewController {
     
     internal func backButtonAction() {
         let navi = self.navigationController
-        navi?.dismiss(animated: true, completion: nil)
+        navi?.popViewController(animated: true)
     }
     
     private func setupRightBarButton() {
-        let img = UIImage(named: "eventReport")?.withRenderingMode(.alwaysOriginal)
+        let img = UIImage(named: "dealEvent")?.withRenderingMode(.alwaysOriginal)
         let rightBtn = UIBarButtonItem(image: img, style: .plain, target: self, action: #selector(rightBarButtonClicked))
         self.navigationItem.rightBarButtonItem = rightBtn
     }
     
     internal func rightBarButtonClicked() {
-        self.present(EventReportViewController(), animated: true, completion: nil)
+        //self.present(EventReportViewController(), animated: true, completion: nil)
     }
     
     private func setupTitle() {
@@ -163,79 +175,68 @@ extension EventOverViewViewController {
     
 }
 
-extension EventOverViewViewController: UITableViewDelegate, UITableViewDataSource {
+extension EventDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     fileprivate func registCell() {
-        self.tableView.register(EventTableViewCell.self, forCellReuseIdentifier: "eventTableViewCell")
+        self.tableView.register(THJTableViewCell.self, forCellReuseIdentifier: "THJCell")
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    internal func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return events.count
+    internal func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return data.count
     }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "eventTableViewCell") as! EventTableViewCell
-        let data = events[indexPath.row]
-        cell.setData(data: data)
+    
+    internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "THJCell") as! THJTableViewCell
+        let any = data[indexPath.row]
+        if let event = any as? JSON_Event {
+            cell.setData(event: event)
+        } else if let process = any as? JSON_Process {
+            cell.setData(process: process)
+        }
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return CGFloat(EventTableViewCell.cellHeight)
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let data = events[indexPath.row]
-        let navi = self.navigationController
-        navi?.pushViewController(EventDetailViewController(data), animated: true)
     }
     
 }
 
-extension EventOverViewViewController {
-    
-    fileprivate func getData(refresh: Bool) {
-        let request: URLRequest?
-        if refresh {
-            request = getQueryRelationEventListRequest(pNum: 1)
-        } else {
-            request = getQueryRelationEventListRequest()
-        }
 
+extension EventDetailViewController {
+    
+    fileprivate func getData(eventId: Int) {
+        let request = getQueryProcessListRequest(eventId: eventId)
         if request == nil {
             AlertWithNoButton(view: self, title: msg_SomethingWrongTryAgain, message: "", preferredStyle: .alert, showTime: 1)
             self.endRefreshing()
             return
         }
-        queryRelationEventList(request: request!, complete: {(eventList: JSON_EventList) in
-            
-            if refresh {
-                self.total = 0
-                self.pageNum = 1
-                self.events = [JSON_Event]()
-                self.tableView.mj_footer.state = .idle
+        queryProcessList(request: request!, complete: {(data: JSON) in
+            let processList = JSON_EventProcess(data)
+            if(processList.status != 0){
+                if let msg = processList.msg {
+                    AlertWithUIAlertAction(view: self, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
+                }
+                self.endRefreshing()
+                return
+            }
+        
+            self.data.removeAll()
+            if let e = self.event {
+                self.data.append(e)
             }
             
-            self.total = eventList.total
-            let datas = eventList.datas
-            self.events.append(contentsOf: datas)
+            for item in processList.datas {
+                self.data.append(item)
+            }
+
             self.tableView.reloadData()
-            if datas.count > 0 {
-                self.pageNum += 1
-            }
-            let page = ceil(Double(self.total / self.pageSize))
-            if Double(self.pageNum) >= page {
-                self.tableView.mj_footer.state = .noMoreData
-            }
             self.endRefreshing()
         })
     }
     
-    private func queryRelationEventList(request: URLRequest, complete: ((JSON_EventList) -> Void)?) {
+    private func queryProcessList(request: URLRequest, complete: ((JSON) -> Void)?) {
         NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
             if error != nil {
                 AlertWithNoButton(view: self, title: msg_Error, message: msg_RequestError, preferredStyle: .alert, showTime: 1)
@@ -256,20 +257,10 @@ extension EventOverViewViewController {
                     return
                 }
                 
-                print("Query relation event list success \(Date().addingTimeInterval(kTimeInteval))")
+                print("Query process list success \(Date().addingTimeInterval(kTimeInteval))")
                 let json = JSON(data : data!)
-                
-                let eventList = JSON_EventList(json)
-                if(eventList.status != 0){
-                    if let msg = eventList.msg {
-                        AlertWithUIAlertAction(view: self, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
-                    }
-                    self.endRefreshing()
-                    return
-                }
-                
                 if let com = complete {
-                    com(eventList)
+                    com(json)
                 }
             } else {
                 self.endRefreshing()
@@ -277,12 +268,12 @@ extension EventOverViewViewController {
         })
     }
     
-    private func getQueryRelationEventListRequest(pNum: Int? = nil) -> URLRequest?{
-        var urlRequest = URLRequest(url: URL(string: url_QueryEventList)!)
+    private func getQueryProcessListRequest(eventId: Int) -> URLRequest?{
+        var urlRequest = URLRequest(url: URL(string: url_QueryProcessList)!)
         urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)
         urlRequest.httpMethod = HttpMethod.Post.rawValue
         
-        let jsonDic = getQueryRelationEventListRequestData(pNum: pNum)
+        let jsonDic = getQueryProcessListRequestData(eventId: eventId)
         do{
             let jsonData = try JSONSerialization.data(withJSONObject: jsonDic, options: .prettyPrinted)
             urlRequest.httpBody = jsonData
@@ -296,20 +287,11 @@ extension EventOverViewViewController {
         }
     }
     
-    private func getQueryRelationEventListRequestData(pNum: Int? = nil) -> Dictionary<String,Any> {
+    private func getQueryProcessListRequestData(eventId: Int) -> Dictionary<String,Any> {
         var jsonDic = Dictionary<String,Any>()
-        jsonDic["uid"] = loginInfo?.userId
-        jsonDic["starttime"] = nil
-        jsonDic["endtime"] = nil
-        if let pnum = pNum {
-            jsonDic["pagenum"] = pnum
-        } else {
-            jsonDic["pagenum"] = self.pageNum
-        }
-        jsonDic["pagesize"] = pageSize
-        
+        jsonDic["id"] = eventId
+
         return jsonDic
     }
     
 }
-

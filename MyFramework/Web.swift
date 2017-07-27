@@ -22,6 +22,9 @@ let url_EndTask = "\(url_Main)/api/task/EndTask"
 let url_UploadPoints = "\(url_Main)/api/track/UploadPoints"
 let url_CreateEvent = "\(url_Main)/api/event/CreateEvent"
 let url_QueryEventList = "\(url_Main)/api/event/QueryRelationEventList"
+let url_QueryProcessList = "\(url_Main)/api/process/QueryProcessList"
+let url_QueryImage = "\(url_Main)/api/image/QueryImage"
+let url_Picture = "\(url_Main)/api/Picture"
 
 let url_UploadImage = "\(url_Main)/api/image/UploadImage"
 public func getUploadImage(prid: String,typenum: String,actualtime: String) -> String {

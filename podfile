@@ -5,4 +5,5 @@ use_frameworks!
 target 'MyFramework' do
 	pod 'SwiftyJSON'
         pod 'MJRefresh'
+        pod 'SnapKit'
 end
