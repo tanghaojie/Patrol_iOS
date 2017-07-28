@@ -25,6 +25,8 @@ let msg_PleaseSelectEventType = "请选择事件类型"
 let msg_PleaseSelectEventLevel = "请选择事件级别"
 let msg_PleaseSelectEventLocation = "请选择事件所在位置"
 
+let msg_PleaseFillInDealDetailOrDealImages = "请填写处理详情或添加处理图片"
+
 let msg_ConnectTimeout = "连接超时"
 let msg_PleaseCheckNetworkSetting = "请检查网络设置"
 let msg_ServerNoResponse = "服务器未响应"

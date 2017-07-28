@@ -15,13 +15,19 @@ class EventDetailViewController: UIViewController {
     fileprivate var tableView: UITableView!
     fileprivate var tableViewHeader: MJRefreshNormalHeader!
     fileprivate var tableViewFooter: MJRefreshAutoGifFooter!
+    fileprivate var leftBtn: UIBarButtonItem!
+    fileprivate var rightBtn: UIBarButtonItem!
+    fileprivate var titleLabel1: UILabel!
+    fileprivate var titleLabel2: UILabel!
+    fileprivate var titleImage: UIImageView!
     
     fileprivate let navigationTitle_Default = "事件详情"
     fileprivate let navigationTitle_Loading = "加载中"
     fileprivate let titleActivity = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
     fileprivate let titleLabel = UILabel()
-
     fileprivate let event: JSON_Event?
+    
+    fileprivate let navigationItemIncrease: CGFloat = 30.0
     fileprivate var data: [Any] = [Any]()
 
     init(_ json_Event: JSON_Event?) {
@@ -31,6 +37,7 @@ class EventDetailViewController: UIViewController {
         } else {
             self.event = nil
         }
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -40,7 +47,7 @@ class EventDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupUI()
         
         self.tableView.delegate = self
@@ -48,16 +55,18 @@ class EventDetailViewController: UIViewController {
         
         self.tableView.mj_header.beginRefreshing()
     }
-
+    
 
 }
 
 extension EventDetailViewController {
     
     fileprivate func setupUI() {
+        
         setupBackButton()
         setupRightBarButton()
         setupTitle()
+        setupNavigationbar(isBig: true)
         
         setupTableView()
         setupRefreshHeader()
@@ -97,7 +106,6 @@ extension EventDetailViewController {
     
     internal func headerRefresh() {
         print("pull refresh")
-        
         getData(eventId: (self.event?.id)!)
     }
     
@@ -123,19 +131,23 @@ extension EventDetailViewController {
     
     private func setupBackButton() {
         let img = UIImage(named: "leftArrow")?.withRenderingMode(.alwaysOriginal)
-        let leftBtn = UIBarButtonItem(image: img, style: UIBarButtonItemStyle.plain, target: self, action: #selector(backButtonAction))
-        self.navigationItem.leftBarButtonItem = leftBtn;
+        self.leftBtn = UIBarButtonItem(image: img, style: UIBarButtonItemStyle.plain, target: self, action: #selector(backButtonAction))
+        self.navigationItem.leftBarButtonItem = self.leftBtn;
     }
     
     internal func backButtonAction() {
+        setupNavigationbar(isBig: false)
+        
         let navi = self.navigationController
         navi?.popViewController(animated: true)
     }
     
     private func setupRightBarButton() {
-        let img = UIImage(named: "dealEvent")?.withRenderingMode(.alwaysOriginal)
-        let rightBtn = UIBarButtonItem(image: img, style: .plain, target: self, action: #selector(rightBarButtonClicked))
-        self.navigationItem.rightBarButtonItem = rightBtn
+        if event?.statecode == "0001010500000002" {
+            let img = UIImage(named: "dealEvent")?.withRenderingMode(.alwaysOriginal)
+            self.rightBtn = UIBarButtonItem(image: img, style: .plain, target: self, action: #selector(rightBarButtonClicked))
+            self.navigationItem.rightBarButtonItem = self.rightBtn
+        }
     }
     
     internal func rightBarButtonClicked() {
@@ -145,8 +157,8 @@ extension EventDetailViewController {
     private func setupTitle() {
         
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 120, height: 44))
-        self.navigationItem.titleView = view
         
+        self.navigationItem.titleView = view
         let wid : CGFloat = 75.0//4 chn charactor
         let hei : CGFloat = 44.0
         let x : CGFloat = 32.5
@@ -170,6 +182,45 @@ extension EventDetailViewController {
             self.view.isUserInteractionEnabled = true
             titleActivity.stopAnimating()
             titleLabel.text = navigationTitle_Default
+        }
+    }
+    
+    fileprivate func setupNavigationbar(isBig: Bool) {
+        let bar = self.navigationController?.navigationBar
+        let baseFrame = bar?.frame
+        if isBig {
+            bar?.frame = CGRect(x: (baseFrame?.minX)!, y: (baseFrame?.minY)!, width: (baseFrame?.width)!, height: (baseFrame?.height)! + navigationItemIncrease)
+            
+            bar?.setTitleVerticalPositionAdjustment( -navigationItemIncrease, for: .default)
+            self.navigationItem.rightBarButtonItem?.setBackgroundVerticalPositionAdjustment(-navigationItemIncrease, for: .default)
+            self.navigationItem.leftBarButtonItem?.setBackgroundVerticalPositionAdjustment(-navigationItemIncrease, for: .default)
+            
+            let w = kScreenWidth / 3
+            self.titleLabel1 = UILabel(frame: CGRect(x: 0, y: 44, width: w, height: navigationItemIncrease))
+            self.titleLabel1.textAlignment = .center
+            self.titleLabel1.font = UIFont.systemFont(ofSize: 16)
+            self.titleLabel1.text = self.event?.typecode_alias
+            bar?.addSubview(self.titleLabel1)
+            
+            self.titleLabel2 = UILabel(frame: CGRect(x: w, y: 44, width: w , height: navigationItemIncrease))
+            self.titleLabel2.textAlignment = .center
+            self.titleLabel2.font = UIFont.systemFont(ofSize: 16)
+            self.titleLabel2.text = self.event?.levelcode_alias
+            bar?.addSubview(self.titleLabel2)
+            
+            self.titleImage = UIImageView(frame: CGRect(x: w * 2, y: 44, width: w, height: navigationItemIncrease))
+            self.titleImage.image = UIImage(named: "point")
+            self.titleImage.contentMode = .center
+            bar?.addSubview(self.titleImage)
+        } else {
+            bar?.frame = CGRect(x: (baseFrame?.minX)!, y: (baseFrame?.minY)!, width: (baseFrame?.width)!, height: (baseFrame?.height)! - navigationItemIncrease)
+            
+            bar?.setTitleVerticalPositionAdjustment( 0, for: .default)
+            if let nSubViews = bar?.subviews {
+                for subV in nSubViews {
+                    subV.removeFromSuperview()
+                }
+            }
         }
     }
     
@@ -201,7 +252,6 @@ extension EventDetailViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
 }
-
 
 extension EventDetailViewController {
     
@@ -239,7 +289,7 @@ extension EventDetailViewController {
     private func queryProcessList(request: URLRequest, complete: ((JSON) -> Void)?) {
         NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
             if error != nil {
-                AlertWithNoButton(view: self, title: msg_Error, message: msg_RequestError, preferredStyle: .alert, showTime: 1)
+                AlertWithNoButton(view: self, title: msg_Error, message: "\(msg_RequestError) \(error?.localizedDescription ?? "")", preferredStyle: .alert, showTime: 1)
                 self.endRefreshing()
                 return
             }
