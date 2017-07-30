@@ -45,7 +45,7 @@ class THJTableViewCell: UITableViewCell {
                 names += "\(name.realname ?? "未知")、"
             }
             names = names.substring(to: names.index(names.endIndex, offsetBy: -1))
-            line2.text = "分派人员：\(names)"
+            line2.text = "处理人员：\(names)"
         } else {
             line2.text = "  "
         }
@@ -161,20 +161,21 @@ extension THJTableViewCell {
                 let h = ceil(Double(imageCount) / 3.0) * 85
                 make.height.equalTo(h)
             })
-            
-            for index in 0...imageCount - 1 {
-                let x = (index % 3) * 85
-                let y = (index / 3) * 85
-                let imgView = UIImageView(frame: CGRect(x: Double(x) + 2.5, y: Double(y) + 2.5, width: 80, height: 80))
-                imgView.contentMode = .scaleAspectFill
-                imgView.clipsToBounds = true
-                Image.instance.getImageInfo(prid: prid, typenum: typenum){ (uiimage) in
-                    imgView.image = uiimage
-                    imgView.reloadInputViews()
+
+            Image.instance.getImageInfo(prid: prid, typenum: typenum){ (uiimage, index) in
+                if index < imageCount {
+                    let x = (index % 3) * 85
+                    let y = (index / 3) * 85
+                    let imgView = UIImageView(image: uiimage)
+                    imgView.frame = CGRect(x: Double(x) + 2.5, y: Double(y) + 2.5, width: 80, height: 80)
+                    imgView.contentMode = .scaleAspectFill
+                    imgView.clipsToBounds = true
+                    
+                    DispatchQueue.main.async {
+                        self.line4.addSubview(imgView)
+                    }
+                    
                 }
-                
-                imgView.backgroundColor = UIColor.orange
-                line4.addSubview(imgView)
             }
         }
     }

@@ -81,6 +81,46 @@ class Image {
         return resizedImg
     }
     
+    func wechatCompressImage_720(originalImg:UIImage) -> UIImage? {
+        let width = originalImg.size.width
+        let height = originalImg.size.height
+        let scale = width/height
+        var sizeChange = CGSize()
+        
+        if width <= 720 && height <= 720{
+            return originalImg
+        }else {
+            if scale <= 2 && scale >= 1 {
+                let changedWidth:CGFloat = 720
+                let changedheight:CGFloat = changedWidth / scale
+                sizeChange = CGSize(width: changedWidth, height: changedheight)
+            }else if scale >= 0.5 && scale <= 1 {
+                let changedheight:CGFloat = 720
+                let changedWidth:CGFloat = changedheight * scale
+                sizeChange = CGSize(width: changedWidth, height: changedheight)
+            }else if width > 1280 && height > 720 {
+                if scale > 2 {
+                    let changedheight:CGFloat = 720
+                    let changedWidth:CGFloat = changedheight * scale
+                    sizeChange = CGSize(width: changedWidth, height: changedheight)
+                }else if scale < 0.5{
+                    let changedWidth:CGFloat = 720
+                    let changedheight:CGFloat = changedWidth / scale
+                    sizeChange = CGSize(width: changedWidth, height: changedheight)
+                }
+            }else {
+                return originalImg
+            }
+        }
+        
+        UIGraphicsBeginImageContext(sizeChange)
+        originalImg.draw(in: CGRect(x: 0, y: 0, width: sizeChange.width, height: sizeChange.height))
+        let resizedImg = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return resizedImg
+    }
+    
     func uploadImages(images: [UIImage], prid: String, typenum: String, actualtime: String, eventImagesUploadComplete: ((_ eventId: Int) -> Void)?) {
         var urlRequest = URLRequest(url: URL(string: getUploadImage(prid: prid, typenum: typenum, actualtime: actualtime))!)
         urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)
@@ -147,7 +187,7 @@ class Image {
         return body
     }
     
-    func getImageInfo(prid: Int, typenum: Int, complete: ((UIImage) -> Void)?) {
+    func getImageInfo(prid: Int, typenum: Int, complete: ((UIImage,Int) -> Void)?) {
         var urlRequest = URLRequest(url: URL(string: url_QueryImage)!)
         urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)
         urlRequest.httpMethod = HttpMethod.Post.rawValue
@@ -164,7 +204,10 @@ class Image {
             return
         }
         URLSession.shared.dataTask(with: urlRequest){(data1, response, error) in
-            if (data1?.isEmpty)!{
+            if error != nil {
+                return
+            }
+            if data1 == nil || (data1?.isEmpty)!{
                 return
             }
             let json = JSON(data : data1!)
@@ -176,7 +219,7 @@ class Image {
                 return
             }
             let count = data.count
-            for index in 0...count - 1 {
+            for index in 0..<count {
                 let item = data[index]
                 if item == JSON.null {
                     continue
@@ -194,7 +237,7 @@ class Image {
                 let img = UIImage(data: data!)
                 if let i = img {
                     if let com = complete {
-                        com(i)
+                        com(i, index)
                     }
                 }
             }

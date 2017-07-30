@@ -9,7 +9,7 @@
 
 //URL
 
-let url_Main = "http://119.6.30.131/patrolapi"
+let url_Main = "http://119.6.30.131:10063/patrolapi"
 //let url_Main = "http://192.168.0.122/test"
 
 let url_Login = "\(url_Main)/api/user/login"
@@ -25,6 +25,7 @@ let url_QueryEventList = "\(url_Main)/api/event/QueryRelationEventList"
 let url_QueryProcessList = "\(url_Main)/api/process/QueryProcessList"
 let url_QueryImage = "\(url_Main)/api/image/QueryImage"
 let url_Picture = "\(url_Main)/api/Picture"
+let url_CreateProcessExecute = "\(url_Main)/api/process/CreateProcessExecute"
 
 let url_UploadImage = "\(url_Main)/api/image/UploadImage"
 public func getUploadImage(prid: String,typenum: String,actualtime: String) -> String {

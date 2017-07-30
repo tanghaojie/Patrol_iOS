@@ -9,26 +9,21 @@
 import UIKit
 import SwiftyJSON
 //main
-class EventReportSBViewController: UIViewController {
+class EventDealSBViewController: UIViewController {
 
     @IBOutlet var scrollView: UIScrollView!
-    @IBOutlet weak var eventName: UITextField!
-    
-    @IBOutlet weak var eventType: UIButton!
-    @IBOutlet weak var eventTypeTableView: UITableView!
-    
-    @IBOutlet weak var eventLevel: UIButton!
-    @IBOutlet weak var eventLevelTableView: UITableView!
-    
-    @IBOutlet weak var currentLocation: UIButton!
-    @IBOutlet weak var strLocation: UITextField!
+    @IBOutlet weak var eventName: UILabel!
+    @IBOutlet weak var eventType: UILabel!
+    @IBOutlet weak var eventLevel: UILabel!
+    @IBOutlet weak var eventLocation: UIImageView!
+    @IBOutlet weak var dealLocation: UIButton!
     @IBOutlet weak var currentDate: UIButton!
-    @IBOutlet weak var eventDate: UIDatePicker!
-    @IBOutlet weak var eventDetail: UITextView!
-    @IBOutlet weak var eventImage: UICollectionView!
+    @IBOutlet weak var dealDate: UIDatePicker!
+    @IBOutlet weak var dealDetail: UITextView!
+    @IBOutlet weak var dealImage: UICollectionView!
     @IBOutlet weak var commit: UIButton!
     
-    fileprivate let navigationTitle_Default = "事件上报"
+    fileprivate let navigationTitle_Default = "事件处理"
     fileprivate let navigationTitle_Loading = "请稍后"
     fileprivate let defaultAddImageAccessibilityIdentifier = "de_add_image_iden"
     fileprivate let collectionViewCellIdentifier = "collectionViewCellIdentifier"
@@ -38,11 +33,11 @@ class EventReportSBViewController: UIViewController {
     fileprivate let collectionViewCellHeight = 85
     fileprivate let collectionViewCellWidth = 85
     fileprivate let maxImageCount = 9
-    //fileprivate let cachePath = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+
     fileprivate let cachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
-    fileprivate let imagePathName = "EventImages"
+    fileprivate let imagePathName = "DealImages"
     
-    let eventModel = EventModel(uid: nil, eventId: nil, eventName: nil, eventTypeCode: nil, eventLevelCode: nil, location: nil, address: nil, date: nil, remark: nil,images: nil)
+    fileprivate var location: CLLocationCoordinate2D?
     
     //for save self.eventImage collectionViewCell and for display data   ps. an add image button image is also in the array
     var imageArray: NSMutableArray = NSMutableArray()
@@ -50,61 +45,32 @@ class EventReportSBViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.eventTypeTableView.delegate = self
-        self.eventTypeTableView.dataSource = self
-        self.eventLevelTableView.delegate = self
-        self.eventLevelTableView.dataSource = self
-        self.eventImage.delegate = self
-        self.eventImage.dataSource = self
+        self.dealImage.delegate = self
+        self.dealImage.dataSource = self
 
         setupUI()
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if((loginInfo?.config?.eventType.count)! > 0){
-            if(eventType.title(for: .normal) == nil){
-                let code = loginInfo?.config?.eventType[0].code
-                setEventTypeSelection(eventTypeCode: code!)
-                switchEventTypeTableView(isHidden: true)
-            }
-        }
-        if((loginInfo?.config?.eventLevel.count)! > 0){
-            if(eventLevel.title(for: .normal) == nil){
-                let code = loginInfo?.config?.eventLevel[0].code
-                setEventLevelSelection(eventLevelCode: code!)
-                switchEventTypeTableView(isHidden: true)
-            }
-        }
-    }
-    
+
     @IBAction func commitTouchUpInSide(_ sender: Any) {
         commitTouchUpInSide()
     }
 
-    @IBAction func eventTypeTouchUpInSide(_ sender: Any) {
-        switchEventTypeTableView()
-    }
-
-    @IBAction func eventLevelTouchUpInSide(_ sender: Any) {
-        switchEventLevelTableView()
-    }
-    
     @IBAction func currentDateTouchUpInSide(_ sender: Any) {
-        eventDate.date = Date()
+        dealDate.date = Date()
     }
     
 }
 //func
-extension EventReportSBViewController {
+extension EventDealSBViewController {
     
     fileprivate func commitTouchUpInSide() {
         setLoading(isLoading: true)
-        setModel()
+
         if !checkInput() {
             setLoading(isLoading: false)
             return
         }
+        
         let nRequest = getCreateEventRequest()
         if let request = nRequest {
             createEvent(request: request, complete: createEventComplete)
@@ -218,7 +184,7 @@ extension EventReportSBViewController {
     }
     
     private func getCreateEventRequest() -> URLRequest? {
-        var urlRequest = URLRequest(url: URL(string: url_CreateEvent)!)
+        var urlRequest = URLRequest(url: URL(string: url_CreateProcessExecute)!)
         urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)
         urlRequest.httpMethod = HttpMethod.Post.rawValue
    
@@ -238,68 +204,23 @@ extension EventReportSBViewController {
     
     private func getRequestData() -> Dictionary<String,Any> {
         var jsonDic = Dictionary<String,Any>()
+        jsonDic["eid"] = ""
+        jsonDic["processname"] = ""
+        jsonDic["statecode"] = ""
         jsonDic["uid"] = loginInfo?.userId
-        jsonDic["eventname"] = self.eventModel.eventName
-        jsonDic["typecode"] = self.eventModel.eventTypeCode
-        jsonDic["levelcode"] = self.eventModel.eventLevelCode
-        if let location = self.eventModel.location {
-            jsonDic["location"] = getLocationDictionary(location: location)
-        }
-        jsonDic["address"] = self.eventModel.address
-        jsonDic["statecode"] = nil
-        if let d = self.eventModel.date {
-            jsonDic["actualtime"] = getDateFormatter(dateFormatter: kDateTimeFormate).string(from: d)
-        }
-        jsonDic["remark"] = self.eventModel.remark
-        
+        jsonDic["location"] = ""
+        jsonDic["actualtime"] = ""
+        jsonDic["remark"] = ""
+
         return jsonDic
     }
     
-    private func getLocationDictionary(location: CLLocationCoordinate2D) -> Dictionary<String,Any> {
-        var locationDic = Dictionary<String,Any>()
-        locationDic["x"] = location.longitude
-        locationDic["y"] = location.latitude
-        return locationDic
-    }
-    
-    private func setModel(){
-        eventModel.eventName = eventName.text
-        if eventModel.location == nil {
-            eventModel.location = MLocationManager.instance.location?.coordinate
-        }
-        eventModel.address = strLocation.text
-        eventModel.date = eventDate.date.addingTimeInterval(TimeInterval(TimeZone.current.secondsFromGMT()))
-        eventModel.remark = eventDetail.text
-        var images = [UIImage]()
-        if imageArray.count > 1 {
-            for item in imageArray {
-                let nImage = item as? UIImage
-                if let image = nImage {
-                    if image.accessibilityIdentifier != defaultAddImageAccessibilityIdentifier {
-                        images.append(image)
-                    }
-                }
-            }
-        }
-        eventModel.images = images.count > 0 ? images : nil
-    }
-    
     private func checkInput() -> Bool {
-        if self.eventModel.eventName == nil || (self.eventModel.eventName?.isEmpty)! {
-            AlertWithNoButton(view: self, title: msg_PleaseEnterEventName, message: nil, preferredStyle: .alert, showTime: 1)
-            self.eventName.becomeFirstResponder()
-            return false
-        }
-        if self.eventModel.eventTypeCode == nil || (self.eventModel.eventTypeCode?.isEmpty)! {
-            AlertWithNoButton(view: self, title: msg_PleaseSelectEventType, message: nil, preferredStyle: .alert, showTime: 1)
-            return false
-        }
-        if self.eventModel.eventLevelCode == nil || (self.eventModel.eventLevelCode?.isEmpty)! {
-            AlertWithNoButton(view: self, title: msg_PleaseSelectEventLevel, message: nil, preferredStyle: .alert, showTime: 1)
-            return false
-        }
-        if self.eventModel.location == nil {
-            AlertWithNoButton(view: self, title: msg_PleaseSelectEventLocation, message: nil, preferredStyle: .alert, showTime: 1)
+        
+        let remark = dealDetail.text
+        let count = imageArray.count
+        if (remark == nil || (remark?.isEmpty)!) || (count <= 0 ) {
+            AlertWithNoButton(view: self, title: msg_PleaseFillInDealDetailOrDealImages, message: nil, preferredStyle: .alert, showTime: 1)
             return false
         }
         return true
@@ -323,7 +244,7 @@ extension EventReportSBViewController {
     
 }
 //ui
-extension EventReportSBViewController {
+extension EventDealSBViewController {
     
     fileprivate func setupUI(){
         
@@ -335,7 +256,7 @@ extension EventReportSBViewController {
     }
     
     private func setupCollectionView(){
-        self.eventImage.register(UICollectionViewCell.self, forCellWithReuseIdentifier: collectionViewCellIdentifier)
+        self.dealImage.register(UICollectionViewCell.self, forCellWithReuseIdentifier: collectionViewCellIdentifier)
         addLongPressListener()
     }
     
@@ -343,11 +264,9 @@ extension EventReportSBViewController {
         scrollView.frame = self.view.frame
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
-        //scrollView.pagingEnabled = false
         scrollView.bounces = true
         scrollView.alwaysBounceVertical = true
         scrollView.alwaysBounceHorizontal = false
-        //scrollView.delegate = self
         scrollView.scrollsToTop = true
         scrollView.keyboardDismissMode = .onDrag
         scrollView.contentSize = CGSize(width: kScreenWidth, height: 900)
@@ -396,133 +315,13 @@ extension EventReportSBViewController {
     }
     
 }
-//tableview
-extension EventReportSBViewController: UITableViewDataSource , UITableViewDelegate {
-    
-    fileprivate func switchEventTypeTableView(isHidden: Bool? = nil){
-        if(isHidden != nil){
-            UIView.animate(withDuration: 0.5, animations: {
-                self.eventTypeTableView?.isHidden = isHidden!
-            })
-            return
-        }
-        if(self.eventTypeTableView.isHidden){
-            self.view.bringSubview(toFront: eventTypeTableView)
-            UIView.animate(withDuration: 0.5, animations: {
-                self.eventTypeTableView?.isHidden = false
-            })
-        }else{
-            UIView.animate(withDuration: 0.5, animations: {
-                self.eventTypeTableView?.isHidden = true
-            })
-        }
-    }
-    
-    fileprivate func switchEventLevelTableView(isHidden: Bool? = nil){
-        if(isHidden != nil){
-            UIView.animate(withDuration: 0.5, animations: {
-                self.eventLevelTableView?.isHidden = isHidden!
-            })
-            return
-        }
-        if(self.eventLevelTableView.isHidden){
-            self.view.bringSubview(toFront: eventLevelTableView)
-            UIView.animate(withDuration: 0.5, animations: {
-                self.eventLevelTableView?.isHidden = false
-            })
-        }else{
-            UIView.animate(withDuration: 0.5, animations: {
-                self.eventLevelTableView?.isHidden = true
-            })
-        }
-    }
-    
-    internal func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    internal func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(tableView.tag == 0){
-            return (loginInfo?.config?.eventType.count)!
-        }else if(tableView.tag == 1){
-            return (loginInfo?.config?.eventLevel.count)!
-        }
-        return 0
-    }
-    
-    internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if(tableView.tag == 0){
-            var cell = tableView.dequeueReusableCell(withIdentifier: "cellid")
-            if cell == nil  {
-                cell = UITableViewCell(style: .default, reuseIdentifier: "cellid")
-            }
-            cell?.backgroundColor = UIColor(red: 225, green: 225, blue: 225)
-            let item = loginInfo?.config?.eventType[indexPath.row]
-            cell?.textLabel?.text = item?.alias
-            cell?.textLabel?.textAlignment = .center
-            return cell!
-        }else if(tableView.tag == 1){
-            var cell = tableView.dequeueReusableCell(withIdentifier: "cellid")
-            if cell == nil  {
-                cell = UITableViewCell(style: .default, reuseIdentifier: "cellid")
-            }
-            cell?.backgroundColor = UIColor(red: 225, green: 225, blue: 225)
-            let item = loginInfo?.config?.eventLevel[indexPath.row]
-            cell?.textLabel?.text = item?.alias
-            cell?.textLabel?.textAlignment = .center
-            return cell!
-        }
-        return tableView.dequeueReusableCell(withIdentifier: "cellid")!
-    }
-    
-    internal func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if(tableView.tag == 0){
-            let item = loginInfo?.config?.eventType[indexPath.row]
-            selectedEventType(item: item!)
-        }else if(tableView.tag == 1){
-            let item = loginInfo?.config?.eventLevel[indexPath.row]
-            selectedEventType(item: item!)
-        }
-    }
-    
-    private func selectedEventType(item: EventType){
-        self.eventModel.eventTypeCode = item.code
-        self.eventType.setTitle(item.alias, for: .normal)
-        switchEventTypeTableView(isHidden: true)
-    }
-    
-    private func selectedEventType(item: EventLevel){
-        self.eventModel.eventLevelCode = item.code
-        self.eventLevel.setTitle(item.alias, for: .normal)
-        switchEventLevelTableView(isHidden: true)
-    }
-    
-    fileprivate func setEventTypeSelection(eventTypeCode : String){
-        let index = loginInfo?.config?.eventType.index(where: { (iTType) -> Bool in
-            return iTType.code == eventTypeCode
-        })
-        if let iindex = index{
-            tableView(self.eventTypeTableView, didSelectRowAt: IndexPath.init(row: iindex, section: iindex))
-        }
-    }
-    
-    fileprivate func setEventLevelSelection(eventLevelCode : String){
-        let index = loginInfo?.config?.eventLevel.index(where: { (iTType) -> Bool in
-            return iTType.code == eventLevelCode
-        })
-        if let iindex = index{
-            tableView(self.eventLevelTableView, didSelectRowAt: IndexPath.init(row: iindex, section: iindex))
-        }
-    }
-    
-}
 //collectionview
-extension EventReportSBViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension EventDealSBViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     fileprivate func setupInitBtnImage() {
         defaultAddImage?.accessibilityIdentifier = defaultAddImageAccessibilityIdentifier
         imageArray.add(defaultAddImage as Any)
-        self.eventImage.reloadData()
+        self.dealImage.reloadData()
     }
     
     internal func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -531,12 +330,12 @@ extension EventReportSBViewController: UICollectionViewDelegate, UICollectionVie
     
     internal func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let count = imageArray.count
-        let countPerRow = floor(self.eventImage.frame.width / CGFloat(collectionViewCellWidth))
+        let countPerRow = floor(self.dealImage.frame.width / CGFloat(collectionViewCellWidth))
         let rowCount = Int(ceil(CGFloat(count) / countPerRow))
         let height = rowCount * collectionViewCellHeight
-        if self.eventImage.frame.height != CGFloat(height) {
-            self.eventImage.frame = CGRect(x: self.eventImage.frame.minX, y: self.eventImage.frame.minY, width: self.eventImage.frame.width, height: CGFloat(height))
-            self.commit.frame = CGRect(x: self.commit.frame.minX, y: self.eventImage.frame.maxY + 10, width: self.commit.frame.width, height: self.commit.frame.height)
+        if self.dealImage.frame.height != CGFloat(height) {
+            self.dealImage.frame = CGRect(x: self.dealImage.frame.minX, y: self.dealImage.frame.minY, width: self.dealImage.frame.width, height: CGFloat(height))
+            self.commit.frame = CGRect(x: self.commit.frame.minX, y: self.dealImage.frame.maxY + 10, width: self.commit.frame.width, height: self.commit.frame.height)
         }
         return count
     }
@@ -546,7 +345,7 @@ extension EventReportSBViewController: UICollectionViewDelegate, UICollectionVie
         let image = imageArray[indexPath.row] as? UIImage
 
         let imageView = UIImageView(frame: CGRect(x: 1, y: 1, width: 80, height: 80))
-        imageView.backgroundColor = self.eventImage.backgroundColor
+        imageView.backgroundColor = self.dealImage.backgroundColor
         imageView.image = image
         imageView.center = cell.contentView.center
         cell.contentView.addSubview(imageView)
@@ -565,21 +364,21 @@ extension EventReportSBViewController: UICollectionViewDelegate, UICollectionVie
     fileprivate func addLongPressListener(){
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.collectionViewLongPress))
         longPress.minimumPressDuration = 1
-        self.eventImage.addGestureRecognizer(longPress)
+        self.dealImage.addGestureRecognizer(longPress)
     }
     
     internal func collectionViewLongPress(longPressGestureRecognizer: UILongPressGestureRecognizer){
         if longPressGestureRecognizer.state == UIGestureRecognizerState.began {
             let actionController = UIAlertController(title: "", message: "警告", preferredStyle: .actionSheet)
-            let location = longPressGestureRecognizer.location(in: self.eventImage)
-            let nIndexPath = self.eventImage.indexPathForItem(at: location)
+            let location = longPressGestureRecognizer.location(in: self.dealImage)
+            let nIndexPath = self.dealImage.indexPathForItem(at: location)
             if nIndexPath != nil{
                 let image = self.imageArray[nIndexPath!.row] as? UIImage
                 if image != nil {
                     if image?.accessibilityIdentifier != defaultAddImageAccessibilityIdentifier {
                         let actionDel = UIAlertAction(title: "删除", style: .default){ (_) -> Void in
                             self.imageArray.remove(image as Any)
-                            self.eventImage.reloadData()
+                            self.dealImage.reloadData()
                         }
                         let actionCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)
                         actionController.addAction(actionDel)
@@ -593,7 +392,7 @@ extension EventReportSBViewController: UICollectionViewDelegate, UICollectionVie
 
 }
 //imagePickerController
-extension EventReportSBViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension EventDealSBViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     fileprivate func addImageAction(){
         let picker = UIImagePickerController()
@@ -630,7 +429,7 @@ extension EventReportSBViewController: UIImagePickerControllerDelegate, UINaviga
         }
         
         picker.dismiss(animated: true, completion: nil)
-        self.eventImage.reloadData()
+        self.dealImage.reloadData()
     }
     
     internal func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

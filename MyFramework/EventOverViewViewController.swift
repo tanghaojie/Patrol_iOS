@@ -238,7 +238,7 @@ extension EventOverViewViewController {
     private func queryRelationEventList(request: URLRequest, complete: ((JSON_EventList) -> Void)?) {
         NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
             if error != nil {
-                AlertWithNoButton(view: self, title: msg_Error, message: msg_RequestError, preferredStyle: .alert, showTime: 1)
+                AlertWithNoButton(view: self, title: msg_Error, message: "\(msg_RequestError) \(error?.localizedDescription ?? "")", preferredStyle: .alert, showTime: 1)
                 self.endRefreshing()
                 return
             }
