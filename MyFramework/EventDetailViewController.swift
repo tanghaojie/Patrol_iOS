@@ -17,6 +17,8 @@ class EventDetailViewController: UIViewController {
     fileprivate var tableViewFooter: MJRefreshAutoGifFooter!
     fileprivate var leftBtn: UIBarButtonItem!
     fileprivate var rightBtn: UIBarButtonItem!
+    
+    fileprivate var subNavigationBar: UIView!
     fileprivate var titleLabel1: UILabel!
     fileprivate var titleLabel2: UILabel!
     fileprivate var titleImage: UIImageView!
@@ -27,7 +29,7 @@ class EventDetailViewController: UIViewController {
     fileprivate let titleLabel = UILabel()
     fileprivate let event: JSON_Event?
     
-    fileprivate let navigationItemIncrease: CGFloat = 30.0
+    static let navigationItemIncrease: CGFloat = 30.0
     fileprivate var data: [Any] = [Any]()
 
     init(_ json_Event: JSON_Event?) {
@@ -56,6 +58,11 @@ class EventDetailViewController: UIViewController {
         self.tableView.mj_header.beginRefreshing()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        setupNavigationbar(isBig: true)
+    }
 
 }
 
@@ -70,7 +77,6 @@ extension EventDetailViewController {
         
         setupTableView()
         setupRefreshHeader()
-        //setupRefreshFooter()
     }
     
     private func setupTableView() {
@@ -91,6 +97,7 @@ extension EventDetailViewController {
         self.tableView.estimatedRowHeight = 50
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.view = tableView
+        self.tableView.contentInset = UIEdgeInsets(top: EventDetailViewController.navigationItemIncrease, left: 0, bottom: 0, right: 0)
     }
     
     private func setupRefreshHeader() {
@@ -108,23 +115,7 @@ extension EventDetailViewController {
         print("pull refresh")
         getData(eventId: (self.event?.id)!)
     }
-    
-    private func setupRefreshFooter() {
-        self.tableViewFooter = MJRefreshAutoGifFooter()
-        self.tableViewFooter.setRefreshingTarget(self, refreshingAction: #selector(footerRefresh))
-        self.tableView.mj_footer = self.tableViewFooter
-        self.tableViewFooter.setTitle("加载更多", for: .idle)
-        self.tableViewFooter.setTitle("释放以加载更多", for: .pulling)
-        self.tableViewFooter.setTitle("加载中...", for: .refreshing)
-        self.tableViewFooter.setTitle("没有更多数据", for: .noMoreData)
-    }
-    
-    internal func footerRefresh() {
-        print("pull load")
-        
-        
-    }
-    
+
     fileprivate func endRefreshing() {
         self.tableView.mj_header.endRefreshing()
     }
@@ -151,7 +142,11 @@ extension EventDetailViewController {
     }
     
     internal func rightBarButtonClicked() {
-        //self.present(EventReportViewController(), animated: true, completion: nil)
+        let sb = UIStoryboard(name: "EventDealSB", bundle: nil)
+        let vc = sb.instantiateViewController(withIdentifier: "EventDealSBViewController") as! EventDealSBViewController
+        vc.setEvent(self.event)
+        setupNavigationbar(isBig: false)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     private func setupTitle() {
@@ -189,41 +184,37 @@ extension EventDetailViewController {
         let bar = self.navigationController?.navigationBar
         let baseFrame = bar?.frame
         if isBig {
-            bar?.frame = CGRect(x: (baseFrame?.minX)!, y: (baseFrame?.minY)!, width: (baseFrame?.width)!, height: (baseFrame?.height)! + navigationItemIncrease)
-            
-            bar?.setTitleVerticalPositionAdjustment( -navigationItemIncrease, for: .default)
-            self.navigationItem.rightBarButtonItem?.setBackgroundVerticalPositionAdjustment(-navigationItemIncrease, for: .default)
-            self.navigationItem.leftBarButtonItem?.setBackgroundVerticalPositionAdjustment(-navigationItemIncrease, for: .default)
-            
-            let w = kScreenWidth / 3
-            self.titleLabel1 = UILabel(frame: CGRect(x: 0, y: 44, width: w, height: navigationItemIncrease))
-            self.titleLabel1.textAlignment = .center
-            self.titleLabel1.font = UIFont.systemFont(ofSize: 16)
-            self.titleLabel1.text = self.event?.typecode_alias
-            bar?.addSubview(self.titleLabel1)
-            
-            self.titleLabel2 = UILabel(frame: CGRect(x: w, y: 44, width: w , height: navigationItemIncrease))
-            self.titleLabel2.textAlignment = .center
-            self.titleLabel2.font = UIFont.systemFont(ofSize: 16)
-            self.titleLabel2.text = self.event?.levelcode_alias
-            bar?.addSubview(self.titleLabel2)
-            
-            self.titleImage = UIImageView(frame: CGRect(x: w * 2, y: 44, width: w, height: navigationItemIncrease))
-            self.titleImage.image = UIImage(named: "point")
-            self.titleImage.contentMode = .center
-            bar?.addSubview(self.titleImage)
-        } else {
-            bar?.frame = CGRect(x: (baseFrame?.minX)!, y: (baseFrame?.minY)!, width: (baseFrame?.width)!, height: (baseFrame?.height)! - navigationItemIncrease)
-            
-            bar?.setTitleVerticalPositionAdjustment( 0, for: .default)
-            if let nSubViews = bar?.subviews {
-                for subV in nSubViews {
-                    subV.removeFromSuperview()
-                }
+            if self.subNavigationBar == nil {
+                self.subNavigationBar = UIView(frame: CGRect(x: 0, y: (baseFrame?.height)!, width: kScreenWidth, height: EventDetailViewController.navigationItemIncrease))
+                self.subNavigationBar.backgroundColor = .red
+                
+                let w = kScreenWidth / 3
+                self.titleLabel1 = UILabel(frame: CGRect(x: 0, y: 0, width: w, height: EventDetailViewController.navigationItemIncrease))
+                self.titleLabel1.textAlignment = .center
+                self.titleLabel1.font = UIFont.systemFont(ofSize: 16)
+                self.titleLabel1.text = self.event?.typecode_alias
+                self.subNavigationBar.addSubview(self.titleLabel1)
+                
+                self.titleLabel2 = UILabel(frame: CGRect(x: w, y: 0, width: w , height: EventDetailViewController.navigationItemIncrease))
+                self.titleLabel2.textAlignment = .center
+                self.titleLabel2.font = UIFont.systemFont(ofSize: 16)
+                self.titleLabel2.text = self.event?.levelcode_alias
+                self.subNavigationBar.addSubview(self.titleLabel2)
+                
+                self.titleImage = UIImageView(frame: CGRect(x: w * 2, y: 0, width: w, height: EventDetailViewController.navigationItemIncrease))
+                self.titleImage.image = UIImage(named: "point")
+                self.titleImage.contentMode = .center
+                self.subNavigationBar.addSubview(self.titleImage)
+                
+                bar?.addSubview(subNavigationBar)
+            } else {
+                subNavigationBar.isHidden = false
             }
+        } else {
+            subNavigationBar.isHidden = true
         }
     }
-    
+
 }
 
 extension EventDetailViewController: UITableViewDelegate, UITableViewDataSource {
