@@ -38,7 +38,6 @@ class EventReportSBViewController: UIViewController {
     fileprivate let collectionViewCellHeight = 85
     fileprivate let collectionViewCellWidth = 85
     fileprivate let maxImageCount = 9
-    //fileprivate let cachePath = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
     fileprivate let cachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
     fileprivate let imagePathName = "EventImages"
     
@@ -192,7 +191,7 @@ extension EventReportSBViewController {
             }
             let eid = uid_eid[1]
             let date = getDateFormatter(dateFormatter: "yyyy-MM-dd+HH:mm:ss").string(from: Date().addingTimeInterval(kTimeInteval))
-            Image.instance.uploadImages(images: images, prid: eid, typenum: "1", actualtime: date, eventImagesUploadComplete: eventImagesUploadCompleted)
+            Image.instance.uploadImages(images: images, prid: eid, typenum: "1", actualtime: date, imagesUploadComplete: eventImagesUploadCompleted)
         }
     }
     

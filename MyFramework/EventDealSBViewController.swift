@@ -37,18 +37,24 @@ class EventDealSBViewController: UIViewController {
     fileprivate let cachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
     fileprivate let imagePathName = "DealImages"
     
-    fileprivate var location: CLLocationCoordinate2D?
+    fileprivate var event: JSON_Event?
     
+    fileprivate var location: CLLocationCoordinate2D?
+
     //for save self.eventImage collectionViewCell and for display data   ps. an add image button image is also in the array
     var imageArray: NSMutableArray = NSMutableArray()
+    
+    func setEvent(_ event: JSON_Event?) {
+        self.event = event
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupUI()
+        
         self.dealImage.delegate = self
         self.dealImage.dataSource = self
-
-        setupUI()
     }
 
     @IBAction func commitTouchUpInSide(_ sender: Any) {
@@ -71,23 +77,19 @@ extension EventDealSBViewController {
             return
         }
         
-        let nRequest = getCreateEventRequest()
+        let nRequest = getCreateProcessExecuteRequest()
         if let request = nRequest {
-            createEvent(request: request, complete: createEventComplete)
+            createProcessExecute(request: request, complete: createEventComplete)
         }else {
             AlertWithNoButton(view: self, title: msg_SomethingWrongTryAgain, message: "", preferredStyle: .alert, showTime: 1)
             setLoading(isLoading: false)
         }
     }
     
-    private func createEventComplete() {
-        backButtonAction()
-    }
-    
-    private func createEvent(request: URLRequest, complete: (() -> Void)?) {
+    fileprivate func createProcessExecute(request: URLRequest, complete: (() -> Void)?) {
         NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
             if error != nil {
-                AlertWithNoButton(view: self, title: msg_Error, message: msg_RequestError, preferredStyle: .alert, showTime: 1)
+                AlertWithNoButton(view: self, title: msg_Error, message: "\(msg_RequestError) \(error?.localizedDescription ?? "")", preferredStyle: .alert, showTime: 1)
                 self.setLoading(isLoading: false)
                 return
             }
@@ -96,7 +98,7 @@ extension EventDealSBViewController {
                 self.setLoading(isLoading: false)
                 return
             }
-            if let urlResponse = response{
+            if let urlResponse = response {
                 let httpResponse = urlResponse as! HTTPURLResponse
                 let statusCode = httpResponse.statusCode
                 if statusCode != 200 {
@@ -105,7 +107,7 @@ extension EventDealSBViewController {
                     return
                 }
                 
-                print("create event success \(Date().addingTimeInterval(kTimeInteval))")
+                print("create process success \(Date().addingTimeInterval(kTimeInteval))")
                 let json = JSON(data : data!)
                 let nStatus = json["status"].int
                 let nMsg = json["msg"].string
@@ -120,15 +122,15 @@ extension EventDealSBViewController {
                         return
                     }
                     if data != JSON.null  {
-                        let eventId = data["id"].int
-                        if let images = self.eventModel.images {
-                            if images.count > 0 {
-                                let thisEventDir = self.saveImages(eventId: eventId!, images: images)
-                                self.uploadImages(eventDir: thisEventDir)
+                        let nId = data["id"].int
+                        if let processId = nId {
+                            if self.imageArray.count > 0 {
+                                let thisProcessDir = self.saveImages(processId: processId, images: self.imageArray)
+                                self.uploadImages(processDir: thisProcessDir)
                             }
-                        }
-                        if complete != nil {
-                            complete!()
+                            if complete != nil {
+                                complete!()
+                            }
                         }
                     }else {
                         //application will not running here in normal situation
@@ -141,53 +143,11 @@ extension EventDealSBViewController {
         })
     }
     
-    private func uploadImages(eventDir: String) {
-        var images: [UIImage] = [UIImage]()
-        let enumerator = FileManager.default.enumerator(atPath: eventDir)
-        while let path = enumerator?.nextObject() as? String {
-            let nImage = UIImage(named: "\(eventDir)/\(path)")
-            if let image = nImage {
-                images.append(image)
-            }
-        }
-        if images.count > 0 {
-            let dirName = URL(fileURLWithPath: eventDir).lastPathComponent
-            let uid_eid = dirName.components(separatedBy: "_")
-            if uid_eid.count < 2 {
-                return
-            }
-            let eid = uid_eid[1]
-            let date = getDateFormatter(dateFormatter: "yyyy-MM-dd+HH:mm:ss").string(from: Date().addingTimeInterval(kTimeInteval))
-            Image.instance.uploadImages(images: images, prid: eid, typenum: "1", actualtime: date, eventImagesUploadComplete: eventImagesUploadCompleted)
-        }
-    }
-    
-    private func saveImages(eventId: Int, images: [UIImage]) -> String {
-        let uid = loginInfo?.userId
-        let directoryName = "\(uid ?? -1)_\(eventId)"
-        var fullDir = cachePath?.appending("/\(imagePathName)")
-        fullDir = fullDir?.appending("/\(directoryName)")
-        Image.instance.saveImages(path: fullDir!, images: images, compressFunc: Image.instance.wechatCompressImage_720(originalImg:))
-        
-        return fullDir!
-    }
-    
-    internal func eventImagesUploadCompleted(eventId: Int) {
-        let uid = loginInfo?.userId
-        let directoryName = "\(uid ?? -1)_\(eventId)"
-        var fullDir = cachePath?.appending("/\(imagePathName)")
-        fullDir = fullDir?.appending("/\(directoryName)")
-        var x = ObjCBool(true)
-        if FileManager.default.fileExists(atPath: fullDir!, isDirectory: &x) {
-            try! FileManager.default.copyItem(atPath: fullDir!, toPath: "\(fullDir!)_")
-        }
-    }
-    
-    private func getCreateEventRequest() -> URLRequest? {
+    fileprivate func getCreateProcessExecuteRequest() -> URLRequest? {
         var urlRequest = URLRequest(url: URL(string: url_CreateProcessExecute)!)
         urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)
         urlRequest.httpMethod = HttpMethod.Post.rawValue
-   
+        
         let jsonDic = getRequestData()
         do{
             let jsonData = try JSONSerialization.data(withJSONObject: jsonDic, options: .prettyPrinted)
@@ -197,31 +157,100 @@ extension EventDealSBViewController {
             
             return urlRequest
         }catch {
-            printLog(message: "Create event. json data wrong\(error)")
+            printLog(message: "Create process execute. json data wrong\(error)")
             return nil
         }
     }
     
     private func getRequestData() -> Dictionary<String,Any> {
         var jsonDic = Dictionary<String,Any>()
-        jsonDic["eid"] = ""
-        jsonDic["processname"] = ""
-        jsonDic["statecode"] = ""
+        jsonDic["eid"] = self.event?.id
+        jsonDic["processname"] = "毫无作用的事件处理名，系统自动添加，所有处理都是这个名字"
+        jsonDic["statecode"] = "0001010400000003"
         jsonDic["uid"] = loginInfo?.userId
-        jsonDic["location"] = ""
-        jsonDic["actualtime"] = ""
-        jsonDic["remark"] = ""
-
+        if let location = self.location {
+            jsonDic["location"] = getLocationDictionary(location: location)
+        }
+        let date = self.dealDate.date
+        let d = date.addingTimeInterval(TimeInterval(TimeZone.current.secondsFromGMT()))
+        jsonDic["actualtime"] = getDateFormatter(dateFormatter: kDateTimeFormate).string(from: d)
+        jsonDic["remark"] = self.dealDetail.text
+        
         return jsonDic
+    }
+    
+    private func createEventComplete() {
+        backButtonAction()
+    }
+    
+    private func uploadImages(processDir: String) {
+        var images: [UIImage] = [UIImage]()
+        let enumerator = FileManager.default.enumerator(atPath: processDir)
+        while let path = enumerator?.nextObject() as? String {
+            let nImage = UIImage(named: "\(processDir)/\(path)")
+            if let image = nImage {
+                images.append(image)
+            }
+        }
+        if images.count > 0 {
+            let dirName = URL(fileURLWithPath: processDir).lastPathComponent
+            let uid_pid = dirName.components(separatedBy: "_")
+            if uid_pid.count < 2 {
+                return
+            }
+            let pid = uid_pid[1]
+            let date = getDateFormatter(dateFormatter: "yyyy-MM-dd+HH:mm:ss").string(from: Date().addingTimeInterval(kTimeInteval))
+            Image.instance.uploadImages(images: images, prid: pid, typenum: "2", actualtime: date, imagesUploadComplete: processImagesUploadCompleted)
+        }
+    }
+    
+    private func saveImages(processId: Int, images: NSMutableArray) -> String {
+        let uid = loginInfo?.userId
+        let directoryName = "\(uid ?? -1)_\(processId)"
+        var fullDir = cachePath?.appending("/\(imagePathName)")
+        fullDir = fullDir?.appending("/\(directoryName)")
+        var uiImages = [UIImage]()
+        for item in images {
+            let img = item as! UIImage
+            if img.accessibilityIdentifier != defaultAddImageAccessibilityIdentifier {
+                uiImages.append(img)
+            }
+        }
+        Image.instance.saveImages(path: fullDir!, images: uiImages, compressFunc: Image.instance.wechatCompressImage_720(originalImg:))
+        
+        return fullDir!
+    }
+    
+    internal func processImagesUploadCompleted(processId: Int) {
+        let uid = loginInfo?.userId
+        let directoryName = "\(uid ?? -1)_\(processId)"
+        var fullDir = cachePath?.appending("/\(imagePathName)")
+        fullDir = fullDir?.appending("/\(directoryName)")
+        var x = ObjCBool(true)
+        if FileManager.default.fileExists(atPath: fullDir!, isDirectory: &x) {
+            try! FileManager.default.copyItem(atPath: fullDir!, toPath: "\(fullDir!)_")
+        }
+    }
+    
+    private func getLocationDictionary(location: CLLocationCoordinate2D) -> Dictionary<String,Any> {
+        var locationDic = Dictionary<String,Any>()
+        locationDic["x"] = location.longitude
+        locationDic["y"] = location.latitude
+        return locationDic
     }
     
     private func checkInput() -> Bool {
         
         let remark = dealDetail.text
         let count = imageArray.count
-        if (remark == nil || (remark?.isEmpty)!) || (count <= 0 ) {
+        let remarkIsNil = ((remark == nil) || (remark?.isEmpty)!)
+        let countIsNil = (count <= 1)
+        if remarkIsNil && countIsNil {
             AlertWithNoButton(view: self, title: msg_PleaseFillInDealDetailOrDealImages, message: nil, preferredStyle: .alert, showTime: 1)
             return false
+        }
+        if self.location == nil {
+            self.location = MLocationManager.instance.location?.coordinate
         }
         return true
     }
@@ -243,6 +272,7 @@ extension EventDealSBViewController {
     }
     
 }
+
 //ui
 extension EventDealSBViewController {
     
@@ -253,6 +283,15 @@ extension EventDealSBViewController {
         setupTitle()
         setupInitBtnImage()
         setupCollectionView()
+        setupShowEvent()
+    }
+    
+    private func setupShowEvent() {
+        if let ev = self.event {
+            self.eventName.text = ev.eventname
+            self.eventType.text = ev.typecode_alias
+            self.eventLevel.text = ev.levelcode_alias
+        }
     }
     
     private func setupCollectionView(){
@@ -278,9 +317,9 @@ extension EventDealSBViewController {
         self.navigationItem.leftBarButtonItem = leftBtn;
     }
     
-    func backButtonAction(){
+    internal func backButtonAction(){
         let navi = self.navigationController
-        navi?.dismiss(animated: true, completion: nil)
+        navi?.popViewController(animated: true)
     }
     
     private func setupTitle(){

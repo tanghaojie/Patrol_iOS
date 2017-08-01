@@ -14,11 +14,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-//        if((launchOptions?.index(forKey: .location)) != nil){
-//            if(MLocationManager.instance.responds(to: #selector(MLocationManager.instance.requestAlwaysAuthorization))){
-//                MLocationManager.instance.requestAlwaysAuthorization()
-//            }
-//        }
         SystemInit()
         return true
     }

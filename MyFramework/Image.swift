@@ -121,7 +121,7 @@ class Image {
         return resizedImg
     }
     
-    func uploadImages(images: [UIImage], prid: String, typenum: String, actualtime: String, eventImagesUploadComplete: ((_ eventId: Int) -> Void)?) {
+    func uploadImages(images: [UIImage], prid: String, typenum: String, actualtime: String, imagesUploadComplete: ((_ eventId: Int) -> Void)?) {
         var urlRequest = URLRequest(url: URL(string: getUploadImage(prid: prid, typenum: typenum, actualtime: actualtime))!)
         urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)
         urlRequest.httpMethod = HttpMethod.Post.rawValue
@@ -158,8 +158,8 @@ class Image {
                         return
                     }
                     print("upload images success")
-                    if eventImagesUploadComplete != nil {
-                        eventImagesUploadComplete?(Int(prid)!)
+                    if imagesUploadComplete != nil {
+                        imagesUploadComplete?(Int(prid)!)
                     }
                 }
             }
