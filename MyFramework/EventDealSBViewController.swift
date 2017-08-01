@@ -182,7 +182,7 @@ extension EventDealSBViewController {
     private func createEventComplete() {
         backButtonAction()
     }
-
+    
     private func uploadImages(processDir: String) {
         var images: [UIImage] = [UIImage]()
         let enumerator = FileManager.default.enumerator(atPath: processDir)
@@ -212,7 +212,7 @@ extension EventDealSBViewController {
         var uiImages = [UIImage]()
         for item in images {
             let img = item as! UIImage
-            if img.accessibilityIdentifier != collectionViewCellIdentifier {
+            if img.accessibilityIdentifier != defaultAddImageAccessibilityIdentifier {
                 uiImages.append(img)
             }
         }
@@ -243,7 +243,9 @@ extension EventDealSBViewController {
         
         let remark = dealDetail.text
         let count = imageArray.count
-        if (remark == nil || (remark?.isEmpty)!) || (count <= 0 ) {
+        let remarkIsNil = ((remark == nil) || (remark?.isEmpty)!)
+        let countIsNil = (count <= 1)
+        if remarkIsNil && countIsNil {
             AlertWithNoButton(view: self, title: msg_PleaseFillInDealDetailOrDealImages, message: nil, preferredStyle: .alert, showTime: 1)
             return false
         }
@@ -281,6 +283,15 @@ extension EventDealSBViewController {
         setupTitle()
         setupInitBtnImage()
         setupCollectionView()
+        setupShowEvent()
+    }
+    
+    private func setupShowEvent() {
+        if let ev = self.event {
+            self.eventName.text = ev.eventname
+            self.eventType.text = ev.typecode_alias
+            self.eventLevel.text = ev.levelcode_alias
+        }
     }
     
     private func setupCollectionView(){

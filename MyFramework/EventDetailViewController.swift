@@ -309,7 +309,7 @@ extension EventDetailViewController {
         })
     }
     
-    private func getQueryProcessListRequest(eventId: Int) -> URLRequest?{
+    private func getQueryProcessListRequest(eventId: Int) -> URLRequest? {
         var urlRequest = URLRequest(url: URL(string: url_QueryProcessList)!)
         urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)
         urlRequest.httpMethod = HttpMethod.Post.rawValue
