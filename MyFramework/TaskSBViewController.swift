@@ -382,13 +382,17 @@ extension TaskSBViewController{
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 120, height: 44))
         self.navigationItem.titleView = view
         
-        let wid : CGFloat = 55.0//3 chn charactor
+        let wid : CGFloat = 65.0//3 chn charactor
         let hei : CGFloat = 44.0
         let x : CGFloat = 32.5
         let y : CGFloat = 0
         titleLabel.frame = CGRect(x: x, y: y, width: wid, height: hei)
         titleLabel.text = navigationTitle_Default
         titleLabel.textAlignment = .center
+        
+        titleLabel.textColor = .white
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        
         view.addSubview(titleLabel)
         
         titleActivity.center.x = x - 20
@@ -513,7 +517,12 @@ extension TaskSBViewController: UITableViewDataSource , UITableViewDelegate{
         if cell == nil  {
             cell = UITableViewCell(style: .default, reuseIdentifier: "cellid")
         }
-        cell?.backgroundColor = UIColor(red: 225, green: 225, blue: 225)
+        
+        cell?.backgroundColor = UIColor(red: 113, green: 122, blue: 132)
+        let sView = UIView()
+        sView.backgroundColor = UIColor(red: 58, green: 68, blue: 87)
+        cell?.selectedBackgroundView = sView
+        
         let item = loginInfo?.config?.taskType[indexPath.row]
         cell?.textLabel?.text = item?.alias
         cell?.textLabel?.textAlignment = .center

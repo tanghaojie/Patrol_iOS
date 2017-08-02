@@ -121,7 +121,47 @@ class Image {
         return resizedImg
     }
     
-    func uploadImages(images: [UIImage], prid: String, typenum: String, actualtime: String, imagesUploadComplete: ((_ eventId: Int) -> Void)?) {
+    func compressImage(originalImg:UIImage, resolution: CGFloat) -> UIImage? {
+        let width = originalImg.size.width
+        let height = originalImg.size.height
+        let scale = width/height
+        var sizeChange = CGSize()
+        
+        if width <= resolution && height <= resolution {
+            return originalImg
+        }else {
+            if scale <= 2 && scale >= 1 {
+                let changedWidth:CGFloat = resolution
+                let changedheight:CGFloat = changedWidth / scale
+                sizeChange = CGSize(width: changedWidth, height: changedheight)
+            }else if scale >= 0.5 && scale <= 1 {
+                let changedheight:CGFloat = resolution
+                let changedWidth:CGFloat = changedheight * scale
+                sizeChange = CGSize(width: changedWidth, height: changedheight)
+            }else if width > 1280 && height > resolution {
+                if scale > 2 {
+                    let changedheight:CGFloat = resolution
+                    let changedWidth:CGFloat = changedheight * scale
+                    sizeChange = CGSize(width: changedWidth, height: changedheight)
+                }else if scale < 0.5{
+                    let changedWidth:CGFloat = resolution
+                    let changedheight:CGFloat = changedWidth / scale
+                    sizeChange = CGSize(width: changedWidth, height: changedheight)
+                }
+            }else {
+                return originalImg
+            }
+        }
+        
+        UIGraphicsBeginImageContext(sizeChange)
+        originalImg.draw(in: CGRect(x: 0, y: 0, width: sizeChange.width, height: sizeChange.height))
+        let resizedImg = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return resizedImg
+    }
+    
+    func uploadImages(images: [UIImage], prid: String, typenum: String, actualtime: String, imagesUploadComplete: ((_ prid: Int) -> Void)?) {
         var urlRequest = URLRequest(url: URL(string: getUploadImage(prid: prid, typenum: typenum, actualtime: actualtime))!)
         urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)
         urlRequest.httpMethod = HttpMethod.Post.rawValue
@@ -189,7 +229,7 @@ class Image {
     
     func getImageInfo(prid: Int, typenum: Int, complete: ((UIImage,Int) -> Void)?) {
         var urlRequest = URLRequest(url: URL(string: url_QueryImage)!)
-        urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)
+        urlRequest.timeoutInterval = TimeInterval(kLongTimeoutInterval)
         urlRequest.httpMethod = HttpMethod.Post.rawValue
         var jsonDic = Dictionary<String,Any>()
         jsonDic["prid"] = prid
@@ -228,7 +268,8 @@ class Image {
                 if name == nil || (name?.isEmpty)! {
                     continue
                 }
-                let urlStr = "\(url_Picture)?typenum=\(typenum)&prid=\(prid)&filename=\(name!)"
+                let date = getDateFormatter(dateFormatter: "yyyy-MM-dd+HH:mm:ss").string(from: Date().addingTimeInterval(kTimeInteval))
+                let urlStr = "\(url_Picture)?typenum=\(typenum)&prid=\(prid)&filename=\(name!)&t=\(date)"
                 let url = URL(string: urlStr)
                 let data = try? Data(contentsOf: url!)
                 if data == nil || (data?.isEmpty)! {

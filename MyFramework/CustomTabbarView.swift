@@ -21,7 +21,7 @@ class CustomTabbarView: UIView {
         
         super.init(frame: frame)
         
-        self.backgroundColor = UIColor(red: 230, green: 230, blue: 230)
+        self.backgroundColor = UIColor(red: 37, green: 140, blue: 201)
         
         setupUI()
       
@@ -46,7 +46,7 @@ extension CustomTabbarView {
         
         for (index,title) in self.titles.enumerated(){
             let btn = UIButton(type: .system)
-            
+
             btn.tag = index
             btn.setTitle(title, for: .normal)
             btn.setTitleColor(UIColor(red: 68, green: 82, blue: 82), for: .normal)

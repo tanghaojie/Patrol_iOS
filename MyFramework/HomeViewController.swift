@@ -12,6 +12,8 @@ class HomeViewController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.navigationBar.barTintColor = kMainColor
 
         self.pushViewController(MyViewController(), animated: true)
     }

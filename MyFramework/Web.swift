@@ -33,6 +33,7 @@ public func getUploadImage(prid: String,typenum: String,actualtime: String) -> S
 }
 
 let kShortTimeoutInterval = 5
+let kLongTimeoutInterval = 20
 
 public enum HttpMethod: String{
     case Get = "GET"

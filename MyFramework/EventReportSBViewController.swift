@@ -93,6 +93,14 @@ class EventReportSBViewController: UIViewController {
         eventDate.date = Date()
     }
     
+    @IBAction func currentLocationTouchUpInSide(_ sender: Any) {
+        let navi = self.navigationController
+        navi?.present(SelectLocationViewController(){ (latitude,longitude) in
+            let coor = CLLocationCoordinate2D(latitude: CLLocationDegrees().advanced(by: latitude), longitude: CLLocationDegrees().advanced(by: longitude))
+            self.setupLocation(location: coor)
+        }, animated: true, completion: nil)
+    }
+    
 }
 //func
 extension EventReportSBViewController {
@@ -333,6 +341,16 @@ extension EventReportSBViewController {
         setupCollectionView()
     }
     
+    fileprivate func setupLocation(location: CLLocationCoordinate2D?){
+        if let lo = location {
+            currentLocation.setTitle("已选择位置（点击选择位置）", for: .normal)
+            self.eventModel.location = lo
+        } else {
+            currentLocation.setTitle("当前位置（点击选择位置）", for: .normal)
+            self.eventModel.location = nil
+        }
+    }
+    
     private func setupCollectionView(){
         self.eventImage.register(UICollectionViewCell.self, forCellWithReuseIdentifier: collectionViewCellIdentifier)
         addLongPressListener()
@@ -368,15 +386,19 @@ extension EventReportSBViewController {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 120, height: 44))
         self.navigationItem.titleView = view
         
-        let wid : CGFloat = 75.0//4 chn charactor
+        let wid : CGFloat = 85.0//4 chn charactor
         let hei : CGFloat = 44.0
         let x : CGFloat = 32.5
         let y : CGFloat = 0
         titleLabel.frame = CGRect(x: x, y: y, width: wid, height: hei)
         titleLabel.text = navigationTitle_Default
         titleLabel.textAlignment = .center
-        view.addSubview(titleLabel)
         
+        titleLabel.textColor = .white
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        
+        view.addSubview(titleLabel)
+
         titleActivity.center.x = x - 20
         titleActivity.center.y = hei/2
         view.addSubview(titleActivity)
@@ -455,20 +477,30 @@ extension EventReportSBViewController: UITableViewDataSource , UITableViewDelega
             if cell == nil  {
                 cell = UITableViewCell(style: .default, reuseIdentifier: "cellid")
             }
-            cell?.backgroundColor = UIColor(red: 225, green: 225, blue: 225)
             let item = loginInfo?.config?.eventType[indexPath.row]
             cell?.textLabel?.text = item?.alias
             cell?.textLabel?.textAlignment = .center
+            
+            cell?.backgroundColor = UIColor(red: 113, green: 122, blue: 132)
+            let sView = UIView()
+            sView.backgroundColor = UIColor(red: 58, green: 68, blue: 87)
+            cell?.selectedBackgroundView = sView
+            
             return cell!
         }else if(tableView.tag == 1){
             var cell = tableView.dequeueReusableCell(withIdentifier: "cellid")
             if cell == nil  {
                 cell = UITableViewCell(style: .default, reuseIdentifier: "cellid")
             }
-            cell?.backgroundColor = UIColor(red: 225, green: 225, blue: 225)
             let item = loginInfo?.config?.eventLevel[indexPath.row]
             cell?.textLabel?.text = item?.alias
             cell?.textLabel?.textAlignment = .center
+            
+            cell?.backgroundColor = UIColor(red: 113, green: 122, blue: 132)
+            let sView = UIView()
+            sView.backgroundColor = UIColor(red: 58, green: 68, blue: 87)
+            cell?.selectedBackgroundView = sView
+            
             return cell!
         }
         return tableView.dequeueReusableCell(withIdentifier: "cellid")!
