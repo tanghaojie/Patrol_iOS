@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "iphone",
-      "filename" : "task2.png",
+      "filename" : "whitePoint.png",
       "scale" : "1x"
     },
     {
       "idiom" : "iphone",
-      "filename" : "task2@2x.png",
+      "filename" : "whitePoint@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "iphone",
-      "filename" : "task2@3x.png",
+      "filename" : "whitePoint@3x.png",
       "scale" : "3x"
     }
   ],

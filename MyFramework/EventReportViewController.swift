@@ -12,6 +12,8 @@ class EventReportViewController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.navigationBar.barTintColor = kMainColor
 
         let sb = UIStoryboard(name: "EventReportSB", bundle: nil)
         let vc = sb.instantiateViewController(withIdentifier: "EventReportSBViewController") as! EventReportSBViewController

@@ -91,9 +91,9 @@ extension EventDetailViewController {
         self.tableView.keyboardDismissMode = .onDrag
         self.tableView.tableFooterView = UIView()
         self.registCell()
-        self.tableView.backgroundColor = .yellow
+        self.tableView.backgroundColor = .white
         self.tableView.allowsSelection = false
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyle.singleLineEtched
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyle.singleLine
         self.tableView.estimatedRowHeight = 50
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.view = tableView
@@ -101,7 +101,9 @@ extension EventDetailViewController {
     }
     
     private func setupRefreshHeader() {
-        self.tableViewHeader = MJRefreshNormalHeader()
+        let header = MJRefreshNormalHeader()
+        header.backgroundColor = UIColor(red: 254, green: 218, blue: 106)
+        self.tableViewHeader = header
         self.tableViewHeader.setRefreshingTarget(self, refreshingAction: #selector(headerRefresh))
         self.tableView.mj_header = self.tableViewHeader
         self.tableViewHeader.setTitle("下拉刷新", for: .idle)
@@ -154,13 +156,17 @@ extension EventDetailViewController {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 120, height: 44))
         
         self.navigationItem.titleView = view
-        let wid : CGFloat = 75.0//4 chn charactor
+        let wid : CGFloat = 85.0//4 chn charactor
         let hei : CGFloat = 44.0
         let x : CGFloat = 32.5
         let y : CGFloat = 0
         titleLabel.frame = CGRect(x: x, y: y, width: wid, height: hei)
         titleLabel.text = navigationTitle_Default
         titleLabel.textAlignment = .center
+        
+        titleLabel.textColor = .white
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        
         view.addSubview(titleLabel)
         
         titleActivity.center.x = x - 20
@@ -186,23 +192,25 @@ extension EventDetailViewController {
         if isBig {
             if self.subNavigationBar == nil {
                 self.subNavigationBar = UIView(frame: CGRect(x: 0, y: (baseFrame?.height)!, width: kScreenWidth, height: EventDetailViewController.navigationItemIncrease))
-                self.subNavigationBar.backgroundColor = .red
+                self.subNavigationBar.backgroundColor = UIColor(red: 91, green: 166, blue: 121)
                 
                 let w = kScreenWidth / 3
                 self.titleLabel1 = UILabel(frame: CGRect(x: 0, y: 0, width: w, height: EventDetailViewController.navigationItemIncrease))
                 self.titleLabel1.textAlignment = .center
                 self.titleLabel1.font = UIFont.systemFont(ofSize: 16)
+                self.titleLabel1.textColor = .white
                 self.titleLabel1.text = self.event?.typecode_alias
                 self.subNavigationBar.addSubview(self.titleLabel1)
                 
                 self.titleLabel2 = UILabel(frame: CGRect(x: w, y: 0, width: w , height: EventDetailViewController.navigationItemIncrease))
                 self.titleLabel2.textAlignment = .center
                 self.titleLabel2.font = UIFont.systemFont(ofSize: 16)
+                self.titleLabel2.textColor = .white
                 self.titleLabel2.text = self.event?.levelcode_alias
                 self.subNavigationBar.addSubview(self.titleLabel2)
                 
                 self.titleImage = UIImageView(frame: CGRect(x: w * 2, y: 0, width: w, height: EventDetailViewController.navigationItemIncrease))
-                self.titleImage.image = UIImage(named: "point")
+                self.titleImage.image = UIImage(named: "whitePoint")
                 self.titleImage.contentMode = .center
                 self.subNavigationBar.addSubview(self.titleImage)
                 

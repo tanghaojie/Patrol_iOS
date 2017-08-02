@@ -64,13 +64,14 @@ extension EventOverViewViewController {
         self.tableView.keyboardDismissMode = .onDrag
         self.tableView.tableFooterView = UIView()
         self.registCell()
-        self.tableView.backgroundColor = UIColor(red: 230, green: 230, blue: 230)
         self.tableView.separatorStyle = UITableViewCellSeparatorStyle.none
         self.view = tableView
     }
     
     private func setupRefreshHeader() {
-        self.tableViewHeader = MJRefreshNormalHeader()
+        let header = MJRefreshNormalHeader()
+        header.backgroundColor = UIColor(red: 254, green: 218, blue: 106)
+        self.tableViewHeader = header
         self.tableViewHeader.setRefreshingTarget(self, refreshingAction: #selector(headerRefresh))
         self.tableView.mj_header = self.tableViewHeader
         self.tableViewHeader.setTitle("下拉刷新", for: .idle)
@@ -87,7 +88,9 @@ extension EventOverViewViewController {
     }
     
     private func setupRefreshFooter() {
-        self.tableViewFooter = MJRefreshAutoGifFooter()
+        let footer = MJRefreshAutoGifFooter()
+        footer.backgroundColor = UIColor(red: 254, green: 218, blue: 106)
+        self.tableViewFooter = footer
         self.tableViewFooter.setRefreshingTarget(self, refreshingAction: #selector(footerRefresh))
         self.tableView.mj_footer = self.tableViewFooter
         self.tableViewFooter.setTitle("加载更多", for: .idle)
@@ -142,6 +145,10 @@ extension EventOverViewViewController {
         titleLabel.frame = CGRect(x: x, y: y, width: wid, height: hei)
         titleLabel.text = navigationTitle_Default
         titleLabel.textAlignment = .center
+        
+        titleLabel.textColor = .white
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        
         view.addSubview(titleLabel)
         
         titleActivity.center.x = x - 20
@@ -181,6 +188,7 @@ extension EventOverViewViewController: UITableViewDelegate, UITableViewDataSourc
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventTableViewCell") as! EventTableViewCell
         let data = events[indexPath.row]
         cell.setData(data: data)
+        cell.selectionStyle = .none
         return cell
     }
     

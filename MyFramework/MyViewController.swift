@@ -13,13 +13,14 @@ class MyViewController: UIViewController {
     fileprivate var tableView: UITableView!
     fileprivate var cacheSizeLabel: UILabel!
     fileprivate var cacheActivityIndicatorView: UIActivityIndicatorView!
+    fileprivate var headPotraitImageView: UIImageView!
     
     fileprivate var tableViewDisplay = Dictionary<IndexPath,(UITableViewCell) -> UITableViewCell>()
     fileprivate var tableViewSelectAction = Dictionary<IndexPath,() -> Void>()
     
     fileprivate let tableViewHeaderHeight: CGFloat = 200
     fileprivate let tableViewHeaderImageWH: CGFloat = 180
-    fileprivate let tableViewRowHeight: CGFloat = 50
+    fileprivate let tableViewRowHeight: CGFloat = 40
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,8 +32,6 @@ class MyViewController: UIViewController {
         self.tableView.delegate = self
         self.tableView.dataSource = self
     }
-    
-
 
 }
 
@@ -69,18 +68,27 @@ extension MyViewController {
     private func setupTableViewHeaderView() -> UIView {
 
         let headView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: tableViewHeaderHeight))
-        headView.backgroundColor = .yellow
+        headView.backgroundColor = .white
         
-        let imgView = UIImageView(frame: CGRect(x: (kScreenWidth - tableViewHeaderImageWH) / 2, y: (tableViewHeaderHeight - tableViewHeaderImageWH) / 2, width: tableViewHeaderImageWH, height: tableViewHeaderImageWH))
-        imgView.layer.masksToBounds = true
-        imgView.layer.cornerRadius = tableViewHeaderImageWH / 2
-        imgView.layer.borderWidth = 2
-        imgView.layer.borderColor = UIColor.black.cgColor
+        self.headPotraitImageView = UIImageView(frame: CGRect(x: (kScreenWidth - tableViewHeaderImageWH) / 2, y: (tableViewHeaderHeight - tableViewHeaderImageWH) / 2, width: tableViewHeaderImageWH, height: tableViewHeaderImageWH))
+        self.headPotraitImageView.contentMode = .scaleAspectFill
+        self.headPotraitImageView.layer.masksToBounds = true
+        self.headPotraitImageView.layer.cornerRadius = tableViewHeaderImageWH / 2
+        self.headPotraitImageView.layer.borderWidth = 2
+        self.headPotraitImageView.layer.borderColor = UIColor.gray.cgColor
+        self.headPotraitImageView.isUserInteractionEnabled = true
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(headPotraitAction))
+        tapGestureRecognizer.cancelsTouchesInView = false
+        self.headPotraitImageView.addGestureRecognizer(tapGestureRecognizer)
         
-        HeadPortrait(imageView: imgView)
-        headView.addSubview(imgView)
+        HeadPortrait(imageView: self.headPotraitImageView)
+        headView.addSubview(self.headPotraitImageView)
         
         return headView
+    }
+    
+    internal func headPotraitAction() {
+        addImageAction()
     }
     
     private func setupBackButton(){
@@ -97,18 +105,21 @@ extension MyViewController {
     private func setupTitle() {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 120, height: 44))
         self.navigationItem.titleView = view
-        let wid : CGFloat = 75.0//4 chn charactor
+        let wid : CGFloat = 75.0
         let hei : CGFloat = 44.0
-        let x : CGFloat = 32.5
+        let x : CGFloat = 22.5
         let y : CGFloat = 0
         let titleLabel = UILabel()
         titleLabel.frame = CGRect(x: x, y: y, width: wid, height: hei)
         titleLabel.text = "我的"
         titleLabel.textAlignment = .center
+        
+        titleLabel.textColor = .white
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 20)
+
         view.addSubview(titleLabel)
     }
-    
-    
+
 }
 
 extension MyViewController {
@@ -120,6 +131,7 @@ extension MyViewController {
             }
         }
     }
+    
 }
 
 extension MyViewController: UITableViewDelegate, UITableViewDataSource {
@@ -181,24 +193,28 @@ extension MyViewController {
     }
     
     private func setupQuit(cell: UITableViewCell) -> UITableViewCell {
-        cell.backgroundColor = .red
+        cell.backgroundColor = UIColor(red: 247, green: 33, blue: 0)
         cell.textLabel?.text = "退出"
         cell.textLabel?.textAlignment = NSTextAlignment.center
+        cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        cell.textLabel?.textColor = .white
         cell.selectionStyle = UITableViewCellSelectionStyle.none
         
         return cell
     }
     
     private func setupClearCache(cell: UITableViewCell) -> UITableViewCell {
-        let x: CGFloat = 10
+        let x: CGFloat = 20
         let h: CGFloat = 40
-        let w: CGFloat = (kScreenWidth - CGFloat(20)) / 2
+        let w: CGFloat = (kScreenWidth - CGFloat(x * 2)) / 2
         let y = (self.tableViewRowHeight - h) / 2
         let x2 = x + w
         let cacheTextLabel = UILabel(frame: CGRect(x: x, y: y, width: w, height: h))
         cacheTextLabel.text = "清除缓存"
+        cacheTextLabel.textColor = UIColor(red: 64, green: 64, blue: 64)
 
         self.cacheSizeLabel = UILabel(frame: CGRect(x: x2, y: y, width: w, height: h))
+        self.cacheSizeLabel.textColor = UIColor(red: 113, green: 122, blue: 132)
         self.cacheSizeLabel.textAlignment = NSTextAlignment.right
         
         self.cacheActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
@@ -302,6 +318,54 @@ extension MyViewController {
     
     private func quit() {
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
+    }
+    
+}
+
+extension MyViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    fileprivate func addImageAction(){
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        
+        let actionController = UIAlertController(title: "提示", message: "拍照或从相册选择", preferredStyle: .actionSheet)
+        let actionAlbum = UIAlertAction(title: "从相册选择", style: .default){ (action) -> Void in
+            picker.sourceType = .savedPhotosAlbum
+            self.navigationController?.present(picker, animated: true, completion: nil)
+        }
+        let actionCamera = UIAlertAction(title: "拍照", style: .default){ (action) -> Void in
+            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                picker.sourceType = .camera
+                self.navigationController?.present(picker, animated: true, completion: nil)
+            } else {
+                AlertWithNoButton(view: self, title: "", message: "不支持拍照", preferredStyle: .alert, showTime: 1)
+            }
+        }
+        let actionCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+        
+        actionController.addAction(actionAlbum)
+        actionController.addAction(actionCamera)
+        actionController.addAction(actionCancel)
+        
+        self.navigationController?.present(actionController, animated: true, completion: nil)
+    }
+    
+    internal func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+        let date = getDateFormatter(dateFormatter: "yyyy-MM-dd+HH:mm:ss").string(from: Date().addingTimeInterval(kTimeInteval))
+        let compressedImage = Image.instance.compressImage(originalImg: image, resolution: 300)
+        if let cImg = compressedImage {
+            Image.instance.uploadImages(images: [cImg], prid: "\(loginInfo?.userId ?? 1)", typenum: "0", actualtime: date){ (prid) in
+                self.HeadPortrait(imageView: self.headPotraitImageView)
+            }
+        } else {
+            AlertWithUIAlertAction(view: self, title: msg_UploadFailed, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
+        }
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    internal func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
     }
     
 }

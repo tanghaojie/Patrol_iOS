@@ -13,6 +13,8 @@ class TaskViewController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationBar.barTintColor = kMainColor
+        
         let sb = UIStoryboard(name: "TaskSB", bundle: nil)
         let vc = sb.instantiateViewController(withIdentifier: "TaskSBViewController") as! TaskSBViewController
         self.pushViewController(vc, animated: true)

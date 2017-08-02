@@ -13,12 +13,21 @@ class MainViewController: UIViewController,AGSMapViewLayerDelegate {
     
     var mapView: AGSMapView! = AGSMapView()
     let location = MLocationManager.instance
+    
+    var scgisTilemapServerLayer: SCGISTilemapServerLayer!
+    var featureLayer: AGSFeatureLayer!
+    
+    var layerBtn: UIButton!
+    var layerView: UIView?
+    
+    let dark = UIColor(red: 73, green: 73, blue: 75)
+    let normal = UIColor(red: 142, green: 142, blue: 144)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupUI()
-        setupData()
+        setData()
         
         Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(timer10Fire), userInfo: nil, repeats: true)
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timer1Fire), userInfo: nil, repeats: true)
@@ -31,35 +40,108 @@ extension MainViewController {
     fileprivate func setupUI(){
         self.setupMapView()
         self.setupBottomBar()
-       
+        self.addTapListener()
+    }
+    
+    fileprivate func addTapListener(){
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.viewTap(tapGestureRecognizer: )))
+        tap.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tap)
+    }
+    
+    internal func viewTap(tapGestureRecognizer: UITapGestureRecognizer) {
+        if let layerV = self.layerView {
+            let location = tapGestureRecognizer.location(in: layerV)
+            let w = layerV.frame.width
+            let h = layerV.frame.height
+            if location.x < 0 || location.x > w || location.y < 0 || location.y > h {
+                self.layerView?.removeFromSuperview()
+                self.layerView = nil
+            }
+        }
     }
     
     private func setupMapView(){
         
         SCGISUtility.registerESRI()
-        
+
         mapView.frame = CGRect(x: 0, y: 0, width: kScreenWidth, height: kScrennHeight - kMainBottomTabBarHeight)
         mapView.layerDelegate = self
         mapView.gridLineWidth = 10
-        let scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: "http://www.scgis.net.cn/imap/imapserver/defaultrest/services/scmobile_dlg/", token: nil)
+        self.scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: "http://www.scgis.net.cn/imap/imapserver/defaultrest/services/scmobile_dlg/", token: nil)
         if(scgisTilemapServerLayer != nil){
             self.mapView.addMapLayer(scgisTilemapServerLayer)
         }
 
+        self.featureLayer = AGSFeatureLayer(url: URL(string: "http://119.6.30.131:6080/arcgis/rest/services/PipeLineES/MapServer/0"), mode: .onDemand)
+        if featureLayer != nil {
+            featureLayer?.opacity = 0.5
+            let symbol = AGSSimpleLineSymbol(color: UIColor(red: 231, green: 71, blue: 94 ))
+            symbol?.width = 2
+            featureLayer?.renderer = AGSSimpleRenderer(symbol: symbol)
+            self.mapView.addMapLayer(featureLayer)
+        }
+
         self.view.addSubview(mapView)
         
-        //setupLayerButton(pView : mapView)
+        setupLayerButton(pView : mapView)
         setupAddEventButton(pView : mapView)
         setupLocationButton(pView: mapView)
     }
     
     private func setupLayerButton(pView : UIView){
-        let btn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: 120, width: 40, height: 40))
-        btn.backgroundColor = .white
-        btn.layer.borderColor = UIColor.black.cgColor
-        pView.addSubview(btn)
+        self.layerBtn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: 120, width: 40, height: 40))
+        self.layerBtn.backgroundColor = .clear
+        self.layerBtn.layer.borderColor = UIColor.black.cgColor
+        let img = UIImage(named: "layer")
+        self.layerBtn.setImage(img, for: .normal)
+        self.layerBtn.addTarget(self, action: #selector(layerButtonAction), for: .touchUpInside)
+        pView.addSubview(self.layerBtn)
     }
     
+    internal func layerButtonAction() {
+        setupLayerSelectView()
+    }
+    
+    private func setupLayerSelectView() {
+        let w: CGFloat = kScreenWidth / 3 * 2
+        let h: CGFloat = 100
+        let x: CGFloat = self.layerBtn.frame.maxX - w
+        let y: CGFloat = self.layerBtn.frame.minY
+        self.layerView = UIView(frame: CGRect(x: x, y: y, width: w, height: h))
+        self.layerView?.backgroundColor = .gray
+        
+        let btn1 = UIButton(frame: CGRect(x: 0, y: 0, width: w, height: 50))
+        let btn2 = UIButton(frame: CGRect(x: 0, y: 50, width: w, height: 50))
+        
+        
+        btn1.backgroundColor = scgisTilemapServerLayer.isVisible ? dark : normal
+        btn2.backgroundColor = featureLayer.isVisible ? dark : normal
+        
+        btn1.setTitle("底图", for: .normal)
+        btn2.setTitle("管线", for: .normal)
+        btn1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        btn2.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        
+        btn1.addTarget(self, action: #selector(layerBtn1Action(btn:)), for: .touchUpInside)
+        btn2.addTarget(self, action: #selector(layerBtn2Action(btn:)), for: .touchUpInside)
+        
+        self.layerView?.addSubview(btn1)
+        self.layerView?.addSubview(btn2)
+        
+        self.view.addSubview(self.layerView!)
+    }
+    
+    func layerBtn1Action(btn: UIButton) {
+        scgisTilemapServerLayer.isVisible = !scgisTilemapServerLayer.isVisible
+        btn.backgroundColor = scgisTilemapServerLayer.isVisible ? dark : normal
+    }
+    
+    func layerBtn2Action(btn: UIButton) {
+        featureLayer.isVisible = !featureLayer.isVisible
+        btn.backgroundColor = featureLayer.isVisible ? dark : normal
+    }
+
     private func setupAddEventButton(pView : UIView){
         let btn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: 180, width: 40, height: 40))
         btn.backgroundColor = .clear
@@ -95,15 +177,16 @@ extension MainViewController {
     private func setupBottomBar(){
         let frame = CGRect(x: 0, y: kScrennHeight - kMainBottomTabBarHeight, width: kScreenWidth, height: kMainBottomTabBarHeight)
         
-        let titles = ["","",""]
+        let titles = ["任务","事件","我的"]
         let images = ["task","event","my"]
         let jumps : Array<(()->())?>  = [ jumpToTask , jumpToEvent , jumpToHome  ]
         
         let customTBV = CustomTabbarView(frame: frame, titles: titles , images : images ,jumps : jumps)
-        let layer = CALayer()
-        layer.frame = CGRect(x: 0, y: 0, width: customTBV.frame.width, height: 1)
-        layer.backgroundColor = UIColor.black.cgColor
-        customTBV.layer.addSublayer(layer)
+        
+//        let layer = CALayer()
+//        layer.frame = CGRect(x: 0, y: 0, width: customTBV.frame.width, height: 1)
+//        layer.backgroundColor = UIColor.black.cgColor
+//        customTBV.layer.addSublayer(layer)
         self.view.addSubview(customTBV)
     }
 }
@@ -125,7 +208,7 @@ extension MainViewController{
 
 extension MainViewController{
     
-    fileprivate func setupData(){
+    fileprivate func setData(){
         let request = TaskSBViewController.getCurrentTaskRequest(userId: (loginInfo?.userId)!)
         currentTaskAsyncConnect(urlRequest: request)
     }
@@ -242,11 +325,7 @@ extension MainViewController{
         }
     }
     
-}
-
-extension MainViewController{
-
-    func getLocations_Dic() -> [Dictionary<String,Any>]? {
+    private func getLocations_Dic() -> [Dictionary<String,Any>]? {
         let count = locationWithDate.count
         if count <= 0 {
             return nil
@@ -277,7 +356,9 @@ extension MainViewController{
         }
         return result.reversed()
     }
-
+    
 }
+
+
 
 

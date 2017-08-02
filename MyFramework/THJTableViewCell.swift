@@ -28,9 +28,15 @@ class THJTableViewCell: UITableViewCell {
     }
 
     func setData(event: JSON_Event) {
-        line1.text = "\(event.realname ?? "") 上报事件"
-        line2.text = "事件地址：\(event.address ?? "")"
-        line3.text = "事件详情：\(event.remark ?? "")"
+        line1.text = "\(event.realname ?? "") 上报事件 \(event.eventname ?? "")"
+        var eAddress = ""
+        if event.address == nil || (event.address?.isEmpty)! {
+            eAddress = "无"
+        } else {
+            eAddress = event.address!
+        }
+        line2.text = "事件地址 \(eAddress)"
+        line3.text = "\(event.remark ?? " ")"
         setupImages(imageCount: event.picturecount, prid: event.id, typenum: 1)
         if let date = event.actualtime {
             line5.text = "\(getDateFormatter(dateFormatter: kDateTimeFormate).string(from: date))"
@@ -45,11 +51,11 @@ class THJTableViewCell: UITableViewCell {
                 names += "\(name.realname ?? "未知")、"
             }
             names = names.substring(to: names.index(names.endIndex, offsetBy: -1))
-            line2.text = "处理人员：\(names)"
+            line2.text = "处理人员 \(names)"
         } else {
             line2.text = "  "
         }
-        line3.text = "处理详情：\(process.remark ?? "")"
+        line3.text = "\(process.remark ?? " ")"
         setupImages(imageCount: process.picturecount, prid: process.id, typenum: 2)
         if let date = process.actualtime {
             line5.text = "\(getDateFormatter(dateFormatter: kDateTimeFormate).string(from: date))"
@@ -62,7 +68,7 @@ extension THJTableViewCell {
     
     fileprivate func setupUI() {
         
-        self.backgroundColor = .gray
+        self.backgroundColor = .white
         
         setupLine1()
         setupLine2()
@@ -75,44 +81,48 @@ extension THJTableViewCell {
     
     private func setupLine1() {
         line1 = UILabel()
-        line1.font = UIFont.boldSystemFont(ofSize: 18)
+        line1.font = UIFont.boldSystemFont(ofSize: 20)
+        line1.textColor = UIColor(red: 64, green: 64, blue: 64)
         line1.numberOfLines = 0
         
-        line1.backgroundColor = .red
+        //line1.backgroundColor = .red
         self.addSubview(line1)
     }
     
     private func setupLine2() {
         line2 = UILabel()
         line2.font = UIFont.systemFont(ofSize: 16)
+        line2.textColor = UIColor(red: 84, green: 84, blue: 84)
         line2.numberOfLines = 0
         
-        line2.backgroundColor = .green
+        //line2.backgroundColor = .green
         self.addSubview(line2)
     }
     
     private func setupLine3() {
         line3 = UILabel()
         line3.font = UIFont.systemFont(ofSize: 16)
+        line3.textColor = UIColor(red: 84, green: 84, blue: 84)
         line3.numberOfLines = 0
         
-        line3.backgroundColor = .yellow
+        //line3.backgroundColor = .yellow
         self.addSubview(line3)
     }
     
     private func setupLine4() {
         line4 = UIView()
         
-        line4.backgroundColor = .darkGray
+        //line4.backgroundColor = .darkGray
         self.addSubview(line4)
     }
     
     private func setupLine5() {
         line5 = UILabel()
         line5.font = UIFont.systemFont(ofSize: 16)
+        line5.textColor = UIColor(red: 215, green: 215, blue: 215)
         line5.numberOfLines = 0
         
-        line5.backgroundColor = .blue
+        //line5.backgroundColor = .blue
         self.addSubview(line5)
     }
     

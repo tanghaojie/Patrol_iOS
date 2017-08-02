@@ -13,6 +13,8 @@ let kScreenWidth = UIScreen.main.bounds.width
 let kScrennHeight = UIScreen.main.bounds.height
 let kMainBottomTabBarHeight : CGFloat = 40
 
+let kMainColor = UIColor(red: 37/255, green: 140/255, blue: 201/255, alpha: 1)
+
 let kTimeZone = TimeZone.current
 let kTimeInteval = TimeInterval(Double(kTimeZone.secondsFromGMT()))
 

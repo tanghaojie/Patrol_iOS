@@ -10,9 +10,9 @@ import UIKit
 
 class EventTableViewCell: UITableViewCell {
     
-    static let cellHeight = 180
-    fileprivate let margin_Horizontal: CGFloat = 10
-    fileprivate let margin_Vertical: CGFloat = 20
+    static let cellHeight = 160
+    fileprivate let margin_Horizontal: CGFloat = 15
+    fileprivate let margin_Vertical: CGFloat = 18
     fileprivate let margin_Content: CGFloat = 10
     fileprivate let mainView_topHeight: CGFloat = 18
     fileprivate let margin_inner: CGFloat = 5
@@ -29,10 +29,8 @@ class EventTableViewCell: UITableViewCell {
     fileprivate var mainViewTopRightLabel: UILabel!
     fileprivate var mainViewTextView: UITextView!
 
-    
     var data: JSON_Event!
-    
-    
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -66,6 +64,8 @@ class EventTableViewCell: UITableViewCell {
 extension EventTableViewCell {
     
     fileprivate func setupUI() {
+        self.backgroundColor = UIColor(red: 237, green: 238, blue: 240)
+        
         setupItemView()
         //setupBorder()
         
@@ -75,10 +75,10 @@ extension EventTableViewCell {
     }
     
     private func setupItemView() {
-        let w = kScreenWidth //- margin_Horizontal * 2
-        let h = CGFloat(EventTableViewCell.cellHeight) - margin_Vertical * 2
-        itemView = UIView(frame: CGRect(x: 0, y: margin_Vertical, width: w, height: h))
-        itemView.backgroundColor = UIColor(red: 245, green: 245, blue: 245)
+        let w = kScreenWidth
+        let h = CGFloat(EventTableViewCell.cellHeight) - margin_Vertical
+        itemView = UIView(frame: CGRect(x: 0, y: 0, width: w, height: h))
+        itemView.backgroundColor = UIColor(red: 255, green: 255, blue: 255)
         self.contentView.addSubview(itemView)
     }
     
@@ -89,9 +89,10 @@ extension EventTableViewCell {
     
     private func setupTitle() {
         let w = itemView.frame.width - margin_Content * 2
-        let h:CGFloat = 21
+        let h: CGFloat = 21
         titleLabel = UILabel(frame: CGRect(x: margin_Content, y: margin_Content, width: w, height: h))
         titleLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        titleLabel.textColor = UIColor(red: 64, green: 64, blue: 64)
         itemView.addSubview(titleLabel)
     }
     
@@ -103,9 +104,19 @@ extension EventTableViewCell {
     
     private func setupMainView() {
         let w = itemView.frame.width - margin_Content * 2
-        let h:CGFloat = itemView.frame.height - margin_Content * 2 - margin_inner * 2 - titleLabel.frame.height - bottomLabel.frame.height
+        let h: CGFloat = itemView.frame.height - margin_Content * 2 - margin_inner * 2 - titleLabel.frame.height - bottomView.frame.height
         let y = margin_Content + margin_inner + titleLabel.frame.height
         mainView = UIView(frame: CGRect(x: margin_Content, y: y, width: w, height: h))
+        
+        let layer = CALayer()
+        layer.frame = CGRect(x: 0, y: 0, width: w, height: 1)
+        layer.backgroundColor = UIColor(red: 215, green: 215, blue: 215).cgColor
+        mainView.layer.addSublayer(layer)
+        
+        let blayer = CALayer()
+        blayer.frame = CGRect(x: 0, y: h, width: w, height: 1)
+        blayer.backgroundColor = UIColor(red: 215, green: 215, blue: 215).cgColor
+        mainView.layer.addSublayer(blayer)
 
         itemView.addSubview(mainView)
     }
@@ -113,31 +124,34 @@ extension EventTableViewCell {
     private func setupMainTop() {
         let w = mainView.frame.width / 3
         let h:CGFloat = mainView_topHeight
-        mainViewTopLeft = UIView(frame: CGRect(x: 0, y: 0, width: w, height: h))
+        mainViewTopLeft = UIView(frame: CGRect(x: 0, y: margin_inner, width: w, height: h))
         mainView.addSubview(mainViewTopLeft)
         mainViewTopLeftLabel = UILabel(frame: CGRect(x: 0, y: 0, width: w, height: h))
         mainViewTopLeftLabel.font = UIFont.systemFont(ofSize: 16)
+        mainViewTopLeftLabel.textColor = UIColor(red: 215, green: 215, blue: 215)
         mainViewTopLeft.addSubview(mainViewTopLeftLabel)
 
-        mainViewTopRight = UIView(frame: CGRect(x: w, y: 0, width: w, height: h))
+        mainViewTopRight = UIView(frame: CGRect(x: w , y: margin_inner, width: w, height: h))
         mainView.addSubview(mainViewTopRight)
         mainViewTopRightLabel = UILabel(frame: CGRect(x: 0, y: 0, width: w, height: h))
         mainViewTopRightLabel.font = UIFont.systemFont(ofSize: 16)
+        mainViewTopRightLabel.textColor = UIColor(red: 215, green: 215, blue: 215)
         mainViewTopRight.addSubview(mainViewTopRightLabel)
     }
     
     private func setupMainText() {
         let w = mainView.frame.width
-        let y = mainView_topHeight + 3
+        let y = margin_inner + mainView_topHeight + margin_inner
         let h = mainView.frame.height - y
         mainViewTextView = UITextView(frame: CGRect(x: 0, y: y, width: w, height: h))
         mainViewTextView.isEditable = false
         mainViewTextView.isScrollEnabled = false
         mainViewTextView.isUserInteractionEnabled = false
-        mainViewTextView.backgroundColor = UIColor(red: 245, green: 245, blue: 245)
+        //mainViewTextView.backgroundColor = UIColor(red: 255, green: 255, blue: 255)
         mainViewTextView.textContainer.lineFragmentPadding = 0
         mainViewTextView.textContainerInset = UIEdgeInsetsMake(0, 0, 0, 0)
         mainViewTextView.font = UIFont.systemFont(ofSize: 16)
+        mainViewTextView.textColor = UIColor(red: 84, green: 84, blue: 84)
         mainView.addSubview(mainViewTextView)
     }
     
@@ -149,7 +163,7 @@ extension EventTableViewCell {
     
     private func setupBottomView() {
         let w = itemView.frame.width - margin_Content * 2
-        let h:CGFloat = 18
+        let h: CGFloat = 20
         bottomView = UIView(frame: CGRect(x: margin_Content, y: itemView.frame.height - margin_Content - h, width: w, height: h))
         itemView.addSubview(bottomView)
     }
@@ -159,6 +173,7 @@ extension EventTableViewCell {
         let h = bottomView.frame.height
         bottomLabel = UILabel(frame: CGRect(x: 0, y: 0, width: w, height: h))
         bottomLabel.font = UIFont.systemFont(ofSize: 18)
+        bottomLabel.textColor = UIColor(red: 215, green: 215, blue: 215)
         bottomView.addSubview(bottomLabel)
     }
     
@@ -168,6 +183,7 @@ extension EventTableViewCell {
         let h = bottomView.frame.height
         bootomDateLabel = UILabel(frame: CGRect(x: x, y: 0, width: w, height: h))
         bootomDateLabel.font = UIFont.systemFont(ofSize: 16)
+        bootomDateLabel.textColor = UIColor(red: 215, green: 215, blue: 215)
         bottomView.addSubview(bootomDateLabel)
     }
     
