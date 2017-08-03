@@ -212,7 +212,6 @@ extension EventDetailViewController {
                 self.subNavigationBar.addSubview(self.titleLabel2)
                 
                 self.titleImageButton = UIButton(frame: CGRect(x: w * 2, y: 0, width: w, height: EventDetailViewController.navigationItemIncrease))
-                self.titleImageButton.backgroundColor = .red
                 self.titleImageButton.setImage(UIImage(named: "whitePoint"), for: .normal)
 
                 let tap = UITapGestureRecognizer(target: self, action: #selector(tapSubNavigationbar(tap: )))
