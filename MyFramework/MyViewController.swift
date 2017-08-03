@@ -80,9 +80,14 @@ extension MyViewController {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(headPotraitAction))
         tapGestureRecognizer.cancelsTouchesInView = false
         self.headPotraitImageView.addGestureRecognizer(tapGestureRecognizer)
+
+        headView.addSubview(self.headPotraitImageView)
         
         HeadPortrait(imageView: self.headPotraitImageView)
-        headView.addSubview(self.headPotraitImageView)
+//        let line = CALayer()
+//        line.frame = CGRect(x: 0, y: tableViewHeaderHeight - 1, width: headView.frame.width, height: 5)
+//        line.backgroundColor = UIColor(red: 255, green: 255, blue: 255).cgColor
+//        headView.layer.addSublayer(line)
         
         return headView
     }
@@ -226,7 +231,7 @@ extension MyViewController {
         cell.addSubview(cacheSizeLabel)
         cell.addSubview(cacheActivityIndicatorView)
         cell.selectionStyle = UITableViewCellSelectionStyle.none
-        
+
         getCacheAndShowUI()
         
         return cell
