@@ -57,7 +57,7 @@ class CustomInteractionController: UIPercentDrivenInteractiveTransition, UIGestu
                 
             }
         default:
-            print("handle pan gesture recognizer error")
+            print("handle   pan gesture recognizer error")
         }
         
     }
