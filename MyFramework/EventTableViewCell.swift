@@ -128,14 +128,14 @@ extension EventTableViewCell {
         mainView.addSubview(mainViewTopLeft)
         mainViewTopLeftLabel = UILabel(frame: CGRect(x: 0, y: 0, width: w, height: h))
         mainViewTopLeftLabel.font = UIFont.systemFont(ofSize: 16)
-        mainViewTopLeftLabel.textColor = UIColor(red: 235, green: 235, blue: 235)
+        mainViewTopLeftLabel.textColor = UIColor(red: 155, green: 155, blue: 155)
         mainViewTopLeft.addSubview(mainViewTopLeftLabel)
 
         mainViewTopRight = UIView(frame: CGRect(x: w , y: margin_inner, width: w, height: h))
         mainView.addSubview(mainViewTopRight)
         mainViewTopRightLabel = UILabel(frame: CGRect(x: 0, y: 0, width: w, height: h))
         mainViewTopRightLabel.font = UIFont.systemFont(ofSize: 16)
-        mainViewTopRightLabel.textColor = UIColor(red: 235, green: 235, blue: 235)
+        mainViewTopRightLabel.textColor = UIColor(red: 155, green: 155, blue: 155)
         mainViewTopRight.addSubview(mainViewTopRightLabel)
     }
     
@@ -173,7 +173,7 @@ extension EventTableViewCell {
         let h = bottomView.frame.height
         bottomLabel = UILabel(frame: CGRect(x: 0, y: 0, width: w, height: h))
         bottomLabel.font = UIFont.systemFont(ofSize: 18)
-        bottomLabel.textColor = UIColor(red: 235, green: 235, blue: 235)
+        bottomLabel.textColor = UIColor(red: 155, green: 155, blue: 155)
         bottomView.addSubview(bottomLabel)
     }
     
@@ -183,7 +183,7 @@ extension EventTableViewCell {
         let h = bottomView.frame.height
         bootomDateLabel = UILabel(frame: CGRect(x: x, y: 0, width: w, height: h))
         bootomDateLabel.font = UIFont.systemFont(ofSize: 16)
-        bootomDateLabel.textColor = UIColor(red: 235, green: 235, blue: 235)
+        bootomDateLabel.textColor = UIColor(red: 155, green: 155, blue: 155)
         bottomView.addSubview(bootomDateLabel)
     }
     

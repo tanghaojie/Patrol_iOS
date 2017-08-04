@@ -251,18 +251,32 @@ extension MainViewController{
     
 }
 
-extension MainViewController{
+extension MainViewController: UIViewControllerTransitioningDelegate {
+    
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return CustomPresentAnimationController()
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return CustomDismissAnimateController()
+    }
     
     fileprivate func jumpToTask(){
-        self.present(TaskViewController(), animated: true, completion: nil)
+        let toVC = TaskViewController()
+        toVC.transitioningDelegate = self
+        self.present(toVC, animated: true, completion: nil)
     }
     
     fileprivate func jumpToHome(){
-        self.present(HomeViewController(), animated: true, completion: nil)
+        let toVC = HomeViewController()
+        toVC.transitioningDelegate = self
+        self.present(toVC, animated: true, completion: nil)
     }
     
     fileprivate func jumpToEvent(){
-        self.present(EventViewController(), animated: true, completion: nil)
+        let toVC = EventViewController()
+        toVC.transitioningDelegate = self
+        self.present(toVC, animated: true, completion: nil)
     }
 }
 

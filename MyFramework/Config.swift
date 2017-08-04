@@ -16,6 +16,7 @@ class Config{
     var taskType : [TaskType] = [TaskType]()
     var eventType : [EventType] = [EventType]()
     var eventLevel : [EventLevel] = [EventLevel]()
+    var taskLine = [TaskLine]()
 
     init(id : Int){
         var urlRequest = URLRequest(url: URL(string: url_Config)!)
@@ -80,6 +81,14 @@ class Config{
                                         self.eventLevel.append(EventLevel(code: code!, alias: alias!))
                                     }
                                 }
+                            } else if typeCode.string == TaskLine.taskLineCode {
+                                for l in list{
+                                    let code = l.1["code"].string
+                                    let alias = l.1["alias"].string
+                                    if(code != nil && alias != nil){
+                                        self.taskLine.append(TaskLine(code: code!, alias: alias!))
+                                    }
+                                }
                             }
                         }
                         self.success = true
@@ -126,6 +135,17 @@ class EventType{
 
 class EventLevel{
     static let eventLevelCode = "0001010300000000"
+    
+    init(code : String, alias : String){
+        self.code = code
+        self.alias = alias
+    }
+    var code : String
+    var alias : String
+}
+
+class TaskLine {
+    static let taskLineCode = "0001010600000000"
     
     init(code : String, alias : String){
         self.code = code

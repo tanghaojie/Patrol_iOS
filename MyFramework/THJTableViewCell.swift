@@ -125,7 +125,7 @@ extension THJTableViewCell {
     private func setupLine5() {
         line5 = UILabel()
         line5.font = UIFont.systemFont(ofSize: 16)
-        line5.textColor = UIColor(red: 235, green: 235, blue: 235)
+        line5.textColor = UIColor(red: 155, green: 155, blue: 155)
         line5.numberOfLines = 0
         
         //line5.backgroundColor = .blue
