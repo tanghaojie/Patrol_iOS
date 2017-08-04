@@ -13,6 +13,7 @@ class TaskViewController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.backgroundColor = UIColor(red: 248, green: 248, blue: 248)
         self.navigationBar.barTintColor = kMainColor
         
         let sb = UIStoryboard(name: "TaskSB", bundle: nil)

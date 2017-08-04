@@ -10,7 +10,7 @@ import UIKit
 import MJRefresh
 import SwiftyJSON
 
-class EventOverViewViewController: UIViewController {
+class EventOverViewViewController: UIViewController, UIGestureRecognizerDelegate {
     
     fileprivate var tableView: UITableView!
     fileprivate var tableViewHeader: MJRefreshNormalHeader!
@@ -31,12 +31,14 @@ class EventOverViewViewController: UIViewController {
         super.viewDidLoad()
         
         setupUI()
-        
+
         tableView.delegate = self
         tableView.dataSource = self
         
         self.tableView.mj_header.beginRefreshing()
     }
+
+    
 
 }
 

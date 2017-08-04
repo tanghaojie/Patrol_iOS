@@ -15,27 +15,28 @@ class TaskSBViewController: UIViewController {
     @IBOutlet weak var taskName: UITextField!
     @IBOutlet weak var taskType: UIButton!
     @IBOutlet weak var taskTypeTableView: UITableView!
+    @IBOutlet weak var taskLine: UIButton!
+    @IBOutlet weak var taskLineTableView: UITableView!
     @IBOutlet weak var taskExplain: UITextView!
     @IBOutlet weak var taskStartLabel: UILabel!
     @IBOutlet weak var taskStart: UIButton!
     @IBOutlet weak var taskStop: UIButton!
     
-    //var isStartTask = false
-    //var pTaskName : String?
-    //var pTaskType : TaskType?
-    
     fileprivate let navigationTitle_Default = "任务"
     fileprivate let navigationTitle_Loading = "加载中"
     let titleActivity = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
     let titleLabel = UILabel()
-    let defaultTaskModel = TaskModel(isStarted: false, tid: -1, uid: -1, tName: "", tType: "", startTime: Date(), remark: "")
+    let defaultTaskModel = TaskModel(isStarted: false, tid: -1, uid: -1, tName: "", tType: "", tLineCode: "", startTime: Date(), remark: "")
     
-    var taskModel : TaskModel = TaskModel(isStarted: false, tid: -1, uid: -1, tName: "", tType: "", startTime: Date(), remark: "")
+    var taskModel : TaskModel = TaskModel(isStarted: false, tid: -1, uid: -1, tName: "", tType: "", tLineCode: "", startTime: Date(), remark: "")
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.taskTypeTableView.dataSource = self
         self.taskTypeTableView.delegate = self
+        self.taskLineTableView.dataSource = self
+        self.taskLineTableView.delegate = self
+        
         self.taskExplain.delegate = self
         setupUI()
         
@@ -51,12 +52,23 @@ class TaskSBViewController: UIViewController {
                 taskTypeTableView.isHidden = true
             }
         }
+        if (loginInfo?.config?.taskLine.count)! > 0 {
+            if taskLine.title(for: .normal) == nil && !self.taskModel.isStarted {
+                let code = loginInfo?.config?.taskLine[0].code
+                setSelection(taskLineCode: code!)
+                taskLineTableView.isHidden = true
+            }
+        }
     }
 
     @IBAction func taskTypeBtnTouchUpInSide(_ sender: Any) {
-        switchTable()
+        switchTaskTypeTable()
     }
     
+    @IBAction func taskLineTouchUpInSide(_ sender: Any) {
+        switchTaskLineTable()
+    }
+
     @IBAction func startTaskTouchUpInSide(_ sender: Any) {
         startBtnTouchUpInSide()
     }
@@ -143,6 +155,7 @@ extension TaskSBViewController{
                         let uId = ndata["uid"].int
                         let tName = ndata["taskname"].string
                         let tType = ndata["tasktype"].string
+                        let tTaskLine = ndata["linecode"].string
                         let sstartTime = ndata["starttime"].string
                         let remark = ndata["remark"].string
                         
@@ -150,10 +163,10 @@ extension TaskSBViewController{
                         let formatter = getDateFormatter(dateFormatter: "yyyy-MM-dd HH:mm:ss")
                         let startTime = formatter.date(from: ssstartTime!)
                         
-                        self.taskModel = TaskModel(isStarted: true, tid: taskId!, uid: uId!, tName: tName!, tType: tType!, startTime: startTime!, remark: remark!)
+                        self.taskModel = TaskModel(isStarted: true, tid: taskId!, uid: uId!, tName: tName!, tType: tType!, tLineCode: tTaskLine, startTime: startTime!, remark: remark!)
                         self.setTaskView(model: self.taskModel)
                     }else{
-                        self.taskModel = TaskModel(isStarted: false, tid: nil, uid: nil, tName: nil, tType: nil, startTime: nil, remark: nil)
+                        self.taskModel = TaskModel(isStarted: false, tid: nil, uid: nil, tName: nil, tType: nil, tLineCode: nil, startTime: nil, remark: nil)
                         self.setTaskView(model: self.taskModel)
                     }
                 }else{
@@ -169,37 +182,42 @@ extension TaskSBViewController{
             self.view.isUserInteractionEnabled = true
         })
     }
-    
-    
-    
+
     fileprivate func createTask(){
         let request = getCreateTaskRequest()
-        createTaskAsyncConnect(urlRequest: request)
+        if let re = request {
+            createTaskAsyncConnect(urlRequest: re)
+        } else {
+            AlertWithNoButton(view: self, title: msg_RequestError, message: nil, preferredStyle: .alert, showTime: 1)
+        }
     }
     
-    private func getCreateTaskRequest() -> URLRequest{
+    private func getCreateTaskRequest() -> URLRequest? {
         var urlRequest = URLRequest(url: URL(string: url_CreateTask)!)
         urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)
         urlRequest.httpMethod = HttpMethod.Post.rawValue
+        urlRequest.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
         
         let df = getDateFormatter(dateFormatter: kDateTimeFormate)
         let sDate = df.string(from: self.taskModel.startTime!)
+        let xx = self.taskModel.remark ?? ""
+        
+        var jsonDic = Dictionary<String,Any>()
+        jsonDic["uid"] = loginInfo?.userId
+        jsonDic["taskname"] = self.taskModel.taskName ?? ""
+        jsonDic["tasktype"] = self.taskModel.taskTypeCode ?? ""
+        jsonDic["linecode"] = self.taskModel.taskLineCode ?? ""
+        jsonDic["starttime"] = sDate
+        jsonDic["remark"] = xx
 
-//        let df = DateFormatter()
-//        df.dateFormat = "HH"
-//        let hour = Int(df.string(from: self.taskModel.startTime!))
-//        df.dateFormat = "mm"
-//        let minute = Int(df.string(from: self.taskModel.startTime!))
-//        df.dateFormat = "ss"
-//        let second = Int(df.string(from: self.taskModel.startTime!))
-//        let secondOfCurrentDay = hour! * 3600 + minute! * 60 + second!
+        do {
+            urlRequest.httpBody = try JSONSerialization.data(withJSONObject: jsonDic, options: .prettyPrinted)
+            urlRequest.httpShouldHandleCookies = true
+        }catch {
+            printLog(message: "Create event. json data wrong\(error)")
+            return nil
+        }
         
-        let uid : Int = (loginInfo?.userId!)!
-        
-        let xx=self.taskModel.remark ?? ""
-        let body = "uid=\(uid)&taskname=\(self.taskModel.taskName ?? "")&tasktype=\(self.taskModel.taskTypeCode ?? "")&starttime=\(sDate)&remark=\(xx)"
-        urlRequest.httpBody = body.data(using: String.Encoding.utf8)
-        urlRequest.httpShouldHandleCookies = true
         return urlRequest
     }
     
@@ -264,8 +282,7 @@ extension TaskSBViewController{
             self.view.isUserInteractionEnabled = true
         })
     }
-    
-    
+
     fileprivate func endBtnTouchUpInSide(){
         let request = getEndTaskRequest()
         endTaskAsyncConnect(urlRequest: request)
@@ -422,6 +439,10 @@ extension TaskSBViewController{
             taskType.isEnabled = false
             taskTypeTableView.isHidden = true
             
+            setSelection(taskLineCode: (model.taskLineCode)!)
+            taskLine.isEnabled = false
+            taskLineTableView.isHidden = true
+            
             taskExplain.text = model.remark
             let dTime = getDateFormatter(dateFormatter: kDateTimeFormate).string(from: (model.startTime)!)
             taskStartLabel.text = dTime
@@ -441,6 +462,12 @@ extension TaskSBViewController{
             }
             taskType.isEnabled = true
             taskTypeTableView.isHidden = true
+            
+            if model.taskLineCode != nil {
+                setSelection(taskLineCode: model.taskLineCode!)
+            }
+            taskLine.isEnabled = true
+            taskLineTableView.isHidden = true
             
             taskExplain.text = model.remark
             if(model.startTime != nil){
@@ -485,13 +512,17 @@ extension TaskSBViewController{
             AlertWithNoButton(view: self, title: msg_PleaseSelectTaskType, message: nil, preferredStyle: .alert, showTime: 1)
             return false
         }
+        if self.taskModel.taskLineCode == nil || (self.taskModel.taskLineCode?.isEmpty)! {
+            AlertWithNoButton(view: self, title: msg_PleastSelectTaskLine, message: nil, preferredStyle: .alert, showTime: 1)
+            return false
+        }
         return true
     }
 }
 
 extension TaskSBViewController: UITableViewDataSource , UITableViewDelegate{
     
-    func switchTable(){
+    func switchTaskTypeTable(){
         if(self.taskTypeTableView.isHidden){
             self.view.bringSubview(toFront: taskTypeTableView)
             UIView.animate(withDuration: 0.5, animations: {
@@ -504,12 +535,30 @@ extension TaskSBViewController: UITableViewDataSource , UITableViewDelegate{
         }
     }
     
+    func switchTaskLineTable(){
+        if(self.taskLineTableView.isHidden){
+            self.view.bringSubview(toFront: taskLineTableView)
+            UIView.animate(withDuration: 0.5, animations: {
+                self.taskLineTableView?.isHidden = false
+            })
+        }else{
+            UIView.animate(withDuration: 0.5, animations: {
+                self.taskLineTableView?.isHidden = true
+            })
+        }
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (loginInfo?.config?.taskType.count)!
+        if tableView.tag == 0 {
+            return (loginInfo?.config?.taskType.count)!
+        } else if tableView.tag == 1 {
+            return (loginInfo?.config?.taskLine.count)!
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -523,18 +572,32 @@ extension TaskSBViewController: UITableViewDataSource , UITableViewDelegate{
         sView.backgroundColor = UIColor(red: 58, green: 68, blue: 87)
         cell?.selectedBackgroundView = sView
         
-        let item = loginInfo?.config?.taskType[indexPath.row]
-        cell?.textLabel?.text = item?.alias
+        if tableView.tag == 0 {
+            let item = loginInfo?.config?.taskType[indexPath.row]
+            cell?.textLabel?.text = item?.alias
+        } else if tableView.tag == 1 {
+            let item = loginInfo?.config?.taskLine[indexPath.row]
+            cell?.textLabel?.text = item?.alias
+        }
+        
         cell?.textLabel?.textAlignment = .center
         
         return cell!
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let item = loginInfo?.config?.taskType[indexPath.row]
-        self.taskModel.taskTypeCode = item?.code
-        self.taskType.setTitle((item?.alias)!, for: .normal)
-        switchTable()
+        
+        if tableView.tag == 0 {
+            let item = loginInfo?.config?.taskType[indexPath.row]
+            self.taskModel.taskTypeCode = item?.code
+            self.taskType.setTitle((item?.alias)!, for: .normal)
+            switchTaskTypeTable()
+        } else if tableView.tag == 1 {
+            let item = loginInfo?.config?.taskLine[indexPath.row]
+            self.taskModel.taskLineCode = item?.code
+            self.taskLine.setTitle((item?.alias)!, for: .normal)
+            switchTaskLineTable()
+        }
     }
     
     func setSelection(taskTypeCode : String){
@@ -546,13 +609,25 @@ extension TaskSBViewController: UITableViewDataSource , UITableViewDelegate{
         }
     }
     
+    func setSelection(taskLineCode : String){
+        let index = loginInfo?.config?.taskLine.index(where: { (iTType) -> Bool in
+            return iTType.code == taskLineCode
+        })
+        if let iindex = index{
+            tableView(self.taskLineTableView, didSelectRowAt: IndexPath.init(row: iindex, section: iindex))
+        }
+    }
+    
 }
 
 extension TaskSBViewController: UITextViewDelegate  {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if(!self.taskTypeTableView.isHidden){
-            switchTable()
+            switchTaskTypeTable()
+        }
+        if !self.taskLineTableView.isHidden {
+            switchTaskLineTable()
         }
     }
     

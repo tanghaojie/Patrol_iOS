@@ -15,7 +15,6 @@ class EventDealSBViewController: UIViewController {
     @IBOutlet weak var eventName: UILabel!
     @IBOutlet weak var eventType: UILabel!
     @IBOutlet weak var eventLevel: UILabel!
-    @IBOutlet weak var eventLocation: UIImageView!
     @IBOutlet weak var dealLocation: UIButton!
     @IBOutlet weak var currentDate: UIButton!
     @IBOutlet weak var dealDate: UIDatePicker!
@@ -72,6 +71,20 @@ class EventDealSBViewController: UIViewController {
             self.setupLocation(location: coor)
         }, animated: true, completion: nil)
     }
+    
+    @IBAction func eventLocationTouchUpInSide(_ sender: Any) {
+        
+        if let e = self.event {
+            if let lo = e.location {
+                let point = AGSPoint(location: CLLocation(latitude: lo.latitude, longitude: lo.longitude))
+                if let p = point {
+                    let show = ShowLocationViewController(p)
+                    self.present(show, animated: true, completion: nil)
+                }
+            }
+        }
+    }
+    
 }
 //func
 extension EventDealSBViewController {
@@ -301,6 +314,11 @@ extension EventDealSBViewController {
         setupInitBtnImage()
         setupCollectionView()
         setupShowEvent()
+        setupDatePicker()
+    }
+    
+    private func setupDatePicker() {
+        self.dealDate.maximumDate = Date()
     }
     
     private func setupShowEvent() {
@@ -417,6 +435,20 @@ extension EventDealSBViewController: UICollectionViewDelegate, UICollectionViewD
         if let image = nImage {
             if image.accessibilityIdentifier == defaultAddImageAccessibilityIdentifier {
                 addImageAction()
+            } else {
+                var imgs = [UIImage]()
+                for item in self.imageArray {
+                    let img = item as? UIImage
+                    if let i = img {
+                        if i.accessibilityIdentifier != defaultAddImageAccessibilityIdentifier {
+                            imgs.append(i)
+                        }
+                    }
+                }
+                if imgs.count > 0 {
+                    let previewVC = ImagePreviewViewController(images: imgs, index: indexPath.row)
+                    self.navigationController?.pushViewController(previewVC, animated: true)
+                }
             }
         }
     }

@@ -19,6 +19,8 @@ let msg_PleaseEnterPhone = "请输入手机号"
 
 let msg_PleaseEnterTaskName = "请输入任务名"
 let msg_PleaseSelectTaskType = "请选择任务类型"
+let msg_PleastSelectTaskLine = "请选择任务线路"
+
 
 let msg_PleaseEnterEventName = "请输入事件名"
 let msg_PleaseSelectEventType = "请选择事件类型"

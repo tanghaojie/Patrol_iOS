@@ -12,7 +12,9 @@ class SelectLocationViewController: UIViewController {
 
     fileprivate var mapView: AGSMapView!
     fileprivate var completeFunc: ((Double,Double) -> Void)?
-    
+    fileprivate let minScale: Double = 5300
+    fileprivate let maxScale: Double = 2900
+
     init(_ complete: ((Double,Double) -> Void)?){
         self.completeFunc = complete
         super.init(nibName: nil, bundle: nil)
@@ -45,15 +47,15 @@ extension SelectLocationViewController {
         
         mapView = AGSMapView()
         
-        SCGISUtility.registerESRI()
+        //SCGISUtility.registerESRI()
         
         mapView.frame = CGRect(x: 0, y: 0, width: kScreenWidth, height: kScrennHeight)
         mapView.layerDelegate = self
         mapView.gridLineWidth = 10
-        mapView.maxScale = 2900
-        mapView.minScale = 5300
+        mapView.maxScale = maxScale
+        mapView.minScale = minScale
         
-        let scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: "http://www.scgis.net.cn/imap/imapserver/defaultrest/services/scmobile_dlg/", token: nil)
+        let scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap, token: nil)
         if(scgisTilemapServerLayer != nil){
             self.mapView.addMapLayer(scgisTilemapServerLayer)
         }
@@ -86,11 +88,11 @@ extension SelectLocationViewController {
     }
     
     internal func locationButtonClicked() {
-        startLocationDisplay(with: AGSLocationDisplayAutoPanMode.default)
-    }
-    
-    private func startLocationDisplay(with autoPanMode: AGSLocationDisplayAutoPanMode) {
-        self.mapView.locationDisplay.autoPanMode = autoPanMode
+        let location = MLocationManager.instance.location
+        if let loca = location {
+            let point = AGSPoint(location: loca)
+            self.mapView.zoom(toScale: minScale, withCenter: point, animated: true)
+        }
     }
     
     private func setupCenterPoint() {
@@ -141,12 +143,10 @@ extension SelectLocationViewController: AGSMapViewLayerDelegate {
     func mapViewDidLoad(_ mapView: AGSMapView!) {
         //let map = self.mapView.mapLayers[0] as! AGSTiledLayer
         //let envelop = map.initialEnvelope
-        self.mapView.zoom(toScale: 5300, animated: true)
+        self.mapView.zoom(toScale: minScale, animated: true)
         //self.mapView.zoom(to: envelop, animated: false)
         self.mapView.locationDisplay.startDataSource()
         self.mapView.locationDisplay.autoPanMode = .default
     }
-    
-    
-    
+
 }

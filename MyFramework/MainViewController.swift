@@ -68,12 +68,12 @@ extension MainViewController {
         mapView.frame = CGRect(x: 0, y: 0, width: kScreenWidth, height: kScrennHeight - kMainBottomTabBarHeight)
         mapView.layerDelegate = self
         mapView.gridLineWidth = 10
-        self.scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: "http://www.scgis.net.cn/imap/imapserver/defaultrest/services/scmobile_dlg/", token: nil)
+        self.scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap, token: nil)
         if(scgisTilemapServerLayer != nil){
             self.mapView.addMapLayer(scgisTilemapServerLayer)
         }
 
-        self.featureLayer = AGSFeatureLayer(url: URL(string: "http://119.6.30.131:6080/arcgis/rest/services/PipeLineES/MapServer/0"), mode: .onDemand)
+        self.featureLayer = AGSFeatureLayer(url: URL(string: eshaProtrait), mode: .onDemand)
         if featureLayer != nil {
             featureLayer?.opacity = 0.5
             let symbol = AGSSimpleLineSymbol(color: UIColor(red: 231, green: 71, blue: 94 ))
@@ -167,7 +167,11 @@ extension MainViewController {
     }
     
     func locationButtonClicked(){
-        startLocationDisplay(with: AGSLocationDisplayAutoPanMode.default)
+        let location = MLocationManager.instance.location
+        if let loca = location {
+            let point = AGSPoint(location: loca)
+            self.mapView.zoom(toScale: 10000, withCenter: point, animated: true)
+        }
     }
     
     func startLocationDisplay(with autoPanMode: AGSLocationDisplayAutoPanMode){
@@ -247,18 +251,32 @@ extension MainViewController{
     
 }
 
-extension MainViewController{
+extension MainViewController: UIViewControllerTransitioningDelegate {
+    
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return CustomPresentAnimationController()
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return CustomDismissAnimateController()
+    }
     
     fileprivate func jumpToTask(){
-        self.present(TaskViewController(), animated: true, completion: nil)
+        let toVC = TaskViewController()
+        toVC.transitioningDelegate = self
+        self.present(toVC, animated: true, completion: nil)
     }
     
     fileprivate func jumpToHome(){
-        self.present(HomeViewController(), animated: true, completion: nil)
+        let toVC = HomeViewController()
+        toVC.transitioningDelegate = self
+        self.present(toVC, animated: true, completion: nil)
     }
     
     fileprivate func jumpToEvent(){
-        self.present(EventViewController(), animated: true, completion: nil)
+        let toVC = EventViewController()
+        toVC.transitioningDelegate = self
+        self.present(toVC, animated: true, completion: nil)
     }
 }
 

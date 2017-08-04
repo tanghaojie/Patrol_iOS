@@ -21,7 +21,7 @@ class EventDetailViewController: UIViewController {
     fileprivate var subNavigationBar: UIView!
     fileprivate var titleLabel1: UILabel!
     fileprivate var titleLabel2: UILabel!
-    fileprivate var titleImage: UIImageView!
+    fileprivate var titleImageButton: UIButton!
     
     fileprivate let navigationTitle_Default = "事件详情"
     fileprivate let navigationTitle_Loading = "加载中"
@@ -64,6 +64,7 @@ class EventDetailViewController: UIViewController {
         setupNavigationbar(isBig: true)
     }
 
+    
 }
 
 extension EventDetailViewController {
@@ -73,10 +74,11 @@ extension EventDetailViewController {
         setupBackButton()
         setupRightBarButton()
         setupTitle()
-        setupNavigationbar(isBig: true)
-        
+
         setupTableView()
         setupRefreshHeader()
+        
+        setupNavigationbar(isBig: true)
     }
     
     private func setupTableView() {
@@ -209,17 +211,35 @@ extension EventDetailViewController {
                 self.titleLabel2.text = self.event?.levelcode_alias
                 self.subNavigationBar.addSubview(self.titleLabel2)
                 
-                self.titleImage = UIImageView(frame: CGRect(x: w * 2, y: 0, width: w, height: EventDetailViewController.navigationItemIncrease))
-                self.titleImage.image = UIImage(named: "whitePoint")
-                self.titleImage.contentMode = .center
-                self.subNavigationBar.addSubview(self.titleImage)
-                
+                self.titleImageButton = UIButton(frame: CGRect(x: w * 2, y: 0, width: w, height: EventDetailViewController.navigationItemIncrease))
+                self.titleImageButton.setImage(UIImage(named: "whitePoint"), for: .normal)
+
+                let tap = UITapGestureRecognizer(target: self, action: #selector(tapSubNavigationbar(tap: )))
+                self.tableView.addGestureRecognizer(tap)
+
+                self.subNavigationBar.addSubview(self.titleImageButton)
+
                 bar?.addSubview(subNavigationBar)
             } else {
                 subNavigationBar.isHidden = false
             }
         } else {
             subNavigationBar.isHidden = true
+        }
+    }
+    
+    internal func tapSubNavigationbar(tap: UITapGestureRecognizer) {
+        let lo = tap.location(in: self.tableView)
+        if lo.y <= 0 && lo.y >= -30 {
+            if let e = self.event {
+                if let lo = e.location {
+                    let point = AGSPoint(location: CLLocation(latitude: lo.latitude, longitude: lo.longitude))
+                    if let p = point {
+                        let show = ShowLocationViewController(p)
+                        self.present(show, animated: true, completion: nil)
+                    }
+                }
+            }
         }
     }
 
@@ -243,9 +263,9 @@ extension EventDetailViewController: UITableViewDelegate, UITableViewDataSource 
         let cell = tableView.dequeueReusableCell(withIdentifier: "THJCell") as! THJTableViewCell
         let any = data[indexPath.row]
         if let event = any as? JSON_Event {
-            cell.setData(event: event)
+            cell.setData(event: event, navigationController: self.navigationController)
         } else if let process = any as? JSON_Process {
-            cell.setData(process: process)
+            cell.setData(process: process, navigationController: self.navigationController)
         }
         return cell
     }

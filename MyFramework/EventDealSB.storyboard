@@ -89,10 +89,14 @@
                                         <color key="textColor" red="0.32941176470588235" green="0.32941176470588235" blue="0.32941176470588235" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="point" translatesAutoresizingMaskIntoConstraints="NO" id="h3R-RN-YN6">
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="me2-5G-VMy">
                                         <rect key="frame" x="228" y="29" width="99" height="34"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </imageView>
+                                        <state key="normal" image="point"/>
+                                        <connections>
+                                            <action selector="eventLocationTouchUpInSide:" destination="ZxT-Ms-YV8" eventType="touchUpInside" id="QgD-co-EMe"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.88570372495554428" green="0.88570372495554428" blue="0.88570372495554428" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
@@ -144,7 +148,6 @@
                         <outlet property="dealImage" destination="0az-1S-9f3" id="EYL-Dg-ScT"/>
                         <outlet property="dealLocation" destination="EFN-LD-8WD" id="99v-tl-HlI"/>
                         <outlet property="eventLevel" destination="oYO-lh-kNi" id="6hT-Rv-Obw"/>
-                        <outlet property="eventLocation" destination="h3R-RN-YN6" id="yyy-FF-NhB"/>
                         <outlet property="eventName" destination="UUl-Z1-nnk" id="c9T-wB-8ed"/>
                         <outlet property="eventType" destination="sZ0-wv-Dv5" id="f81-0R-kBr"/>
                         <outlet property="scrollView" destination="jZC-ve-iQf" id="MbG-hs-ynu"/>
@@ -152,7 +155,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rQI-UB-cxz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-15607.200000000001" y="-143.47826086956522"/>
+            <point key="canvasLocation" x="-15687" y="-173"/>
         </scene>
     </scenes>
     <resources>

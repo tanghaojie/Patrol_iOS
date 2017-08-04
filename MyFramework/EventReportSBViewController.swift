@@ -339,6 +339,7 @@ extension EventReportSBViewController {
         setupTitle()
         setupInitBtnImage()
         setupCollectionView()
+        setupDatePicker()
     }
     
     fileprivate func setupLocation(location: CLLocationCoordinate2D?){
@@ -349,6 +350,10 @@ extension EventReportSBViewController {
             currentLocation.setTitle("当前位置（点击选择位置）", for: .normal)
             self.eventModel.location = nil
         }
+    }
+    
+    private func setupDatePicker() {
+        self.eventDate.maximumDate = Date()
     }
     
     private func setupCollectionView(){
@@ -589,6 +594,20 @@ extension EventReportSBViewController: UICollectionViewDelegate, UICollectionVie
         if let image = nImage {
             if image.accessibilityIdentifier == defaultAddImageAccessibilityIdentifier {
                 addImageAction()
+            } else {
+                var imgs = [UIImage]()
+                for item in self.imageArray {
+                    let img = item as? UIImage
+                    if let i = img {
+                        if i.accessibilityIdentifier != defaultAddImageAccessibilityIdentifier {
+                            imgs.append(i)
+                        }
+                    }
+                }
+                if imgs.count > 0 {
+                    let previewVC = ImagePreviewViewController(images: imgs, index: indexPath.row)
+                    self.navigationController?.pushViewController(previewVC, animated: true)
+                }
             }
         }
     }
@@ -621,7 +640,7 @@ extension EventReportSBViewController: UICollectionViewDelegate, UICollectionVie
             }
         }
     }
-
+    
 }
 //imagePickerController
 extension EventReportSBViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {

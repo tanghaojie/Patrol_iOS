@@ -12,15 +12,17 @@ class TaskModel{
     var userid : Int?
     var taskName : String?
     var taskTypeCode : String?
+    var taskLineCode: String?
     var startTime : Date?
     var remark : String?
     
-    init(isStarted : Bool, tid : Int?, uid : Int?, tName : String?, tType : String?, startTime : Date?, remark : String?){
+    init(isStarted : Bool, tid : Int?, uid : Int?, tName : String?, tType : String?, tLineCode: String?, startTime : Date?, remark : String?){
         self.isStarted = isStarted
         self.taskid = tid
         self.userid = uid
         self.taskName = tName
         self.taskTypeCode = tType
+        self.taskLineCode = tLineCode
         self.startTime = startTime
         self.remark = remark
     }
