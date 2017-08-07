@@ -17,7 +17,7 @@ class EventViewController: UINavigationController, UINavigationControllerDelegat
         super.viewDidLoad()
         
         self.navigationBar.barTintColor = kMainColor
-        self.delegate = self
+        //self.delegate = self
         
         self.pushViewController(EventOverViewViewController(), animated: true)
     }
