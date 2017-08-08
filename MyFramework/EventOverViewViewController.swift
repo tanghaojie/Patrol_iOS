@@ -50,6 +50,17 @@ extension EventOverViewViewController {
         setupTableView()
         setupRefreshHeader()
         setupRefreshFooter()
+        
+        setupSuperViewJT()
+    }
+    
+    private func setupSuperViewJT() {
+        let jtPop = self.navigationController as? JTViewControllerInteractiveTransitionDelegate
+        if var jtpop = jtPop {
+            jtpop.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self) {
+                self.backButtonAction()
+            }
+        }
     }
     
     private func setupTableView() {

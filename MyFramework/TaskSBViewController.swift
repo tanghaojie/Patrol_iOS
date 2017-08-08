@@ -39,7 +39,7 @@ class TaskSBViewController: UIViewController {
         
         self.taskExplain.delegate = self
         setupUI()
-        
+
         checkTaskIsStarted()
     }
     
@@ -373,6 +373,17 @@ extension TaskSBViewController{
         self.taskStop.isHidden = true
         taskStart.sendSubview(toBack: taskStartLabel)
         self.view.bringSubview(toFront: taskStart)
+        
+        setupSuperViewJT()
+    }
+    
+    private func setupSuperViewJT() {
+        let jtPop = self.navigationController as? JTViewControllerInteractiveTransitionDelegate
+        if var jtpop = jtPop {
+            jtpop.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self) {
+                self.backButtonAction()
+            }
+        }
     }
     
     private func setupScrollView(){

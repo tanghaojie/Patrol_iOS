@@ -8,32 +8,65 @@
 
 import UIKit
 
-class EventViewController: UINavigationController, UINavigationControllerDelegate, UIViewControllerTransitioningDelegate {
+class EventViewController: UINavigationController, UINavigationControllerDelegate, UIViewControllerTransitioningDelegate, JTViewControllerInteractiveTransitionDelegate {
     
-    let customInteractionController = CustomInteractionController()
-    let customNavigationAnimationController = CustomNavigationAnimationController()
+    var jtViewControllerInteractiveTransition: JTViewControllerInteractiveTransition? = nil
+    private let jtNavigationControllerAnimatedTransitioning = JTNavigationControllerAnimatedTransitioning()
+    private var lastTop: UIViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationBar.barTintColor = kMainColor
-        //self.delegate = self
-        
+        self.delegate = self
+        self.transitioningDelegate = self
+
         self.pushViewController(EventOverViewViewController(), animated: true)
     }
+
     
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        if operation == .push {
-            customInteractionController.addGestureRecognizerToViewController(toVC)
+        
+        if operation == .pop {
+            self.lastTop = fromVC
         }
-        customNavigationAnimationController.reverse = operation == .pop
-        return customNavigationAnimationController
+
+        jtNavigationControllerAnimatedTransitioning.reverse = operation == .pop
+        return jtNavigationControllerAnimatedTransitioning
+    }
+
+    func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+
+        let jtVC = self.lastTop as? JTViewControllerInteractiveTransitionDelegate
+        if let jt = jtVC {
+            let jtVCInteractiveTransition = jt.jtViewControllerInteractiveTransition
+            if let jtVCIT = jtVCInteractiveTransition {
+                return jtVCIT.transitionInProgress ? jtVCIT : nil
+            }
+        }
+        
+        return nil
     }
     
-    func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+    
+    
+    
+    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         
-        let inProgress = customInteractionController.transitionInProgress
-        return inProgress ? customInteractionController : nil
+        if let jtVCInteractiveTransition = self.jtViewControllerInteractiveTransition {
+            return jtVCInteractiveTransition.transitionInProgress ? jtVCInteractiveTransition : nil
+        }
+        return nil
     }
+    
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return CustomPresentAnimationController()
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return CustomDismissAnimateController()
+    }
+    
+    
 
 }

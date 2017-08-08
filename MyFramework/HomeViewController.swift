@@ -8,14 +8,35 @@
 
 import UIKit
 
-class HomeViewController: UINavigationController {
+class HomeViewController: UINavigationController, UIViewControllerTransitioningDelegate, JTViewControllerInteractiveTransitionDelegate  {
 
+    var jtViewControllerInteractiveTransition: JTViewControllerInteractiveTransition? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationBar.barTintColor = kMainColor
+        
+        self.transitioningDelegate = self
 
         self.pushViewController(MyViewController(), animated: true)
+    }
+    
+    
+    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        
+        if let jtVCInteractiveTransition = self.jtViewControllerInteractiveTransition {
+            return jtVCInteractiveTransition.transitionInProgress ? jtVCInteractiveTransition : nil
+        }
+        return nil
+    }
+    
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return CustomPresentAnimationController()
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return CustomDismissAnimateController()
     }
     
 

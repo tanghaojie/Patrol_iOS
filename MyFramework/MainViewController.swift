@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 
 class MainViewController: UIViewController,AGSMapViewLayerDelegate {
-    
+
     var mapView: AGSMapView! = AGSMapView()
     let location = MLocationManager.instance
     
@@ -25,13 +25,14 @@ class MainViewController: UIViewController,AGSMapViewLayerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupUI()
         setData()
         
         Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(timer10Fire), userInfo: nil, repeats: true)
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timer1Fire), userInfo: nil, repeats: true)
     }
+
 
 }
 
@@ -252,31 +253,18 @@ extension MainViewController{
 
 extension MainViewController: UIViewControllerTransitioningDelegate {
     
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return CustomPresentAnimationController()
-    }
-    
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return CustomDismissAnimateController()
-    }
-    
     fileprivate func jumpToTask(){
-        let toVC = TaskViewController()
-        toVC.transitioningDelegate = self
-        self.present(toVC, animated: true, completion: nil)
+        self.present(TaskViewController(), animated: true, completion: nil)
     }
     
     fileprivate func jumpToHome(){
-        let toVC = HomeViewController()
-        toVC.transitioningDelegate = self
-        self.present(toVC, animated: true, completion: nil)
+        self.present(HomeViewController(), animated: true, completion: nil)
     }
     
     fileprivate func jumpToEvent(){
-        let toVC = EventViewController()
-        toVC.transitioningDelegate = self
-        self.present(toVC, animated: true, completion: nil)
+        self.present(EventViewController(), animated: true, completion: nil)
     }
+
 }
 
 extension MainViewController{
