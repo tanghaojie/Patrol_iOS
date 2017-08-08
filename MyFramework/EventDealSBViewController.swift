@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 //main
-class EventDealSBViewController: UIViewController {
+class EventDealSBViewController: UIViewController, JTViewControllerInteractiveTransitionDelegate {
 
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet weak var eventName: UILabel!
@@ -39,6 +39,8 @@ class EventDealSBViewController: UIViewController {
     fileprivate var event: JSON_Event?
     
     fileprivate var location: CLLocationCoordinate2D?
+    
+    var jtViewControllerInteractiveTransition: JTViewControllerInteractiveTransition? = nil
 
     //for save self.eventImage collectionViewCell and for display data   ps. an add image button image is also in the array
     var imageArray: NSMutableArray = NSMutableArray()
@@ -315,6 +317,13 @@ extension EventDealSBViewController {
         setupCollectionView()
         setupShowEvent()
         setupDatePicker()
+        setupJTPopInteractiveTransition()
+    }
+    
+    private func setupJTPopInteractiveTransition() {
+        self.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self) {
+            self.backButtonAction()
+        }
     }
     
     private func setupDatePicker() {

@@ -10,8 +10,8 @@ import UIKit
 import SwiftyJSON
 import MJRefresh
 
-class EventDetailViewController: UIViewController {
-    
+class EventDetailViewController: UIViewController, JTViewControllerInteractiveTransitionDelegate {
+
     fileprivate var tableView: UITableView!
     fileprivate var tableViewHeader: MJRefreshNormalHeader!
     fileprivate var tableViewFooter: MJRefreshAutoGifFooter!
@@ -31,6 +31,7 @@ class EventDetailViewController: UIViewController {
     
     static let navigationItemIncrease: CGFloat = 30.0
     fileprivate var data: [Any] = [Any]()
+    var jtViewControllerInteractiveTransition: JTViewControllerInteractiveTransition? = nil
 
     init(_ json_Event: JSON_Event?) {
         if let event = json_Event {
@@ -64,7 +65,6 @@ class EventDetailViewController: UIViewController {
         setupNavigationbar(isBig: true)
     }
 
-    
 }
 
 extension EventDetailViewController {
@@ -79,6 +79,14 @@ extension EventDetailViewController {
         setupRefreshHeader()
         
         setupNavigationbar(isBig: true)
+        
+        setupJTPopInteractiveTransition()
+    }
+    
+    private func setupJTPopInteractiveTransition() {
+        self.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self) {
+            self.backButtonAction()
+        }
     }
     
     private func setupTableView() {

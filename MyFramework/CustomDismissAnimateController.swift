@@ -11,28 +11,33 @@ import Foundation
 class CustomDismissAnimateController: NSObject, UIViewControllerAnimatedTransitioning {
     
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.8
+        return 0.5
     }
     
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let fromViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from)!
         let toViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to)!
-        
         let finalFrameForVC = transitionContext.finalFrame(for: toViewController)
         let containerView = transitionContext.containerView
 
-        toViewController.view.frame = finalFrameForVC
-        toViewController.view.alpha = 0.5
-        
-        containerView.addSubview(toViewController.view)
-        containerView.sendSubview(toBack: toViewController.view)
+        let toView = toViewController.view!
+        toView.frame = finalFrameForVC
+        toView.alpha = 0.2
+
+        containerView.addSubview(toView)
+        containerView.sendSubview(toBack: toView)
         
         UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
             fromViewController.view.frame = fromViewController.view.frame.offsetBy(dx: fromViewController.view.frame.width, dy: 0)
             toViewController.view.alpha = 1
         }, completion: {
             finish in
-            transitionContext.completeTransition(true)
+            
+            if transitionContext.transitionWasCancelled {
+                toView.removeFromSuperview()
+            }
+            
+            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         })
         
     }
