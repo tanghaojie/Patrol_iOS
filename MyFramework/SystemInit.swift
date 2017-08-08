@@ -21,5 +21,7 @@ public func SystemInit(){
     
     loginInfo = nil
     HTTPCookieStorage.shared.cookieAcceptPolicy = .always
+    
+    SettingViewController.getServiceInfoFromFile()
 }
 

@@ -9,25 +9,99 @@
 
 //URL
 
-let url_Main = "http://119.6.30.131:10063/patrolapi"
-//let url_Main = "http://192.168.0.122/test"
+//var url_Main = "http://119.6.30.131:10063/patrolapi"
+var url_Main = ""
 
-let url_Login = "\(url_Main)/api/user/login"
-let url_Regist = "\(url_Main)/api/user/regist"
-let url_RegistUsernameUniqueCheck = "\(url_Main)/api/user/validateusername"
-let url_Config = "\(url_Main)/api/config/GetGroupConfig"
-let url_CurrentTask = "\(url_Main)/api/task/CurrentTask"
-let url_CreateTask = "\(url_Main)/api/task/CreateTask"
-let url_EndTask = "\(url_Main)/api/task/EndTask"
-let url_UploadPoints = "\(url_Main)/api/track/UploadPoints"
-let url_CreateEvent = "\(url_Main)/api/event/CreateEvent"
-let url_QueryEventList = "\(url_Main)/api/event/QueryRelationEventList"
-let url_QueryProcessList = "\(url_Main)/api/process/QueryProcessList"
-let url_QueryImage = "\(url_Main)/api/image/QueryImage"
-let url_Picture = "\(url_Main)/api/Picture"
-let url_CreateProcessExecute = "\(url_Main)/api/process/CreateProcessExecute"
+var url_Login: String {
+    get{
+        return getUrl("/api/user/login")
+    }
+}
 
-let url_UploadImage = "\(url_Main)/api/image/UploadImage"
+var url_Regist: String {
+    get{
+        return getUrl("/api/user/regist")
+    }
+}
+
+var url_RegistUsernameUniqueCheck: String {
+    get{
+         return getUrl("/api/user/validateusername")
+    }
+}
+
+var url_Config: String {
+    get{
+        return getUrl("/api/config/GetGroupConfig")
+    }
+}
+
+var url_CurrentTask: String {
+    get{
+        return getUrl("/api/task/CurrentTask")
+    }
+}
+
+var url_CreateTask: String {
+    get{
+        return getUrl("/api/task/CreateTask")
+    }
+}
+
+var url_EndTask: String {
+    get{
+        return getUrl("/api/task/EndTask")
+    }
+}
+
+var url_UploadPoints: String {
+    get{
+        return  getUrl("/api/track/UploadPoints")
+    }
+}
+
+var url_CreateEvent: String {
+    get{
+        return getUrl("/api/event/CreateEvent")
+    }
+}
+
+var url_QueryEventList: String {
+    get{
+        return getUrl("/api/event/QueryRelationEventList")
+    }
+}
+
+var url_QueryProcessList: String {
+    get{
+        return getUrl("/api/process/QueryProcessList")
+    }
+}
+
+var url_QueryImage: String {
+    get{
+        return getUrl("/api/image/QueryImage")
+    }
+}
+
+var url_Picture: String {
+    get{
+        return getUrl("/api/Picture")
+    }
+}
+
+var url_CreateProcessExecute: String {
+    get{
+        return getUrl("/api/process/CreateProcessExecute")
+    }
+}
+
+var url_UploadImage: String {
+    get{
+        return getUrl("/api/image/UploadImage")
+    }
+}
+
 public func getUploadImage(prid: String,typenum: String,actualtime: String) -> String {
     return "\(url_UploadImage)?prid=\(prid)&typenum=\(typenum)&actualtime=\(actualtime)"
 }
@@ -38,6 +112,10 @@ let kLongTimeoutInterval = 20
 public enum HttpMethod: String{
     case Get = "GET"
     case Post = "POST"
+}
+
+func getUrl(_ sub: String) -> String {
+    return "\(url_Main)\(sub)"
 }
 
 
