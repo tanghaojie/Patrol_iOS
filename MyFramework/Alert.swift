@@ -43,6 +43,10 @@ let msg_SomethingWrongTryAgain = "出现异常，请重试"
 let msg_Error = "错误"
 let msg_RequestError = "请求错误"
 
+let msg_PleaseEnterServiceAddress = "请输入服务地址"
+
+let msg_NetworkOrAddressError = "网络连接或地址错误"
+
 
 public func AlertWithNoButton(view : UIViewController, title : String , message : String? , preferredStyle : UIAlertControllerStyle , showTime : TimeInterval){
     let alert = UIAlertController(title: title, message: message, preferredStyle: preferredStyle)

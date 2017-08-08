@@ -8,7 +8,7 @@
 import UIKit
 import SwiftyJSON
 
-class LoginViewController: UIViewController,UITextFieldDelegate {
+class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var username: UITextField!
     @IBOutlet weak var password: UITextField!
@@ -39,7 +39,7 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
     }
     
     @IBAction func settingClick(_ sender: Any) {
-        AlertWithNoButton(view: self, title: "敬请期待", message: nil, preferredStyle: .alert, showTime: 1)
+        settingButtonClick()
     }
     
     @IBAction func registeClick(_ sender: Any) {
@@ -52,9 +52,9 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
 }
 
 //ui
-extension LoginViewController{
+extension LoginViewController {
     
-    fileprivate func setupUI(){
+    fileprivate func setupUI() {
         username.delegate = self
         username.addTarget(self, action: #selector(usernameEditingEvents(_:)), for: .allEditingEvents)
         password.delegate = self
@@ -64,13 +64,13 @@ extension LoginViewController{
         activity.center = login.center
         self.view.addSubview(activity)
     }
-  
+
 }
 
 //event
-extension LoginViewController: LoginDelegate{
+extension LoginViewController: LoginDelegate {
     
-    fileprivate func loginButtonClick(){
+    fileprivate func loginButtonClick() {
         let user = username.text
         let pass = password.text
         
@@ -102,11 +102,17 @@ extension LoginViewController: LoginDelegate{
         
         loginAsyncConnect(urlRequest: urlRequest, user: user, pass: pass)
     }
-
-    fileprivate func registeButtonClick(){
+    
+    fileprivate func registeButtonClick() {
         let sb = UIStoryboard(name: "Regist", bundle: nil)
         let vc = sb.instantiateViewController(withIdentifier: "RegistViewController") as! RegistViewController
         vc.delegate = self
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    fileprivate func settingButtonClick() {
+        let sb = UIStoryboard(name: "Setting", bundle: nil)
+        let vc = sb.instantiateViewController(withIdentifier: "Setting") as! SettingViewController
         self.present(vc, animated: true, completion: nil)
     }
     
@@ -131,7 +137,7 @@ extension LoginViewController: LoginDelegate{
 }
 
 //func
-extension LoginViewController{
+extension LoginViewController {
     
     fileprivate func checkInput(user : String, pass : String) -> Bool {
         if(user.isEmpty){
@@ -172,21 +178,21 @@ extension LoginViewController{
         self.view.isUserInteractionEnabled = true
     }
     
-    fileprivate func loginAsyncConnect(urlRequest : URLRequest, user: String?, pass: String?){
+    fileprivate func loginAsyncConnect(urlRequest : URLRequest, user: String?, pass: String?) {
         NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
             if let urlResponse = response{
                 let httpResponse = urlResponse as! HTTPURLResponse
                 let statusCode = httpResponse.statusCode
                 if(statusCode != 200){
-                    self.alertAndLog(msg: String(statusCode) + msg_HttpError, showTime: 0.5, log: String(statusCode) + msg_HttpError + url_Login)
+                    self.alertAndLog(msg: String(statusCode) + msg_HttpError, showTime: 1, log: String(statusCode) + msg_HttpError + url_Login)
                     return
                 }
                 if(error != nil){
-                    self.alertAndLog(msg: msg_ConnectTimeout, showTime: 0.5, log: String(describing: error) + log_Timeout + url_Login)
+                    self.alertAndLog(msg: msg_ConnectTimeout, showTime: 1, log: String(describing: error) + log_Timeout + url_Login)
                     return
                 }
                 if(data?.isEmpty)!{
-                    self.alertAndLog(msg: msg_ServerNoResponse, showTime: 0.5, log: log_ServerNoResponse + url_Login)
+                    self.alertAndLog(msg: msg_ServerNoResponse, showTime: 1, log: log_ServerNoResponse + url_Login)
                     return
                 }
                 
@@ -225,7 +231,7 @@ extension LoginViewController{
                         loginInfo?.config = Config(id: id!)
                         if(!((loginInfo?.config?.success)!)){
                             let msg = loginInfo?.config?.msg
-                            self.alertAndLog(msg: msg!, showTime: 0.5, log: msg!)
+                            self.alertAndLog(msg: msg!, showTime: 1, log: msg!)
                             return
                         }
                         

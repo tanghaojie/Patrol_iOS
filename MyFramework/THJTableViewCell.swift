@@ -204,7 +204,7 @@ extension THJTableViewCell {
         }
     }
     
-    func imageViewTap(_ recognizer:UITapGestureRecognizer){
+    func imageViewTap(_ recognizer: UITapGestureRecognizer){
         
         var imgs = [UIImage]()
         for subView in line4.subviews {
