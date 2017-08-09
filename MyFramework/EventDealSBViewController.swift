@@ -20,6 +20,7 @@ class EventDealSBViewController: UIViewController, JTViewControllerInteractiveTr
     @IBOutlet weak var dealDate: UIDatePicker!
     @IBOutlet weak var dealDetail: UITextView!
     @IBOutlet weak var dealImage: UICollectionView!
+    @IBOutlet weak var dealImageHeight: NSLayoutConstraint!
     @IBOutlet weak var commit: UIButton!
     
     fileprivate let navigationTitle_Default = "事件处理"
@@ -63,6 +64,7 @@ class EventDealSBViewController: UIViewController, JTViewControllerInteractiveTr
     }
 
     @IBAction func currentDateTouchUpInSide(_ sender: Any) {
+        self.dealDate.maximumDate = Date()
         dealDate.date = Date()
     }
     
@@ -421,8 +423,10 @@ extension EventDealSBViewController: UICollectionViewDelegate, UICollectionViewD
         let rowCount = Int(ceil(CGFloat(count) / countPerRow))
         let height = rowCount * collectionViewCellHeight
         if self.dealImage.frame.height != CGFloat(height) {
-            self.dealImage.frame = CGRect(x: self.dealImage.frame.minX, y: self.dealImage.frame.minY, width: self.dealImage.frame.width, height: CGFloat(height))
-            self.commit.frame = CGRect(x: self.commit.frame.minX, y: self.dealImage.frame.maxY + 10, width: self.commit.frame.width, height: self.commit.frame.height)
+            
+            self.dealImageHeight.constant = CGFloat(height)
+//            self.dealImage.frame = CGRect(x: self.dealImage.frame.minX, y: self.dealImage.frame.minY, width: self.dealImage.frame.width, height: CGFloat(height))
+//            self.commit.frame = CGRect(x: self.commit.frame.minX, y: self.dealImage.frame.maxY + 10, width: self.commit.frame.width, height: self.commit.frame.height)
         }
         return count
     }

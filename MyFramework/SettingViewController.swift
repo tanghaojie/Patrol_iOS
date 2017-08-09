@@ -18,14 +18,11 @@ class SettingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.frame = self.view.frame
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.showsVerticalScrollIndicator = false
+
         scrollView.bounces = true
         scrollView.alwaysBounceVertical = true
         scrollView.alwaysBounceHorizontal = false
         scrollView.scrollsToTop = true
-        scrollView.keyboardDismissMode = .onDrag
         self.serviceAddress.text = url_Main
     }
     

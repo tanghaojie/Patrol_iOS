@@ -32,11 +32,11 @@ class HomeViewController: UINavigationController, UIViewControllerTransitioningD
     }
     
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return CustomPresentAnimationController()
+        return JTPresentAnimatedTransitioning()
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return CustomDismissAnimateController()
+        return JTDismissAnimatedTransitioning()
     }
     
 

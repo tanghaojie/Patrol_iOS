@@ -8,10 +8,10 @@
 
 import Foundation
 
-class CustomPresentAnimationController: NSObject, UIViewControllerAnimatedTransitioning {
+class JTPresentAnimatedTransitioning: NSObject, UIViewControllerAnimatedTransitioning {
     
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.8
+        return 0.7
     }
     
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
