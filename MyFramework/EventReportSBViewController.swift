@@ -26,6 +26,7 @@ class EventReportSBViewController: UIViewController {
     @IBOutlet weak var eventDate: UIDatePicker!
     @IBOutlet weak var eventDetail: UITextView!
     @IBOutlet weak var eventImage: UICollectionView!
+    @IBOutlet weak var eventImageHeight: NSLayoutConstraint!
     @IBOutlet weak var commit: UIButton!
     
     fileprivate let navigationTitle_Default = "事件上报"
@@ -90,6 +91,7 @@ class EventReportSBViewController: UIViewController {
     }
     
     @IBAction func currentDateTouchUpInSide(_ sender: Any) {
+        self.eventDate.maximumDate = Date()
         eventDate.date = Date()
     }
     
@@ -362,17 +364,17 @@ extension EventReportSBViewController {
     }
     
     private func setupScrollView(){
-        scrollView.frame = self.view.frame
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.showsVerticalScrollIndicator = false
+        //scrollView.frame = self.view.frame
+        //scrollView.showsHorizontalScrollIndicator = false
+        //scrollView.showsVerticalScrollIndicator = false
         //scrollView.pagingEnabled = false
         scrollView.bounces = true
         scrollView.alwaysBounceVertical = true
         scrollView.alwaysBounceHorizontal = false
         //scrollView.delegate = self
         scrollView.scrollsToTop = true
-        scrollView.keyboardDismissMode = .onDrag
-        scrollView.contentSize = CGSize(width: kScreenWidth, height: 900)
+        //scrollView.keyboardDismissMode = .onDrag
+        //scrollView.contentSize = CGSize(width: kScreenWidth, height: 900)
     }
     
     private func setupBackButton(){
@@ -571,8 +573,11 @@ extension EventReportSBViewController: UICollectionViewDelegate, UICollectionVie
         let rowCount = Int(ceil(CGFloat(count) / countPerRow))
         let height = rowCount * collectionViewCellHeight
         if self.eventImage.frame.height != CGFloat(height) {
-            self.eventImage.frame = CGRect(x: self.eventImage.frame.minX, y: self.eventImage.frame.minY, width: self.eventImage.frame.width, height: CGFloat(height))
-            self.commit.frame = CGRect(x: self.commit.frame.minX, y: self.eventImage.frame.maxY + 10, width: self.commit.frame.width, height: self.commit.frame.height)
+            
+            self.eventImageHeight.constant = CGFloat(height)
+            //self.eventImage.frame = CGRect(x: self.eventImage.frame.minX, y: self.eventImage.frame.minY, width: self.eventImage.frame.width, height: CGFloat(height))
+            
+            //self.commit.frame = CGRect(x: self.commit.frame.minX, y: self.eventImage.frame.maxY + 10, width: self.commit.frame.width, height: self.commit.frame.height)
         }
         return count
     }

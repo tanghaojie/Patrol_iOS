@@ -1,37 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
-        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <scenes>
-        <!--View Controller-->
-        <scene sceneID="D2r-yW-MG4">
-            <objects>
-                <viewController id="n73-x7-MQs" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ENQ-3k-4DD"/>
-                        <viewControllerLayoutGuide type="bottom" id="37m-6n-cva"/>
-                    </layoutGuides>
-                    <scrollView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="EVf-mq-CpV">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </scrollView>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="iuw-tX-RAq" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-4993" y="-49"/>
-        </scene>
-        <!--Storyboard Reference-->
-        <scene sceneID="aYh-D4-0rS">
-            <objects>
-                <viewControllerPlaceholder id="apI-Ip-tq6" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="nXS-mP-Ivk" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-        </scene>
-    </scenes>
+    <scenes/>
 </document>

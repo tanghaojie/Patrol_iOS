@@ -8,10 +8,10 @@
 
 import Foundation
 
-class CustomDismissAnimateController: NSObject, UIViewControllerAnimatedTransitioning {
+class JTDismissAnimatedTransitioning: NSObject, UIViewControllerAnimatedTransitioning {
     
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.5
+        return 0.3
     }
     
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {

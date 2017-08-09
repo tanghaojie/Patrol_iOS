@@ -81,6 +81,7 @@ extension LoginViewController: LoginDelegate {
             loginInfo?.username = "adminJT"
             loginInfo?.protraiurl = ""
             
+            self.activity.center = self.login.center
             self.activity.stopAnimating()
             self.view.isUserInteractionEnabled = true
             

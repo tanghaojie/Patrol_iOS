@@ -26,10 +26,10 @@ class TaskSBViewController: UIViewController {
     fileprivate let navigationTitle_Loading = "加载中"
     let titleActivity = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
     let titleLabel = UILabel()
-    let defaultTaskModel = TaskModel(isStarted: false, tid: -1, uid: -1, tName: "", tType: "", tLineCode: "", startTime: Date(), remark: "")
-    
+
     var taskModel : TaskModel = TaskModel(isStarted: false, tid: -1, uid: -1, tName: "", tType: "", tLineCode: "", startTime: Date(), remark: "")
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.taskTypeTableView.dataSource = self
@@ -345,7 +345,7 @@ extension TaskSBViewController{
                         self.view.isUserInteractionEnabled = true
                         return
                     }else{
-                        self.taskModel = self.defaultTaskModel
+                        self.taskModel = TaskModel(isStarted: false, tid: self.taskModel.taskid, uid: self.taskModel.userid, tName: "", tType: self.taskModel.taskTypeCode, tLineCode: self.taskModel.taskLineCode, startTime: Date(), remark: "")
                         self.setTaskView(model: self.taskModel)
                     }
                 }else{
@@ -370,8 +370,12 @@ extension TaskSBViewController{
         setupScrollView()
         setupBackButton()
         setupTitle()
+        
         self.taskStop.isHidden = true
-        taskStart.sendSubview(toBack: taskStartLabel)
+        self.taskStartLabel.isHidden = true
+        
+        self.view.bringSubview(toFront: self.taskTypeTableView)
+
         self.view.bringSubview(toFront: taskStart)
         
         setupSuperViewJT()
@@ -387,16 +391,11 @@ extension TaskSBViewController{
     }
     
     private func setupScrollView(){
-        scrollView.frame = self.view.frame
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.showsVerticalScrollIndicator = false
-        //scrollView.pagingEnabled = false
         scrollView.bounces = true
         scrollView.alwaysBounceVertical = true
         scrollView.alwaysBounceHorizontal = false
         //scrollView.delegate = self
         scrollView.scrollsToTop = true
-        scrollView.keyboardDismissMode = .onDrag
     }
     
     private func setupBackButton(){
@@ -457,6 +456,7 @@ extension TaskSBViewController{
             taskExplain.text = model.remark
             let dTime = getDateFormatter(dateFormatter: kDateTimeFormate).string(from: (model.startTime)!)
             taskStartLabel.text = dTime
+            taskStartLabel.isHidden = false
             
             taskStart.isHidden = true
             taskStop.isHidden = false
@@ -487,6 +487,7 @@ extension TaskSBViewController{
             
             taskStart.isHidden = false
             taskStop.isHidden = true
+            taskStartLabel.isHidden = true
             
             loginInfo?.taskId = nil
             

@@ -46,8 +46,8 @@
 		6B5AA4E91F0A34040090D584 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B5AA4E81F0A34040090D584 /* UIKit.framework */; };
 		6B65CCA01F32FC7800459F9A /* ImagePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B65CC9F1F32FC7800459F9A /* ImagePreviewViewController.swift */; };
 		6B65CCA21F32FCF300459F9A /* ImagePreviewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B65CCA11F32FCF300459F9A /* ImagePreviewCollectionViewCell.swift */; };
-		6B65CCA41F332ADA00459F9A /* CustomPresentAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B65CCA31F332AD900459F9A /* CustomPresentAnimationController.swift */; };
-		6B65CCA61F3335F300459F9A /* CustomDismissAnimateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B65CCA51F3335F300459F9A /* CustomDismissAnimateController.swift */; };
+		6B65CCA41F332ADA00459F9A /* JTPresentAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B65CCA31F332AD900459F9A /* JTPresentAnimatedTransitioning.swift */; };
+		6B65CCA61F3335F300459F9A /* JTDismissAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B65CCA51F3335F300459F9A /* JTDismissAnimatedTransitioning.swift */; };
 		6B65CCAB1F340FB900459F9A /* JTNavigationControllerAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B65CCAA1F340FB900459F9A /* JTNavigationControllerAnimatedTransitioning.swift */; };
 		6B6C62201F04DA83000FC91B /* LoginInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6C621F1F04DA83000FC91B /* LoginInfo.swift */; };
 		6B6C62221F04EB38000FC91B /* RegistModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6C62211F04EB38000FC91B /* RegistModel.swift */; };
@@ -144,8 +144,8 @@
 		6B5AA4E81F0A34040090D584 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6B65CC9F1F32FC7800459F9A /* ImagePreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePreviewViewController.swift; sourceTree = "<group>"; };
 		6B65CCA11F32FCF300459F9A /* ImagePreviewCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePreviewCollectionViewCell.swift; sourceTree = "<group>"; };
-		6B65CCA31F332AD900459F9A /* CustomPresentAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPresentAnimationController.swift; sourceTree = "<group>"; };
-		6B65CCA51F3335F300459F9A /* CustomDismissAnimateController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomDismissAnimateController.swift; sourceTree = "<group>"; };
+		6B65CCA31F332AD900459F9A /* JTPresentAnimatedTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTPresentAnimatedTransitioning.swift; sourceTree = "<group>"; };
+		6B65CCA51F3335F300459F9A /* JTDismissAnimatedTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTDismissAnimatedTransitioning.swift; sourceTree = "<group>"; };
 		6B65CCAA1F340FB900459F9A /* JTNavigationControllerAnimatedTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTNavigationControllerAnimatedTransitioning.swift; sourceTree = "<group>"; };
 		6B6C621F1F04DA83000FC91B /* LoginInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginInfo.swift; sourceTree = "<group>"; };
 		6B6C62211F04EB38000FC91B /* RegistModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistModel.swift; sourceTree = "<group>"; };
@@ -304,8 +304,8 @@
 		6B65CCA71F333A9E00459F9A /* CustomAnimate */ = {
 			isa = PBXGroup;
 			children = (
-				6B65CCA31F332AD900459F9A /* CustomPresentAnimationController.swift */,
-				6B65CCA51F3335F300459F9A /* CustomDismissAnimateController.swift */,
+				6B65CCA31F332AD900459F9A /* JTPresentAnimatedTransitioning.swift */,
+				6B65CCA51F3335F300459F9A /* JTDismissAnimatedTransitioning.swift */,
 				6B65CCAA1F340FB900459F9A /* JTNavigationControllerAnimatedTransitioning.swift */,
 				6B7CBC461F386F73008403B3 /* JTViewControllerInteractiveTransition.swift */,
 				6B7CBC481F39AB8A008403B3 /* JTViewControllerInteractiveTransitionDelegate.swift */,
@@ -607,12 +607,12 @@
 			files = (
 				6BB823871EFBA83800468956 /* RegistViewController.swift in Sources */,
 				6B06F2501F26ED1C00829F5C /* JSON_Process.swift in Sources */,
-				6B65CCA61F3335F300459F9A /* CustomDismissAnimateController.swift in Sources */,
+				6B65CCA61F3335F300459F9A /* JTDismissAnimatedTransitioning.swift in Sources */,
 				6B6FBD031F1707A10045E6D8 /* MLocationManager.swift in Sources */,
 				6B2A58CE1F31CD060071C275 /* MapServer.swift in Sources */,
 				6B2A58CC1F3046460071C275 /* SelectLocationViewController.swift in Sources */,
 				6B7CBC491F39AB8A008403B3 /* JTViewControllerInteractiveTransitionDelegate.swift in Sources */,
-				6B65CCA41F332ADA00459F9A /* CustomPresentAnimationController.swift in Sources */,
+				6B65CCA41F332ADA00459F9A /* JTPresentAnimatedTransitioning.swift in Sources */,
 				6B5590461EF12078008149FD /* LoginViewController.swift in Sources */,
 				6BAAD82E1EFCA75D00FFE413 /* Log.swift in Sources */,
 				6B9585F11F15C424001A24A2 /* TaskModel.swift in Sources */,
