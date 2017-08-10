@@ -74,14 +74,15 @@ extension LoginViewController: LoginDelegate {
         let user = username.text
         let pass = password.text
         
+        self.activity.center = self.login.center
+        
         if(user=="adminJT"&&pass=="IamJT!"){
             loginInfo = LoginInfo()
             loginInfo?.userId = 1
             loginInfo?.realname = "JT"
             loginInfo?.username = "adminJT"
             loginInfo?.protraiurl = ""
-            
-            self.activity.center = self.login.center
+
             self.activity.stopAnimating()
             self.view.isUserInteractionEnabled = true
             
