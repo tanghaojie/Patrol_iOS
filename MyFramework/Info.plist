@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>zh_CN</string>
 	<key>CFBundleDisplayName</key>
-	<string>Patrol</string>
+	<string>巡检</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -40,13 +40,13 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Use your camera</string>
+	<string>授权使用手机摄像头</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Location Always Usage Description</string>
+	<string>授权使用手机的定位信息</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Location When In Use Usage Description</string>
+	<string>授权使用手机的定位信息</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Use your album</string>
+	<string>授权使用手机相册</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>

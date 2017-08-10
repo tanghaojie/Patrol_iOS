@@ -84,7 +84,7 @@ extension EventDetailViewController {
     }
     
     private func setupJTPopInteractiveTransition() {
-        self.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self) {
+        self.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self, scrollView: self.tableView) {
             self.backButtonAction()
         }
     }

@@ -323,7 +323,7 @@ extension EventDealSBViewController {
     }
     
     private func setupJTPopInteractiveTransition() {
-        self.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self) {
+        self.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self, scrollView: self.scrollView ) {
             self.backButtonAction()
         }
     }

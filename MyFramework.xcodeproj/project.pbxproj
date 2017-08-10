@@ -59,6 +59,9 @@
 		6B72E4071F0639340041EAD4 /* Validate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B72E4061F0639340041EAD4 /* Validate.swift */; };
 		6B7CBC471F386F73008403B3 /* JTViewControllerInteractiveTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7CBC461F386F73008403B3 /* JTViewControllerInteractiveTransition.swift */; };
 		6B7CBC491F39AB8A008403B3 /* JTViewControllerInteractiveTransitionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7CBC481F39AB8A008403B3 /* JTViewControllerInteractiveTransitionDelegate.swift */; };
+		6B8DEC1B1F3C02860033C1BC /* appRadius.png in Resources */ = {isa = PBXBuildFile; fileRef = 6B8DEC181F3C02860033C1BC /* appRadius.png */; };
+		6B8DEC1C1F3C02860033C1BC /* appRadius@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6B8DEC191F3C02860033C1BC /* appRadius@2x.png */; };
+		6B8DEC1D1F3C02860033C1BC /* appRadius@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6B8DEC1A1F3C02860033C1BC /* appRadius@3x.png */; };
 		6B93CECB1F0E3B3A004E0890 /* ArcGIS.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6B93CEC91F0E3B3A004E0890 /* ArcGIS.bundle */; };
 		6B93CECC1F0E3B3A004E0890 /* iTile.db in Resources */ = {isa = PBXBuildFile; fileRef = 6B93CECA1F0E3B3A004E0890 /* iTile.db */; };
 		6B93CECE1F0E3B44004E0890 /* SCGCFrameworkV30.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B93CECD1F0E3B44004E0890 /* SCGCFrameworkV30.framework */; };
@@ -158,6 +161,9 @@
 		6B72E4061F0639340041EAD4 /* Validate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Validate.swift; sourceTree = "<group>"; };
 		6B7CBC461F386F73008403B3 /* JTViewControllerInteractiveTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTViewControllerInteractiveTransition.swift; sourceTree = "<group>"; };
 		6B7CBC481F39AB8A008403B3 /* JTViewControllerInteractiveTransitionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTViewControllerInteractiveTransitionDelegate.swift; sourceTree = "<group>"; };
+		6B8DEC181F3C02860033C1BC /* appRadius.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = appRadius.png; path = ../../../Design/Patrol/icon/appIcon/appRadius.png; sourceTree = "<group>"; };
+		6B8DEC191F3C02860033C1BC /* appRadius@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "appRadius@2x.png"; path = "../../../Design/Patrol/icon/appIcon/appRadius@2x.png"; sourceTree = "<group>"; };
+		6B8DEC1A1F3C02860033C1BC /* appRadius@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "appRadius@3x.png"; path = "../../../Design/Patrol/icon/appIcon/appRadius@3x.png"; sourceTree = "<group>"; };
 		6B93CEC91F0E3B3A004E0890 /* ArcGIS.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = ArcGIS.bundle; path = SCGCFrameworkV30.framework/ArcGIS.bundle; sourceTree = "<group>"; };
 		6B93CECA1F0E3B3A004E0890 /* iTile.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTile.db; path = SCGCFrameworkV30.framework/iTile.db; sourceTree = "<group>"; };
 		6B93CECD1F0E3B44004E0890 /* SCGCFrameworkV30.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SCGCFrameworkV30.framework; sourceTree = "<group>"; };
@@ -355,6 +361,9 @@
 		6BF046EF1EF22EA6006C362E /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
+				6B8DEC181F3C02860033C1BC /* appRadius.png */,
+				6B8DEC191F3C02860033C1BC /* appRadius@2x.png */,
+				6B8DEC1A1F3C02860033C1BC /* appRadius@3x.png */,
 				6B1BDE971EEBB2DA00B29DA8 /* LaunchScreen.storyboard */,
 				6B1BDE8E1EEBB2DA00B29DA8 /* AppDelegate.swift */,
 				6B1BDE951EEBB2DA00B29DA8 /* Assets.xcassets */,
@@ -541,8 +550,11 @@
 				6B93CECB1F0E3B3A004E0890 /* ArcGIS.bundle in Resources */,
 				6B5590441EF12053008149FD /* Login.storyboard in Resources */,
 				6BB823851EFBA32800468956 /* Regist.storyboard in Resources */,
+				6B8DEC1B1F3C02860033C1BC /* appRadius.png in Resources */,
 				6BCA085C1F1C51D0003FBA70 /* EventReportSB.storyboard in Resources */,
+				6B8DEC1D1F3C02860033C1BC /* appRadius@3x.png in Resources */,
 				6B93CECC1F0E3B3A004E0890 /* iTile.db in Resources */,
+				6B8DEC1C1F3C02860033C1BC /* appRadius@2x.png in Resources */,
 				6B1BDE991EEBB2DA00B29DA8 /* LaunchScreen.storyboard in Resources */,
 				6B1BDE961EEBB2DA00B29DA8 /* Assets.xcassets in Resources */,
 				6BDEB5FD1F37FE62008E0050 /* Setting.storyboard in Resources */,
