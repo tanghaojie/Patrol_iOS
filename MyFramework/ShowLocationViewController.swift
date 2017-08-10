@@ -69,8 +69,10 @@ extension ShowLocationViewController {
     
     private func setupBackButton() {
         let img = UIImage(named: "leftArrow")?.withRenderingMode(.alwaysOriginal)
-        let backBtn = UIButton(frame: CGRect(x: 10, y: 28, width: 18, height: 32))
+        let backBtn = UIButton(frame: CGRect(x: 15, y: 25, width: 80, height: 80))
         backBtn.setImage(img, for: .normal)
+        backBtn.contentVerticalAlignment = .top
+        backBtn.contentHorizontalAlignment = .left
         backBtn.addTarget(self, action: #selector(self.backButtonAction), for: UIControlEvents.touchUpInside)
         self.view.addSubview(backBtn)
     }

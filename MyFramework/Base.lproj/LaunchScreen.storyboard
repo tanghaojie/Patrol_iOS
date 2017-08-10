@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -18,28 +19,57 @@
                         <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Dlm-fY-fDg">
-                                <rect key="frame" x="169" y="80" width="37" height="37"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="color" red="0.23065863715277779" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </activityIndicatorView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="launchScreen" translatesAutoresizingMaskIntoConstraints="NO" id="uhO-Me-Kuc">
-                                <rect key="frame" x="0.0" y="185" width="375" height="231"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lyQ-tZ-3uj">
+                                <rect key="frame" x="57" y="616" width="300" height="80"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="巡检" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y1a-oa-nzL">
+                                        <rect key="frame" x="127.66666666666666" y="10" width="45" height="26.666666666666629"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="安全生产从巡检开始" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FBi-OG-fey">
+                                        <rect key="frame" x="127.66666666666667" y="44.666666666666629" width="184" height="24"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <color key="textColor" red="0.60784313725490191" green="0.60784313725490191" blue="0.60784313725490191" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="highlightedColor" red="0.92156862745098034" green="0.92156862745098034" blue="0.92156862745098034" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="appRadius.png" translatesAutoresizingMaskIntoConstraints="NO" id="Pyo-ey-D7M">
+                                        <rect key="frame" x="61.666666666666664" y="10" width="59.999999999999993" height="60"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="60" id="9yo-w5-FGP"/>
+                                            <constraint firstAttribute="height" constant="60" id="UoR-aX-XhY"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="FBi-OG-fey" firstAttribute="top" secondItem="Y1a-oa-nzL" secondAttribute="bottom" constant="8" id="GzU-B1-nLf"/>
+                                    <constraint firstItem="Y1a-oa-nzL" firstAttribute="centerX" secondItem="lyQ-tZ-3uj" secondAttribute="centerX" id="MUV-hD-bDV"/>
+                                    <constraint firstItem="Y1a-oa-nzL" firstAttribute="leading" secondItem="Pyo-ey-D7M" secondAttribute="trailing" constant="6" id="NDZ-oM-OMv"/>
+                                    <constraint firstAttribute="width" constant="300" id="TJG-Fs-IEL"/>
+                                    <constraint firstItem="Pyo-ey-D7M" firstAttribute="top" secondItem="lyQ-tZ-3uj" secondAttribute="top" constant="10" id="ddD-hL-BRh"/>
+                                    <constraint firstItem="Y1a-oa-nzL" firstAttribute="top" secondItem="lyQ-tZ-3uj" secondAttribute="top" constant="10" id="kKO-5x-05Q"/>
+                                    <constraint firstAttribute="height" constant="80" id="lCU-UV-hPf"/>
+                                    <constraint firstItem="FBi-OG-fey" firstAttribute="leading" secondItem="Pyo-ey-D7M" secondAttribute="trailing" constant="6" id="uyJ-sG-gLf"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="lyQ-tZ-3uj" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="FhB-GT-fvj"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="lyQ-tZ-3uj" secondAttribute="bottom" constant="40" id="WnZ-3V-s6g"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-7102" y="-121"/>
+            <point key="canvasLocation" x="-9255" y="-52"/>
         </scene>
     </scenes>
     <resources>
-        <image name="launchScreen" width="230" height="155"/>
+        <image name="appRadius.png" width="60" height="60"/>
     </resources>
 </document>

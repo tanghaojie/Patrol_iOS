@@ -13,6 +13,7 @@ class JTViewControllerInteractiveTransition: UIPercentDrivenInteractiveTransitio
     private let finishPercent: CGFloat = 0.36
     private let fromVc: UIViewController
     private let popInteractiveTransition: () -> Void
+    private let scrollView: UIScrollView?
     
     private var pan: UIPanGestureRecognizer = UIPanGestureRecognizer()
 
@@ -27,9 +28,10 @@ class JTViewControllerInteractiveTransition: UIPercentDrivenInteractiveTransitio
         }
     }
     
-    init(fromVc: UIViewController, popInteractiveTransition: @escaping () -> Void) {
+    init(fromVc: UIViewController, scrollView: UIScrollView? = nil, popInteractiveTransition: @escaping () -> Void) {
         self.fromVc = fromVc
         self.popInteractiveTransition = popInteractiveTransition
+        self.scrollView = scrollView
 
         super.init()
 
@@ -60,9 +62,10 @@ class JTViewControllerInteractiveTransition: UIPercentDrivenInteractiveTransitio
             let velocity = pan.velocity(in: pan.view?.superview)
             if velocity.x > 0 && fabsf(Float(velocity.x / velocity.y)) > 1 {
                 print("began")
-                
+
                 self.transitionInProgress = true
                 self.shouldCompleteTransition = false
+                self.scrollView?.isScrollEnabled = false
                 self.popInteractiveTransition()
             }
         case .changed:
@@ -82,11 +85,13 @@ class JTViewControllerInteractiveTransition: UIPercentDrivenInteractiveTransitio
                 if self.shouldCompleteTransition {
                     self.transitionInProgress = false
                     self.shouldCompleteTransition = false
+                    self.scrollView?.isScrollEnabled = true
                     print("finish")
                     self.finish()
                 } else {
                     self.transitionInProgress = false
                     self.shouldCompleteTransition = false
+                    self.scrollView?.isScrollEnabled = true
                     print("cancel")
                     self.cancel()
                 }
@@ -96,6 +101,7 @@ class JTViewControllerInteractiveTransition: UIPercentDrivenInteractiveTransitio
                 print("default")
                 self.transitionInProgress = false
                 self.shouldCompleteTransition = false
+                self.scrollView?.isScrollEnabled = true
                 self.cancel()
             }
         }

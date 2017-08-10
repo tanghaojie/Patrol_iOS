@@ -49,7 +49,7 @@ extension MyViewController {
     private func setupSuperViewJT() {
         let jtPop = self.navigationController as? JTViewControllerInteractiveTransitionDelegate
         if var jtpop = jtPop {
-            jtpop.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self) {
+            jtpop.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self, scrollView: self.tableView) {
                 self.backButtonAction()
             }
         }
@@ -209,7 +209,7 @@ extension MyViewController {
     
     private func setupQuit(cell: UITableViewCell) -> UITableViewCell {
         cell.backgroundColor = UIColor(red: 247, green: 33, blue: 0)
-        cell.textLabel?.text = "退出"
+        cell.textLabel?.text = "退出账号"
         cell.textLabel?.textAlignment = NSTextAlignment.center
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         cell.textLabel?.textColor = .white

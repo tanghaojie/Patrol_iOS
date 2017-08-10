@@ -38,6 +38,7 @@ class TaskSBViewController: UIViewController {
         self.taskLineTableView.delegate = self
         
         self.taskExplain.delegate = self
+        
         setupUI()
 
         checkTaskIsStarted()
@@ -384,7 +385,7 @@ extension TaskSBViewController{
     private func setupSuperViewJT() {
         let jtPop = self.navigationController as? JTViewControllerInteractiveTransitionDelegate
         if var jtpop = jtPop {
-            jtpop.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self) {
+            jtpop.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self, scrollView: self.scrollView) {
                 self.backButtonAction()
             }
         }
@@ -643,6 +644,17 @@ extension TaskSBViewController: UITextViewDelegate  {
         }
     }
     
+}
+
+extension TaskSBViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+    }
+    
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        self.view.gestureRecognizers?[0].isEnabled = false
+    }
 }
 
 

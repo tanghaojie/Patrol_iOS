@@ -57,7 +57,7 @@ extension EventOverViewViewController {
     private func setupSuperViewJT() {
         let jtPop = self.navigationController as? JTViewControllerInteractiveTransitionDelegate
         if var jtpop = jtPop {
-            jtpop.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self) {
+            jtpop.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self, scrollView: self.tableView) {
                 self.backButtonAction()
             }
         }
@@ -246,8 +246,8 @@ extension EventOverViewViewController {
             if datas.count > 0 {
                 self.pageNum += 1
             }
-            let page = ceil(Double(self.total / self.pageSize))
-            if Double(self.pageNum) >= page {
+            let page = ceil(Double(self.total) / Double(self.pageSize))
+            if Double(self.pageNum) > page {
                 self.tableView.mj_footer.state = .noMoreData
             }
             self.endRefreshing()
