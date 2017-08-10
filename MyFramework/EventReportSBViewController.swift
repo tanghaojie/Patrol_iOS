@@ -619,7 +619,7 @@ extension EventReportSBViewController: UICollectionViewDelegate, UICollectionVie
     
     fileprivate func addLongPressListener(){
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.collectionViewLongPress))
-        longPress.minimumPressDuration = 1
+        longPress.minimumPressDuration = 0.8
         self.eventImage.addGestureRecognizer(longPress)
     }
     
