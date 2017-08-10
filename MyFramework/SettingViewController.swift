@@ -79,7 +79,7 @@ class SettingViewController: UIViewController {
         if let s = nS {
             url_Main = s
         } else {
-            url_Main = ""
+            url_Main = url_Default
         }
     }
 

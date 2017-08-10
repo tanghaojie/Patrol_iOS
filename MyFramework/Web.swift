@@ -9,7 +9,7 @@
 
 //URL
 
-//var url_Main = "http://119.6.30.131:10063/patrolapi"
+let url_Default = "http://119.6.30.131:10063/patrolapi"
 var url_Main = ""
 
 var url_Login: String {
