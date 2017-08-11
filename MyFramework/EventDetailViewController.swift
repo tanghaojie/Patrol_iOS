@@ -243,7 +243,7 @@ extension EventDetailViewController {
                 if let lo = e.location {
                     let point = AGSPoint(location: CLLocation(latitude: lo.latitude, longitude: lo.longitude))
                     if let p = point {
-                        let show = ShowLocationViewController(p)
+                        let show = JTShowLocationViewController(p)
                         self.present(show, animated: true, completion: nil)
                     }
                 }

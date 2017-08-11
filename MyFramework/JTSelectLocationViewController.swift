@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SelectLocationViewController: UIViewController {
+class JTSelectLocationViewController: UIViewController {
 
     fileprivate var mapView: AGSMapView!
     fileprivate var completeFunc: ((Double,Double) -> Void)?
@@ -32,7 +32,7 @@ class SelectLocationViewController: UIViewController {
 
 }
 
-extension SelectLocationViewController {
+extension JTSelectLocationViewController {
     
     fileprivate func setupUI() {
         
@@ -54,6 +54,8 @@ extension SelectLocationViewController {
         mapView.gridLineWidth = 10
         mapView.maxScale = maxScale
         mapView.minScale = minScale
+        
+        mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
         
         let scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap, token: nil)
         if(scgisTilemapServerLayer != nil){
@@ -90,7 +92,7 @@ extension SelectLocationViewController {
     }
     
     internal func locationButtonClicked() {
-        let location = MLocationManager.instance.location
+        let location = JTLocationManager.instance.location
         if let loca = location {
             let point = AGSPoint(location: loca)
             self.mapView.zoom(toScale: minScale, withCenter: point, animated: true)
@@ -140,7 +142,7 @@ extension SelectLocationViewController {
     
 }
 
-extension SelectLocationViewController: AGSMapViewLayerDelegate {
+extension JTSelectLocationViewController: AGSMapViewLayerDelegate {
     
     func mapViewDidLoad(_ mapView: AGSMapView!) {
         //let map = self.mapView.mapLayers[0] as! AGSTiledLayer

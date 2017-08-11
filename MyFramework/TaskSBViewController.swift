@@ -10,6 +10,8 @@ import UIKit
 import SwiftyJSON
 
 class TaskSBViewController: UIViewController {
+    
+    static let isLog: Bool = true
 
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet weak var taskName: UITextField!
@@ -463,8 +465,15 @@ extension TaskSBViewController{
             taskStop.isHidden = false
             
             loginInfo?.taskId = model.taskid
-            
-            MLocationManager.instance.startUpdatingLocation()
+
+            //this is for test
+            if TaskSBViewController.isLog {
+                let taskDir = docPath?.appending("/\(String(describing: model.taskid!))")
+                if let taskdir = taskDir {
+                    try? FileManager.default.createDirectory(atPath: taskdir, withIntermediateDirectories: true, attributes: nil)
+                }
+            }
+            //end this is for test
         }else{
             taskName.text = model.taskName
             taskName.isEnabled = true
@@ -491,8 +500,6 @@ extension TaskSBViewController{
             taskStartLabel.isHidden = true
             
             loginInfo?.taskId = nil
-            
-            MLocationManager.instance.stopUpdatingLocation()
         }
     }
     

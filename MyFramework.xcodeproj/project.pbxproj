@@ -18,15 +18,15 @@
 		6B1BDE991EEBB2DA00B29DA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B1BDE971EEBB2DA00B29DA8 /* LaunchScreen.storyboard */; };
 		6B1BDEA11EEBB64500B29DA8 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1BDEA01EEBB64500B29DA8 /* MainViewController.swift */; };
 		6B1BDEA91EEBB9C600B29DA8 /* test.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B1BDEA81EEBB9C600B29DA8 /* test.storyboard */; };
-		6B1BDEAB1EEBC52700B29DA8 /* CustomTabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1BDEAA1EEBC52700B29DA8 /* CustomTabbarView.swift */; };
+		6B1BDEAB1EEBC52700B29DA8 /* JTTabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1BDEAA1EEBC52700B29DA8 /* JTTabbarView.swift */; };
 		6B1BDEAD1EEBC64100B29DA8 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1BDEAC1EEBC64100B29DA8 /* Common.swift */; };
 		6B227C251F1EEC0500D180A1 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B227C241F1EEC0500D180A1 /* Image.swift */; };
 		6B227C2A1F20908300D180A1 /* EventReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B227C291F20908300D180A1 /* EventReportViewController.swift */; };
 		6B227C2C1F20B0DC00D180A1 /* EventOverViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B227C2B1F20B0DC00D180A1 /* EventOverViewViewController.swift */; };
 		6B227C2E1F20B23800D180A1 /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B227C2D1F20B23800D180A1 /* MyViewController.swift */; };
-		6B2A58CC1F3046460071C275 /* SelectLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2A58CB1F3046460071C275 /* SelectLocationViewController.swift */; };
+		6B2A58CC1F3046460071C275 /* JTSelectLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2A58CB1F3046460071C275 /* JTSelectLocationViewController.swift */; };
 		6B2A58CE1F31CD060071C275 /* MapServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2A58CD1F31CD050071C275 /* MapServer.swift */; };
-		6B2A58D01F31D1000071C275 /* ShowLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2A58CF1F31D1000071C275 /* ShowLocationViewController.swift */; };
+		6B2A58D01F31D1000071C275 /* JTShowLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2A58CF1F31D1000071C275 /* JTShowLocationViewController.swift */; };
 		6B2B08611F02337000B99B5C /* T_User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2B08601F02337000B99B5C /* T_User.swift */; };
 		6B3076861F29D7E2007C5D30 /* EventDealSB.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B3076841F29D7E2007C5D30 /* EventDealSB.storyboard */; };
 		6B3076871F29D7E2007C5D30 /* EventDealSBViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3076851F29D7E2007C5D30 /* EventDealSBViewController.swift */; };
@@ -44,6 +44,8 @@
 		6B5AA4E51F0A33F70090D584 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B5AA4E41F0A33F70090D584 /* OpenGLES.framework */; };
 		6B5AA4E71F0A33FE0090D584 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B5AA4E61F0A33FE0090D584 /* Security.framework */; };
 		6B5AA4E91F0A34040090D584 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B5AA4E81F0A34040090D584 /* UIKit.framework */; };
+		6B6349481F3D50F500AD5696 /* JTAGSLocationDisplayDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6349471F3D50F500AD5696 /* JTAGSLocationDisplayDataSource.swift */; };
+		6B6349501F3D7BF700AD5696 /* Paths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B63494F1F3D7BF700AD5696 /* Paths.swift */; };
 		6B65CCA01F32FC7800459F9A /* ImagePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B65CC9F1F32FC7800459F9A /* ImagePreviewViewController.swift */; };
 		6B65CCA21F32FCF300459F9A /* ImagePreviewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B65CCA11F32FCF300459F9A /* ImagePreviewCollectionViewCell.swift */; };
 		6B65CCA41F332ADA00459F9A /* JTPresentAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B65CCA31F332AD900459F9A /* JTPresentAnimatedTransitioning.swift */; };
@@ -55,7 +57,7 @@
 		6B6F52A11F00E69B00B09846 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B6F52A01F00E69B00B09846 /* libsqlite3.0.tbd */; };
 		6B6F52A71F00ED3800B09846 /* SQLiteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6F52A61F00ED3800B09846 /* SQLiteManager.swift */; };
 		6B6FBD011F1704780045E6D8 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6FBD001F1704780045E6D8 /* test.swift */; };
-		6B6FBD031F1707A10045E6D8 /* MLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6FBD021F1707A10045E6D8 /* MLocationManager.swift */; };
+		6B6FBD031F1707A10045E6D8 /* JTLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6FBD021F1707A10045E6D8 /* JTLocationManager.swift */; };
 		6B72E4071F0639340041EAD4 /* Validate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B72E4061F0639340041EAD4 /* Validate.swift */; };
 		6B7CBC471F386F73008403B3 /* JTViewControllerInteractiveTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7CBC461F386F73008403B3 /* JTViewControllerInteractiveTransition.swift */; };
 		6B7CBC491F39AB8A008403B3 /* JTViewControllerInteractiveTransitionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7CBC481F39AB8A008403B3 /* JTViewControllerInteractiveTransitionDelegate.swift */; };
@@ -119,15 +121,15 @@
 		6B1BDE9A1EEBB2DA00B29DA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6B1BDEA01EEBB64500B29DA8 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		6B1BDEA81EEBB9C600B29DA8 /* test.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = test.storyboard; sourceTree = "<group>"; };
-		6B1BDEAA1EEBC52700B29DA8 /* CustomTabbarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTabbarView.swift; sourceTree = "<group>"; };
+		6B1BDEAA1EEBC52700B29DA8 /* JTTabbarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTTabbarView.swift; sourceTree = "<group>"; };
 		6B1BDEAC1EEBC64100B29DA8 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		6B227C241F1EEC0500D180A1 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		6B227C291F20908300D180A1 /* EventReportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventReportViewController.swift; sourceTree = "<group>"; };
 		6B227C2B1F20B0DC00D180A1 /* EventOverViewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventOverViewViewController.swift; sourceTree = "<group>"; };
 		6B227C2D1F20B23800D180A1 /* MyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
-		6B2A58CB1F3046460071C275 /* SelectLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectLocationViewController.swift; sourceTree = "<group>"; };
+		6B2A58CB1F3046460071C275 /* JTSelectLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTSelectLocationViewController.swift; sourceTree = "<group>"; };
 		6B2A58CD1F31CD050071C275 /* MapServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapServer.swift; sourceTree = "<group>"; };
-		6B2A58CF1F31D1000071C275 /* ShowLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowLocationViewController.swift; sourceTree = "<group>"; };
+		6B2A58CF1F31D1000071C275 /* JTShowLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTShowLocationViewController.swift; sourceTree = "<group>"; };
 		6B2B08601F02337000B99B5C /* T_User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = T_User.swift; sourceTree = "<group>"; };
 		6B3076841F29D7E2007C5D30 /* EventDealSB.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EventDealSB.storyboard; sourceTree = "<group>"; };
 		6B3076851F29D7E2007C5D30 /* EventDealSBViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDealSBViewController.swift; sourceTree = "<group>"; };
@@ -145,6 +147,8 @@
 		6B5AA4E41F0A33F70090D584 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		6B5AA4E61F0A33FE0090D584 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		6B5AA4E81F0A34040090D584 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		6B6349471F3D50F500AD5696 /* JTAGSLocationDisplayDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTAGSLocationDisplayDataSource.swift; sourceTree = "<group>"; };
+		6B63494F1F3D7BF700AD5696 /* Paths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Paths.swift; sourceTree = "<group>"; };
 		6B65CC9F1F32FC7800459F9A /* ImagePreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePreviewViewController.swift; sourceTree = "<group>"; };
 		6B65CCA11F32FCF300459F9A /* ImagePreviewCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePreviewCollectionViewCell.swift; sourceTree = "<group>"; };
 		6B65CCA31F332AD900459F9A /* JTPresentAnimatedTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTPresentAnimatedTransitioning.swift; sourceTree = "<group>"; };
@@ -157,7 +161,7 @@
 		6B6F52A31F00EB9000B09846 /* MyFramework-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MyFramework-Bridging-Header.h"; sourceTree = "<group>"; };
 		6B6F52A61F00ED3800B09846 /* SQLiteManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteManager.swift; sourceTree = "<group>"; };
 		6B6FBD001F1704780045E6D8 /* test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
-		6B6FBD021F1707A10045E6D8 /* MLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLocationManager.swift; sourceTree = "<group>"; };
+		6B6FBD021F1707A10045E6D8 /* JTLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTLocationManager.swift; sourceTree = "<group>"; };
 		6B72E4061F0639340041EAD4 /* Validate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Validate.swift; sourceTree = "<group>"; };
 		6B7CBC461F386F73008403B3 /* JTViewControllerInteractiveTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTViewControllerInteractiveTransition.swift; sourceTree = "<group>"; };
 		6B7CBC481F39AB8A008403B3 /* JTViewControllerInteractiveTransitionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTViewControllerInteractiveTransitionDelegate.swift; sourceTree = "<group>"; };
@@ -298,6 +302,64 @@
 			name = Deal;
 			sourceTree = "<group>";
 		};
+		6B6349491F3D76E700AD5696 /* JT */ = {
+			isa = PBXGroup;
+			children = (
+				6B63494E1F3D7BE200AD5696 /* Core */,
+				6B63494D1F3D776A00AD5696 /* UI */,
+				6B63494C1F3D772000AD5696 /* Location */,
+				6B63494B1F3D770000AD5696 /* InteractiveTransition */,
+				6B63494A1F3D76F500AD5696 /* Animate */,
+			);
+			name = JT;
+			sourceTree = "<group>";
+		};
+		6B63494A1F3D76F500AD5696 /* Animate */ = {
+			isa = PBXGroup;
+			children = (
+				6B65CCA31F332AD900459F9A /* JTPresentAnimatedTransitioning.swift */,
+				6B65CCA51F3335F300459F9A /* JTDismissAnimatedTransitioning.swift */,
+				6B65CCAA1F340FB900459F9A /* JTNavigationControllerAnimatedTransitioning.swift */,
+			);
+			name = Animate;
+			sourceTree = "<group>";
+		};
+		6B63494B1F3D770000AD5696 /* InteractiveTransition */ = {
+			isa = PBXGroup;
+			children = (
+				6B7CBC461F386F73008403B3 /* JTViewControllerInteractiveTransition.swift */,
+				6B7CBC481F39AB8A008403B3 /* JTViewControllerInteractiveTransitionDelegate.swift */,
+			);
+			name = InteractiveTransition;
+			sourceTree = "<group>";
+		};
+		6B63494C1F3D772000AD5696 /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				6B6FBD021F1707A10045E6D8 /* JTLocationManager.swift */,
+				6B6349471F3D50F500AD5696 /* JTAGSLocationDisplayDataSource.swift */,
+			);
+			name = Location;
+			sourceTree = "<group>";
+		};
+		6B63494D1F3D776A00AD5696 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				6B2A58CB1F3046460071C275 /* JTSelectLocationViewController.swift */,
+				6B2A58CF1F31D1000071C275 /* JTShowLocationViewController.swift */,
+				6B1BDEAA1EEBC52700B29DA8 /* JTTabbarView.swift */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
+		6B63494E1F3D7BE200AD5696 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				6B63494F1F3D7BF700AD5696 /* Paths.swift */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
 		6B65CC9E1F32FC4B00459F9A /* ImagePreview */ = {
 			isa = PBXGroup;
 			children = (
@@ -305,18 +367,6 @@
 				6B65CCA11F32FCF300459F9A /* ImagePreviewCollectionViewCell.swift */,
 			);
 			name = ImagePreview;
-			sourceTree = "<group>";
-		};
-		6B65CCA71F333A9E00459F9A /* CustomAnimate */ = {
-			isa = PBXGroup;
-			children = (
-				6B65CCA31F332AD900459F9A /* JTPresentAnimatedTransitioning.swift */,
-				6B65CCA51F3335F300459F9A /* JTDismissAnimatedTransitioning.swift */,
-				6B65CCAA1F340FB900459F9A /* JTNavigationControllerAnimatedTransitioning.swift */,
-				6B7CBC461F386F73008403B3 /* JTViewControllerInteractiveTransition.swift */,
-				6B7CBC481F39AB8A008403B3 /* JTViewControllerInteractiveTransitionDelegate.swift */,
-			);
-			name = CustomAnimate;
 			sourceTree = "<group>";
 		};
 		6B6F529F1F00E69B00B09846 /* Frameworks */ = {
@@ -388,11 +438,10 @@
 		6BF046F11EF22FF2006C362E /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				6B65CCA71F333A9E00459F9A /* CustomAnimate */,
+				6B6349491F3D76E700AD5696 /* JT */,
 				6B65CC9E1F32FC4B00459F9A /* ImagePreview */,
 				6B227C241F1EEC0500D180A1 /* Image.swift */,
 				6B1BDEAC1EEBC64100B29DA8 /* Common.swift */,
-				6B1BDEAA1EEBC52700B29DA8 /* CustomTabbarView.swift */,
 				6BB823881EFBBEB400468956 /* Alert.swift */,
 				6BAAD82B1EFCA62800FFE413 /* Web.swift */,
 				6BAAD82D1EFCA75D00FFE413 /* Log.swift */,
@@ -400,10 +449,7 @@
 				6B6F52A61F00ED3800B09846 /* SQLiteManager.swift */,
 				6B72E4061F0639340041EAD4 /* Validate.swift */,
 				6B9585EE1F14A70A001A24A2 /* Config.swift */,
-				6B6FBD021F1707A10045E6D8 /* MLocationManager.swift */,
 				6BE3751D1F175B47007B95BF /* ShareData.swift */,
-				6B2A58CB1F3046460071C275 /* SelectLocationViewController.swift */,
-				6B2A58CF1F31D1000071C275 /* ShowLocationViewController.swift */,
 				6B2A58CD1F31CD050071C275 /* MapServer.swift */,
 				6BDEB6001F380738008E0050 /* TxtHelper.swift */,
 			);
@@ -620,9 +666,9 @@
 				6BB823871EFBA83800468956 /* RegistViewController.swift in Sources */,
 				6B06F2501F26ED1C00829F5C /* JSON_Process.swift in Sources */,
 				6B65CCA61F3335F300459F9A /* JTDismissAnimatedTransitioning.swift in Sources */,
-				6B6FBD031F1707A10045E6D8 /* MLocationManager.swift in Sources */,
+				6B6FBD031F1707A10045E6D8 /* JTLocationManager.swift in Sources */,
 				6B2A58CE1F31CD060071C275 /* MapServer.swift in Sources */,
-				6B2A58CC1F3046460071C275 /* SelectLocationViewController.swift in Sources */,
+				6B2A58CC1F3046460071C275 /* JTSelectLocationViewController.swift in Sources */,
 				6B7CBC491F39AB8A008403B3 /* JTViewControllerInteractiveTransitionDelegate.swift in Sources */,
 				6B65CCA41F332ADA00459F9A /* JTPresentAnimatedTransitioning.swift in Sources */,
 				6B5590461EF12078008149FD /* LoginViewController.swift in Sources */,
@@ -630,6 +676,7 @@
 				6B9585F11F15C424001A24A2 /* TaskModel.swift in Sources */,
 				6B2B08611F02337000B99B5C /* T_User.swift in Sources */,
 				6BB187361F21D83B00E14239 /* JSON_EventList.swift in Sources */,
+				6B6349481F3D50F500AD5696 /* JTAGSLocationDisplayDataSource.swift in Sources */,
 				6B3076871F29D7E2007C5D30 /* EventDealSBViewController.swift in Sources */,
 				6BF046EE1EF2296F006C362E /* TaskViewController.swift in Sources */,
 				6B6FBD011F1704780045E6D8 /* test.swift in Sources */,
@@ -638,14 +685,14 @@
 				6B1BDEAD1EEBC64100B29DA8 /* Common.swift in Sources */,
 				6B6C62201F04DA83000FC91B /* LoginInfo.swift in Sources */,
 				6BE97E961F2585CB00A979E5 /* EventTableViewCell.swift in Sources */,
-				6B1BDEAB1EEBC52700B29DA8 /* CustomTabbarView.swift in Sources */,
+				6B1BDEAB1EEBC52700B29DA8 /* JTTabbarView.swift in Sources */,
 				6B65CCA21F32FCF300459F9A /* ImagePreviewCollectionViewCell.swift in Sources */,
 				6BAAD82C1EFCA62800FFE413 /* Web.swift in Sources */,
 				6BE375211F176BF3007B95BF /* TCoordinate.swift in Sources */,
 				6BCA085E1F1C522D003FBA70 /* EventReportSBViewController.swift in Sources */,
 				6B1BDE8F1EEBB2DA00B29DA8 /* AppDelegate.swift in Sources */,
 				6BF046F91EF23128006C362E /* EventViewController.swift in Sources */,
-				6B2A58D01F31D1000071C275 /* ShowLocationViewController.swift in Sources */,
+				6B2A58D01F31D1000071C275 /* JTShowLocationViewController.swift in Sources */,
 				6B6F529E1F00E58500B09846 /* SystemInit.swift in Sources */,
 				6BB823891EFBBEB500468956 /* Alert.swift in Sources */,
 				6B06F24C1F26EC3000829F5C /* JSON_EventProcess.swift in Sources */,
@@ -664,6 +711,7 @@
 				6B227C2C1F20B0DC00D180A1 /* EventOverViewViewController.swift in Sources */,
 				6B93CED61F0E4384004E0890 /* TaskSBViewController.swift in Sources */,
 				6B7CBC471F386F73008403B3 /* JTViewControllerInteractiveTransition.swift in Sources */,
+				6B6349501F3D7BF700AD5696 /* Paths.swift in Sources */,
 				6B6C62221F04EB38000FC91B /* RegistModel.swift in Sources */,
 				6B06F24A1F26E2E600829F5C /* EventDetailViewController.swift in Sources */,
 				6BE3751E1F175B47007B95BF /* ShareData.swift in Sources */,
