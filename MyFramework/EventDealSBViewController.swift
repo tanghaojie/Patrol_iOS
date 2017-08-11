@@ -70,7 +70,7 @@ class EventDealSBViewController: UIViewController, JTViewControllerInteractiveTr
     
     @IBAction func currentLocationTouchUpInSide(_ sender: Any) {
         let navi = self.navigationController
-        navi?.present(SelectLocationViewController(){ (latitude,longitude) in
+        navi?.present(JTSelectLocationViewController(){ (latitude,longitude) in
             let coor = CLLocationCoordinate2D(latitude: CLLocationDegrees().advanced(by: latitude), longitude: CLLocationDegrees().advanced(by: longitude))
             self.setupLocation(location: coor)
         }, animated: true, completion: nil)
@@ -82,7 +82,7 @@ class EventDealSBViewController: UIViewController, JTViewControllerInteractiveTr
             if let lo = e.location {
                 let point = AGSPoint(location: CLLocation(latitude: lo.latitude, longitude: lo.longitude))
                 if let p = point {
-                    let show = ShowLocationViewController(p)
+                    let show = JTShowLocationViewController(p)
                     self.present(show, animated: true, completion: nil)
                 }
             }
@@ -284,7 +284,7 @@ extension EventDealSBViewController {
             return false
         }
         if self.location == nil {
-            self.location = MLocationManager.instance.location?.coordinate
+            self.location = JTLocationManager.instance.location?.coordinate
         }
         return true
     }

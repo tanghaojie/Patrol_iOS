@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ShowLocationViewController: UIViewController {
+class JTShowLocationViewController: UIViewController {
 
     fileprivate var mapView: AGSMapView!
     fileprivate let graphicslayer = AGSGraphicsLayer()
@@ -38,7 +38,7 @@ class ShowLocationViewController: UIViewController {
 
 }
 
-extension ShowLocationViewController {
+extension JTShowLocationViewController {
     
     fileprivate func setupUI() {
         
@@ -56,6 +56,7 @@ extension ShowLocationViewController {
 
         mapView.gridLineWidth = 10
         graphicslayer.isVisible = true
+        mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
 
         let scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap, token: nil)
         if(scgisTilemapServerLayer != nil){
@@ -94,7 +95,7 @@ extension ShowLocationViewController {
     }
     
     internal func locationButtonClicked() {
-        let location = MLocationManager.instance.location
+        let location = JTLocationManager.instance.location
         if let loca = location {
             let point = AGSPoint(location: loca)
             self.mapView.zoom(toScale: 10000, withCenter: point, animated: true)

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomTabbarView: UIView {
+class JTTabbarView: UIView {
     
     fileprivate var titles : [String]
     fileprivate var images : [String?]
@@ -33,7 +33,7 @@ class CustomTabbarView: UIView {
     
 }
 
-extension CustomTabbarView {
+extension JTTabbarView {
     
     fileprivate func setupUI(){
         setupLabels()

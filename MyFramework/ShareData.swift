@@ -8,6 +8,5 @@
 
 import Foundation
 
-let dangerLock = NSLock()
 
 var locationWithDate = [TCoordinate]()

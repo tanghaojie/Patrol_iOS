@@ -97,7 +97,7 @@ class EventReportSBViewController: UIViewController {
     
     @IBAction func currentLocationTouchUpInSide(_ sender: Any) {
         let navi = self.navigationController
-        navi?.present(SelectLocationViewController(){ (latitude,longitude) in
+        navi?.present(JTSelectLocationViewController(){ (latitude,longitude) in
             let coor = CLLocationCoordinate2D(latitude: CLLocationDegrees().advanced(by: latitude), longitude: CLLocationDegrees().advanced(by: longitude))
             self.setupLocation(location: coor)
         }, animated: true, completion: nil)
@@ -274,7 +274,7 @@ extension EventReportSBViewController {
     private func setModel(){
         eventModel.eventName = eventName.text
         if eventModel.location == nil {
-            eventModel.location = MLocationManager.instance.location?.coordinate
+            eventModel.location = JTLocationManager.instance.location?.coordinate
         }
         eventModel.address = strLocation.text
         eventModel.date = eventDate.date.addingTimeInterval(TimeInterval(TimeZone.current.secondsFromGMT()))

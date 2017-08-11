@@ -9,10 +9,9 @@
 import UIKit
 import SwiftyJSON
 
-class MainViewController: UIViewController,AGSMapViewLayerDelegate {
+class MainViewController: UIViewController, AGSMapViewLayerDelegate {
 
     var mapView: AGSMapView! = AGSMapView()
-    let location = MLocationManager.instance
     
     var scgisTilemapServerLayer: SCGISTilemapServerLayer!
     var featureLayer: AGSFeatureLayer!
@@ -69,6 +68,8 @@ extension MainViewController {
         mapView.frame = CGRect(x: 0, y: 0, width: kScreenWidth, height: kScrennHeight - kMainBottomTabBarHeight)
         mapView.layerDelegate = self
         mapView.gridLineWidth = 10
+        mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
+        
         self.scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap, token: nil)
         if(scgisTilemapServerLayer != nil){
             self.mapView.addMapLayer(scgisTilemapServerLayer)
@@ -168,15 +169,11 @@ extension MainViewController {
     }
     
     func locationButtonClicked(){
-        let location = MLocationManager.instance.location
+        let location = JTLocationManager.instance.location
         if let loca = location {
             let point = AGSPoint(location: loca)
             self.mapView.zoom(toScale: 10000, withCenter: point, animated: true)
         }
-    }
-    
-    func startLocationDisplay(with autoPanMode: AGSLocationDisplayAutoPanMode){
-        self.mapView.locationDisplay.autoPanMode = autoPanMode
     }
     
     private func setupBottomBar(){
@@ -186,17 +183,14 @@ extension MainViewController {
         let images = ["task","event","my"]
         let jumps : Array<(()->())?>  = [ jumpToTask , jumpToEvent , jumpToHome  ]
         
-        let customTBV = CustomTabbarView(frame: frame, titles: titles , images : images ,jumps : jumps)
-        
-        
-        
+        let customTBV = JTTabbarView(frame: frame, titles: titles , images : images ,jumps : jumps)
 
         self.view.addSubview(customTBV)
     }
 }
 
 //map
-extension MainViewController{
+extension MainViewController {
     
     func mapViewDidLoad(_ mapView: AGSMapView!) {
     
@@ -204,7 +198,10 @@ extension MainViewController{
         let envelop = map.initialEnvelope
 
         self.mapView.zoom(to: envelop, animated: false)
-        self.mapView.locationDisplay.startDataSource()
+
+        if !self.mapView.locationDisplay.isDataSourceStarted {
+            self.mapView.locationDisplay.startDataSource()
+        }
         self.mapView.locationDisplay.autoPanMode = .default
     }
 
@@ -251,7 +248,7 @@ extension MainViewController{
     
 }
 
-extension MainViewController: UIViewControllerTransitioningDelegate {
+extension MainViewController {
     
     fileprivate func jumpToTask(){
         self.present(TaskViewController(), animated: true, completion: nil)
@@ -267,7 +264,7 @@ extension MainViewController: UIViewControllerTransitioningDelegate {
 
 }
 
-extension MainViewController{
+extension MainViewController {
 
     @objc fileprivate func timer10Fire(){
 
@@ -307,9 +304,29 @@ extension MainViewController{
                                 return
                             }
                             print("fire success \(Date().addingTimeInterval(kTimeInteval))")
-//                            let json = JSON(data : data!)
-//                            let nStatus = json["status"].int
-//                            let nMsg = json["msg"].string
+           
+                            //this is for test
+                            if TaskSBViewController.isLog {
+                                let u = docPath?.appending("/\(taskId)")
+                                let file = u?.appending("/system10s.txt")
+                                let url = URL(fileURLWithPath: file!)
+                                if !FileManager.default.fileExists(atPath: url.path) {
+                                    FileManager.default.createFile(atPath: url.path, contents: nil, attributes: nil)
+                                }
+                                
+                                let fileHandle = try? FileHandle(forWritingTo: url)
+                                if let handle = fileHandle {
+                                    handle.seekToEndOfFile()
+                                    
+                                    var str = "\nupload success"
+                                    for xp in points {
+                                        str = str.appending("\n\(String(describing: xp["t"]!))   \(String(format: "%.12f", xp["x"] as! Double))  \(String(format: "%.12f", xp["y"] as! Double))")
+                                    }
+                                    handle.write(str.data(using: String.Encoding.utf8)!)
+                                    handle.closeFile()
+                                }
+                            }
+                            //end this is for test
                         }
                     })
                 } catch let error {
@@ -321,10 +338,29 @@ extension MainViewController{
     
     @objc fileprivate func timer1Fire(){
         if loginInfo?.taskId != nil{
-            let coordinate = location.location
+            let coordinate = JTLocationManager.instance.location
             if let coor = coordinate {
                 let dateTime = Date().addingTimeInterval(kTimeInteval)
-                print("coor:\(coor.coordinate.longitude)   \(coor.coordinate.latitude)   \(dateTime)")
+                let logStr = "\(dateTime)   \(String(format: "%.12f", coor.coordinate.longitude))   \(String(format: "%.12f", coor.coordinate.latitude))"
+                
+                print(logStr)
+                //this is for test
+                if TaskSBViewController.isLog {
+                    let u = docPath?.appending("/\((loginInfo?.taskId)!)")
+                    let file = u?.appending("/system1s.txt")
+                    let url = URL(fileURLWithPath: file!)
+                    if !FileManager.default.fileExists(atPath: url.path) {
+                        FileManager.default.createFile(atPath: url.path, contents: nil, attributes: nil)
+                    }
+                    let fileHandle = try? FileHandle(forWritingTo: url)
+                    if let handle = fileHandle {
+                        handle.seekToEndOfFile()
+                        handle.write("\n\(logStr)".data(using: String.Encoding.utf8)!)
+                        handle.closeFile()
+                    }
+                }
+                //end this is for test
+                
                 locationWithDate.append(TCoordinate(location: coor.coordinate, time: dateTime))
             }
         }
