@@ -17,7 +17,7 @@ class JTLocationManager: CLLocationManager {
 
         self.requestAlwaysAuthorization()
         self.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-
+    
         self.pausesLocationUpdatesAutomatically = false
         if #available(iOS 9.0, *) {
             self.allowsBackgroundLocationUpdates = true
