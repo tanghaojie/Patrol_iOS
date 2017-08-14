@@ -304,28 +304,30 @@ extension MainViewController {
                                 return
                             }
                             print("fire success \(Date().addingTimeInterval(kTimeInteval))")
+                            
+                            locationWithDate.removeFirst(points.count)
            
                             //this is for test
-                            if TaskSBViewController.isLog {
-                                let u = docPath?.appending("/\(taskId)")
-                                let file = u?.appending("/system10s.txt")
-                                let url = URL(fileURLWithPath: file!)
-                                if !FileManager.default.fileExists(atPath: url.path) {
-                                    FileManager.default.createFile(atPath: url.path, contents: nil, attributes: nil)
-                                }
-                                
-                                let fileHandle = try? FileHandle(forWritingTo: url)
-                                if let handle = fileHandle {
-                                    handle.seekToEndOfFile()
-                                    
-                                    var str = "\nupload success"
-                                    for xp in points {
-                                        str = str.appending("\n\(String(describing: xp["t"]!))   \(String(format: "%.12f", xp["x"] as! Double))  \(String(format: "%.12f", xp["y"] as! Double))")
-                                    }
-                                    handle.write(str.data(using: String.Encoding.utf8)!)
-                                    handle.closeFile()
-                                }
-                            }
+//                            if TaskSBViewController.isLog {
+//                                let u = docPath?.appending("/\(taskId)")
+//                                let file = u?.appending("/system10s.txt")
+//                                let url = URL(fileURLWithPath: file!)
+//                                if !FileManager.default.fileExists(atPath: url.path) {
+//                                    FileManager.default.createFile(atPath: url.path, contents: nil, attributes: nil)
+//                                }
+//                                
+//                                let fileHandle = try? FileHandle(forWritingTo: url)
+//                                if let handle = fileHandle {
+//                                    handle.seekToEndOfFile()
+//                                    
+//                                    var str = "\nupload success"
+//                                    for xp in points {
+//                                        str = str.appending("\n\(String(describing: xp["t"]!))   \(String(format: "%.12f", xp["x"] as! Double))  \(String(format: "%.12f", xp["y"] as! Double))")
+//                                    }
+//                                    handle.write(str.data(using: String.Encoding.utf8)!)
+//                                    handle.closeFile()
+//                                }
+//                            }
                             //end this is for test
                         }
                     })
@@ -345,21 +347,22 @@ extension MainViewController {
                 
                 print(logStr)
                 //this is for test
-                if TaskSBViewController.isLog {
-                    let u = docPath?.appending("/\((loginInfo?.taskId)!)")
-                    let file = u?.appending("/system1s.txt")
-                    let url = URL(fileURLWithPath: file!)
-                    if !FileManager.default.fileExists(atPath: url.path) {
-                        FileManager.default.createFile(atPath: url.path, contents: nil, attributes: nil)
-                    }
-                    let fileHandle = try? FileHandle(forWritingTo: url)
-                    if let handle = fileHandle {
-                        handle.seekToEndOfFile()
-                        handle.write("\n\(logStr)".data(using: String.Encoding.utf8)!)
-                        handle.closeFile()
-                    }
-                }
+//                if TaskSBViewController.isLog {
+//                    let u = docPath?.appending("/\((loginInfo?.taskId)!)")
+//                    let file = u?.appending("/system1s.txt")
+//                    let url = URL(fileURLWithPath: file!)
+//                    if !FileManager.default.fileExists(atPath: url.path) {
+//                        FileManager.default.createFile(atPath: url.path, contents: nil, attributes: nil)
+//                    }
+//                    let fileHandle = try? FileHandle(forWritingTo: url)
+//                    if let handle = fileHandle {
+//                        handle.seekToEndOfFile()
+//                        handle.write("\n\(logStr)".data(using: String.Encoding.utf8)!)
+//                        handle.closeFile()
+//                    }
+//                }
                 //end this is for test
+                sparseLocationArray()
                 
                 locationWithDate.append(TCoordinate(location: coor.coordinate, time: dateTime))
             }
@@ -373,9 +376,10 @@ extension MainViewController {
         }
         var result = [Dictionary<String,Any>]()
         var nowSec : Int? = nil
-        for _ in 1...count{
-            let x = locationWithDate.popLast()
-            if let tl = x {
+        for index in 0..<count{
+            //let x = locationWithDate.popLast()
+            let tl = locationWithDate[index]
+            //if let tl = x {
                 let df = getDateFormatter(dateFormatter: "HH:mm:ss")
                 let strTime = df.string(from: tl.time)
                 let xTime = strTime.characters.split(separator: ":").map(String.init)
@@ -393,9 +397,30 @@ extension MainViewController {
                 dicc["y"] = tl.location.latitude
                 dicc["t"] = secondOfCurrentDay
                 result.append(dicc)
-            }
+            //}
         }
         return result.reversed()
+    }
+    
+    private func sparseLocationArray() {
+        if locationWithDate.count > locationArrayMax {
+            dangerLock.lock()
+            if locationWithDate.count > locationArrayMax {
+                var keepCount = 0
+                for i in 0...locationArrayMax - 1{
+                    if keepCount >= locationWithDate.count {
+                        break
+                    }
+                    locationWithDate.remove(at: keepCount)
+                    if i % 3 == 0 {
+                        keepCount += 1
+                        print(keepCount)
+                        print(locationWithDate.count)
+                    }
+                }
+            }
+            dangerLock.unlock()
+        }
     }
     
 }

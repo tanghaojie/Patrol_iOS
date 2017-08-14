@@ -56,7 +56,6 @@
 		6B6F529E1F00E58500B09846 /* SystemInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6F529D1F00E58500B09846 /* SystemInit.swift */; };
 		6B6F52A11F00E69B00B09846 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B6F52A01F00E69B00B09846 /* libsqlite3.0.tbd */; };
 		6B6F52A71F00ED3800B09846 /* SQLiteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6F52A61F00ED3800B09846 /* SQLiteManager.swift */; };
-		6B6FBD011F1704780045E6D8 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6FBD001F1704780045E6D8 /* test.swift */; };
 		6B6FBD031F1707A10045E6D8 /* JTLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6FBD021F1707A10045E6D8 /* JTLocationManager.swift */; };
 		6B72E4071F0639340041EAD4 /* Validate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B72E4061F0639340041EAD4 /* Validate.swift */; };
 		6B7CBC471F386F73008403B3 /* JTViewControllerInteractiveTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7CBC461F386F73008403B3 /* JTViewControllerInteractiveTransition.swift */; };
@@ -160,7 +159,6 @@
 		6B6F52A01F00E69B00B09846 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		6B6F52A31F00EB9000B09846 /* MyFramework-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MyFramework-Bridging-Header.h"; sourceTree = "<group>"; };
 		6B6F52A61F00ED3800B09846 /* SQLiteManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteManager.swift; sourceTree = "<group>"; };
-		6B6FBD001F1704780045E6D8 /* test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
 		6B6FBD021F1707A10045E6D8 /* JTLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTLocationManager.swift; sourceTree = "<group>"; };
 		6B72E4061F0639340041EAD4 /* Validate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Validate.swift; sourceTree = "<group>"; };
 		6B7CBC461F386F73008403B3 /* JTViewControllerInteractiveTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTViewControllerInteractiveTransition.swift; sourceTree = "<group>"; };
@@ -460,7 +458,6 @@
 			isa = PBXGroup;
 			children = (
 				6B1BDEA81EEBB9C600B29DA8 /* test.storyboard */,
-				6B6FBD001F1704780045E6D8 /* test.swift */,
 				6BE3751F1F175F60007B95BF /* test.playground */,
 			);
 			name = Other;
@@ -679,7 +676,6 @@
 				6B6349481F3D50F500AD5696 /* JTAGSLocationDisplayDataSource.swift in Sources */,
 				6B3076871F29D7E2007C5D30 /* EventDealSBViewController.swift in Sources */,
 				6BF046EE1EF2296F006C362E /* TaskViewController.swift in Sources */,
-				6B6FBD011F1704780045E6D8 /* test.swift in Sources */,
 				6B65CCAB1F340FB900459F9A /* JTNavigationControllerAnimatedTransitioning.swift in Sources */,
 				6B72E4071F0639340041EAD4 /* Validate.swift in Sources */,
 				6B1BDEAD1EEBC64100B29DA8 /* Common.swift in Sources */,

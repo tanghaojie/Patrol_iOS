@@ -31,7 +31,6 @@ class TaskSBViewController: UIViewController {
 
     var taskModel : TaskModel = TaskModel(isStarted: false, tid: -1, uid: -1, tName: "", tType: "", tLineCode: "", startTime: Date(), remark: "")
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.taskTypeTableView.dataSource = self
@@ -48,20 +47,8 @@ class TaskSBViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if((loginInfo?.config?.taskType.count)! > 0){
-            if(taskType.title(for: .normal) == nil && !self.taskModel.isStarted){
-                let code = loginInfo?.config?.taskType[0].code
-                setSelection(taskTypeCode: code!)
-                taskTypeTableView.isHidden = true
-            }
-        }
-        if (loginInfo?.config?.taskLine.count)! > 0 {
-            if taskLine.title(for: .normal) == nil && !self.taskModel.isStarted {
-                let code = loginInfo?.config?.taskLine[0].code
-                setSelection(taskLineCode: code!)
-                taskLineTableView.isHidden = true
-            }
-        }
+        
+        viewDidAppearFunc()
     }
 
     @IBAction func taskTypeBtnTouchUpInSide(_ sender: Any) {
@@ -89,14 +76,13 @@ class TaskSBViewController: UIViewController {
 
 extension TaskSBViewController{
     
-    fileprivate func alertAndLog(msg: String, showTime: TimeInterval, log: String){
+    fileprivate func alertAndLog(msg: String, showTime: TimeInterval, log: String) {
         AlertWithNoButton(view: self, title: msg, message: nil, preferredStyle: .alert, showTime: showTime)
         printLog(message: log)
         
         self.view.isUserInteractionEnabled = true
     }
-    
-    
+
     fileprivate func checkTaskIsStarted(){
         let request = TaskSBViewController.getCurrentTaskRequest(userId: (loginInfo?.userId)!)
         currentTaskAsyncConnect(urlRequest: request)
@@ -368,11 +354,40 @@ extension TaskSBViewController{
 }
 
 extension TaskSBViewController{
+    
+    fileprivate func viewDidAppearFunc() {
+        viewDidAppearSetTableView()
+        setupTaskName()
+    }
+    
+    private func setupTaskName() {
+        var now = Date()
+        now.addTimeInterval(TimeInterval(Double(TimeZone.current.secondsFromGMT())))
+        self.taskName.text = getDateFormatter(dateFormatter: "yyyyMMdd").string(from: now)
+    }
+    
+    private func viewDidAppearSetTableView() {
+        if((loginInfo?.config?.taskType.count)! > 0){
+            if(taskType.title(for: .normal) == nil && !self.taskModel.isStarted){
+                let code = loginInfo?.config?.taskType[0].code
+                setSelection(taskTypeCode: code!)
+                taskTypeTableView.isHidden = true
+            }
+        }
+        if (loginInfo?.config?.taskLine.count)! > 0 {
+            if taskLine.title(for: .normal) == nil && !self.taskModel.isStarted {
+                let code = loginInfo?.config?.taskLine[0].code
+                setSelection(taskLineCode: code!)
+                taskLineTableView.isHidden = true
+            }
+        }
+    }
 
     fileprivate func setupUI(){
         setupScrollView()
         setupBackButton()
         setupTitle()
+        setupTaskName()
         
         self.taskStop.isHidden = true
         self.taskStartLabel.isHidden = true
@@ -383,7 +398,7 @@ extension TaskSBViewController{
         
         setupSuperViewJT()
     }
-    
+
     private func setupSuperViewJT() {
         let jtPop = self.navigationController as? JTViewControllerInteractiveTransitionDelegate
         if var jtpop = jtPop {
@@ -467,12 +482,12 @@ extension TaskSBViewController{
             loginInfo?.taskId = model.taskid
 
             //this is for test
-            if TaskSBViewController.isLog {
-                let taskDir = docPath?.appending("/\(String(describing: model.taskid!))")
-                if let taskdir = taskDir {
-                    try? FileManager.default.createDirectory(atPath: taskdir, withIntermediateDirectories: true, attributes: nil)
-                }
-            }
+//            if TaskSBViewController.isLog {
+//                let taskDir = docPath?.appending("/\(String(describing: model.taskid!))")
+//                if let taskdir = taskDir {
+//                    try? FileManager.default.createDirectory(atPath: taskdir, withIntermediateDirectories: true, attributes: nil)
+//                }
+//            }
             //end this is for test
         }else{
             taskName.text = model.taskName
@@ -653,16 +668,6 @@ extension TaskSBViewController: UITextViewDelegate  {
     
 }
 
-extension TaskSBViewController: UIScrollViewDelegate {
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-    }
-    
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        self.view.gestureRecognizers?[0].isEnabled = false
-    }
-}
 
 
 
