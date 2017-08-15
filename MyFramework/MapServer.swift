@@ -8,5 +8,8 @@
 
 import Foundation
 
-let scgisTiledMap = "http://www.scgis.net.cn/imap/imapserver/defaultrest/services/scmobile_dlg/"
+let scgisTiledMap_DLG = "http://www.scgis.net.cn/imap/imapserver/defaultrest/services/scmobile_dlg/"
+
+let scgisTiledMap_DOM = "http://www.scgis.net.cn/iMap/iMapServer/DefaultRest/services/sctilemap_dom_dom/"
+
 let eshaProtrait = "http://119.6.30.131:6080/arcgis/rest/services/PipeLineES/MapServer/0"

@@ -29,7 +29,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         loginInfo = nil
         setLoginButtonEnable()
         if(isFirstApear){
-            //autoLogin()
+            autoLogin()
             isFirstApear = false
         }
     }

@@ -57,7 +57,7 @@ extension JTSelectLocationViewController {
         
         mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
         
-        let scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap, token: nil)
+        let scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DLG, token: nil)
         if(scgisTilemapServerLayer != nil){
             self.mapView.addMapLayer(scgisTilemapServerLayer)
         }

@@ -61,8 +61,6 @@ class JTViewControllerInteractiveTransition: UIPercentDrivenInteractiveTransitio
         case .began:
             let velocity = pan.velocity(in: pan.view?.superview)
             if velocity.x > 0 && fabsf(Float(velocity.x / velocity.y)) > 1 {
-                print("began")
-
                 self.transitionInProgress = true
                 self.shouldCompleteTransition = false
                 self.scrollView?.isScrollEnabled = false
@@ -71,7 +69,6 @@ class JTViewControllerInteractiveTransition: UIPercentDrivenInteractiveTransitio
         case .changed:
             if self.transitionInProgress {
                 if self.transitionInProgress {
-                    print("change")
                     let w = pan.translation(in: pan.view?.superview).x
                     let max = fmax(w / kScreenWidth, 0)
                     let progress: CGFloat = fmin(max, 1.0)
@@ -86,19 +83,16 @@ class JTViewControllerInteractiveTransition: UIPercentDrivenInteractiveTransitio
                     self.transitionInProgress = false
                     self.shouldCompleteTransition = false
                     self.scrollView?.isScrollEnabled = true
-                    print("finish")
                     self.finish()
                 } else {
                     self.transitionInProgress = false
                     self.shouldCompleteTransition = false
                     self.scrollView?.isScrollEnabled = true
-                    print("cancel")
                     self.cancel()
                 }
             }
         default:
             if self.transitionInProgress {
-                print("default")
                 self.transitionInProgress = false
                 self.shouldCompleteTransition = false
                 self.scrollView?.isScrollEnabled = true

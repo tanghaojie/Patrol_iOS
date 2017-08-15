@@ -13,7 +13,8 @@ class MainViewController: UIViewController, AGSMapViewLayerDelegate {
 
     var mapView: AGSMapView! = AGSMapView()
     
-    var scgisTilemapServerLayer: SCGISTilemapServerLayer!
+    var scgisTilemapServerLayer_DLG: SCGISTilemapServerLayer!
+    var scgisTilemapServerLayer_DOM: SCGISTilemapServerLayer!
     var featureLayer: AGSFeatureLayer!
     
     var layerBtn: UIButton!
@@ -30,6 +31,9 @@ class MainViewController: UIViewController, AGSMapViewLayerDelegate {
         
         Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(timer10Fire), userInfo: nil, repeats: true)
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timer1Fire), userInfo: nil, repeats: true)
+        
+        JTLocationManager.instance.startUpdatingLocation()
+        JTLocationManager.instance.startUpdatingHeading()
     }
 
 
@@ -70,9 +74,15 @@ extension MainViewController {
         mapView.gridLineWidth = 10
         mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
         
-        self.scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap, token: nil)
-        if(scgisTilemapServerLayer != nil){
-            self.mapView.addMapLayer(scgisTilemapServerLayer)
+        self.scgisTilemapServerLayer_DLG = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DLG, token: nil)
+        if(scgisTilemapServerLayer_DLG != nil){
+            self.mapView.addMapLayer(scgisTilemapServerLayer_DLG)
+        }
+        
+        self.scgisTilemapServerLayer_DOM = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DOM, token: nil)
+        if(scgisTilemapServerLayer_DOM != nil){
+            self.mapView.addMapLayer(scgisTilemapServerLayer_DOM)
+            scgisTilemapServerLayer_DOM.isVisible = false
         }
 
         self.featureLayer = AGSFeatureLayer(url: URL(string: eshaProtrait), mode: .onDemand)
@@ -107,41 +117,50 @@ extension MainViewController {
     
     private func setupLayerSelectView() {
         let w: CGFloat = kScreenWidth / 3 * 2
-        let h: CGFloat = 100
+        let h: CGFloat = 150
         let x: CGFloat = self.layerBtn.frame.maxX - w
         let y: CGFloat = self.layerBtn.frame.minY
         self.layerView = UIView(frame: CGRect(x: x, y: y, width: w, height: h))
         self.layerView?.backgroundColor = .gray
         
         let btn1 = UIButton(frame: CGRect(x: 0, y: 0, width: w, height: 50))
-        let btn2 = UIButton(frame: CGRect(x: 0, y: 50, width: w, height: 50))
-        
-        
-        btn1.backgroundColor = scgisTilemapServerLayer.isVisible ? dark : normal
-        btn2.backgroundColor = featureLayer.isVisible ? dark : normal
-        
+        btn1.backgroundColor = scgisTilemapServerLayer_DLG.isVisible ? dark : normal
         btn1.setTitle("底图", for: .normal)
-        btn2.setTitle("管线", for: .normal)
         btn1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        btn2.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        
         btn1.addTarget(self, action: #selector(layerBtn1Action(btn:)), for: .touchUpInside)
+        
+        let btn2 = UIButton(frame: CGRect(x: 0, y: 50, width: w, height: 50))
+        btn2.backgroundColor = featureLayer.isVisible ? dark : normal
+        btn2.setTitle("管线", for: .normal)
+        btn2.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         btn2.addTarget(self, action: #selector(layerBtn2Action(btn:)), for: .touchUpInside)
+        
+        let btn3 = UIButton(frame: CGRect(x: 0, y: 100, width: w, height: 50))
+        btn3.backgroundColor = scgisTilemapServerLayer_DOM.isVisible ? dark : normal
+        btn3.setTitle("影像", for: .normal)
+        btn3.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        btn3.addTarget(self, action: #selector(layerBtn3Action(btn:)), for: .touchUpInside)
         
         self.layerView?.addSubview(btn1)
         self.layerView?.addSubview(btn2)
+        self.layerView?.addSubview(btn3)
         
         self.view.addSubview(self.layerView!)
     }
     
     func layerBtn1Action(btn: UIButton) {
-        scgisTilemapServerLayer.isVisible = !scgisTilemapServerLayer.isVisible
-        btn.backgroundColor = scgisTilemapServerLayer.isVisible ? dark : normal
+        scgisTilemapServerLayer_DLG.isVisible = !scgisTilemapServerLayer_DLG.isVisible
+        btn.backgroundColor = scgisTilemapServerLayer_DLG.isVisible ? dark : normal
     }
     
     func layerBtn2Action(btn: UIButton) {
         featureLayer.isVisible = !featureLayer.isVisible
         btn.backgroundColor = featureLayer.isVisible ? dark : normal
+    }
+    
+    func layerBtn3Action(btn: UIButton) {
+        scgisTilemapServerLayer_DOM.isVisible = !scgisTilemapServerLayer_DOM.isVisible
+        btn.backgroundColor = scgisTilemapServerLayer_DOM.isVisible ? dark : normal
     }
 
     private func setupAddEventButton(pView : UIView){
@@ -157,7 +176,7 @@ extension MainViewController {
         self.present(EventReportViewController(), animated: true, completion: nil)
     }
     
-    private func setupLocationButton(pView : UIView){
+    private func setupLocationButton(pView : UIView) {
         let btn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: pView.frame.height - 40 - 20, width: 40, height: 40))
         btn.backgroundColor = .white
         btn.layer.cornerRadius = 20
@@ -168,7 +187,7 @@ extension MainViewController {
         pView.addSubview(btn)
     }
     
-    func locationButtonClicked(){
+    func locationButtonClicked() {
         let location = JTLocationManager.instance.location
         if let loca = location {
             let point = AGSPoint(location: loca)
