@@ -418,7 +418,8 @@ extension MainViewController {
                 result.append(dicc)
             //}
         }
-        return result.reversed()
+        return result
+        //return result.reversed()
     }
     
     private func sparseLocationArray() {
