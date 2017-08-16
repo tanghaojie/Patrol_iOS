@@ -361,9 +361,11 @@ extension TaskSBViewController{
     }
     
     private func setupTaskName() {
-        var now = Date()
-        now.addTimeInterval(TimeInterval(Double(TimeZone.current.secondsFromGMT())))
-        self.taskName.text = getDateFormatter(dateFormatter: "yyyyMMdd").string(from: now)
+        if !self.taskModel.isStarted {
+            var now = Date()
+            now.addTimeInterval(TimeInterval(Double(TimeZone.current.secondsFromGMT())))
+            self.taskName.text = getDateFormatter(dateFormatter: "yyyyMMdd").string(from: now)
+        }
     }
     
     private func viewDidAppearSetTableView() {

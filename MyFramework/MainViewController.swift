@@ -285,7 +285,7 @@ extension MainViewController {
 
 extension MainViewController {
 
-    @objc fileprivate func timer10Fire(){
+    @objc fileprivate func timer10Fire() {
 
         let ntaskId = loginInfo?.taskId
         if let taskId = ntaskId {
@@ -357,7 +357,7 @@ extension MainViewController {
         }
     }
     
-    @objc fileprivate func timer1Fire(){
+    @objc fileprivate func timer1Fire() {
         if loginInfo?.taskId != nil{
             let coordinate = JTLocationManager.instance.location
             if let coor = coordinate {
