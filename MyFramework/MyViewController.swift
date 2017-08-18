@@ -14,23 +14,22 @@ class MyViewController: UIViewController {
     fileprivate var cacheSizeLabel: UILabel!
     fileprivate var cacheActivityIndicatorView: UIActivityIndicatorView!
     fileprivate var headPotraitImageView: UIImageView!
-    
-    fileprivate var tableViewDisplay = Dictionary<IndexPath,(UITableViewCell) -> UITableViewCell>()
-    fileprivate var tableViewSelectAction = Dictionary<IndexPath,() -> Void>()
-    
+
     fileprivate let tableViewHeaderHeight: CGFloat = 200
     fileprivate let tableViewHeaderImageWH: CGFloat = 180
     fileprivate let tableViewRowHeight: CGFloat = 40
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupUI()
-        setTableViewDisplay()
-        setTableViewSelectAction()
         
         self.tableView.delegate = self
         self.tableView.dataSource = self
+    }
+
+    deinit {
+        print("------release myViewController ok")
     }
 
 }
@@ -49,8 +48,8 @@ extension MyViewController {
     private func setupSuperViewJT() {
         let jtPop = self.navigationController as? JTViewControllerInteractiveTransitionDelegate
         if var jtpop = jtPop {
-            jtpop.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self, scrollView: self.tableView) {
-                self.backButtonAction()
+            jtpop.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self, scrollView: self.tableView) { [weak self] () in
+                self?.backButtonAction()
             }
         }
     }
@@ -81,24 +80,20 @@ extension MyViewController {
         headView.backgroundColor = .white
         
         self.headPotraitImageView = UIImageView(frame: CGRect(x: (kScreenWidth - tableViewHeaderImageWH) / 2, y: (tableViewHeaderHeight - tableViewHeaderImageWH) / 2, width: tableViewHeaderImageWH, height: tableViewHeaderImageWH))
-        self.headPotraitImageView.contentMode = .scaleAspectFill
-        self.headPotraitImageView.layer.masksToBounds = true
-        self.headPotraitImageView.layer.cornerRadius = tableViewHeaderImageWH / 2
-        self.headPotraitImageView.layer.borderWidth = 2
-        self.headPotraitImageView.layer.borderColor = UIColor.gray.cgColor
-        self.headPotraitImageView.isUserInteractionEnabled = true
+        self.headPotraitImageView?.contentMode = .scaleAspectFill
+        self.headPotraitImageView?.layer.masksToBounds = true
+        self.headPotraitImageView?.layer.cornerRadius = tableViewHeaderImageWH / 2
+        self.headPotraitImageView?.layer.borderWidth = 2
+        self.headPotraitImageView?.layer.borderColor = UIColor.gray.cgColor
+        self.headPotraitImageView?.isUserInteractionEnabled = true
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(headPotraitAction))
         tapGestureRecognizer.cancelsTouchesInView = false
-        self.headPotraitImageView.addGestureRecognizer(tapGestureRecognizer)
+        self.headPotraitImageView?.addGestureRecognizer(tapGestureRecognizer)
 
-        headView.addSubview(self.headPotraitImageView)
+        headView.addSubview(self.headPotraitImageView!)
         
-        HeadPortrait(imageView: self.headPotraitImageView)
-//        let line = CALayer()
-//        line.frame = CGRect(x: 0, y: tableViewHeaderHeight - 1, width: headView.frame.width, height: 5)
-//        line.backgroundColor = UIColor(red: 255, green: 255, blue: 255).cgColor
-//        headView.layer.addSublayer(line)
-        
+        HeadPortrait()
+
         return headView
     }
     
@@ -115,6 +110,7 @@ extension MyViewController {
     func backButtonAction(){
         let navi = self.navigationController
         navi?.dismiss(animated: true, completion: nil)
+        
     }
     
     private func setupTitle() {
@@ -139,10 +135,57 @@ extension MyViewController {
 
 extension MyViewController {
     
-    fileprivate func HeadPortrait(imageView: UIImageView) {
-        Image.instance.getImageInfo(prid: (loginInfo?.userId)!, typenum: 0) {(image,index) in
+    fileprivate func HeadPortrait() {
+        Image.instance.getImageInfo(prid: (loginInfo?.userId)!, typenum: 0) { [weak self] (image,index) in
             DispatchQueue.main.async {
-                imageView.image = image
+                //imageView.image = image
+                self?.headPotraitImageView?.image = image
+            }
+        }
+    }
+    
+    private func getCacheSize(complete: @escaping (CGFloat) -> Void) {
+        DispatchQueue.global().async {
+            let fileManager = FileManager.default
+            let cache = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
+            let directoryEnumerator = fileManager.enumerator(atPath: cache!)
+            
+            var total: CGFloat = 0
+            
+            while let path = directoryEnumerator?.nextObject() as? String {
+                var isDir = ObjCBool(true)
+                let full = cache?.appending("/\(path)")
+                if fileManager.fileExists(atPath: full!, isDirectory: &isDir) {
+                    if !isDir.boolValue {
+                        let nAttributes = try? fileManager.attributesOfItem(atPath: full!)
+                        if let attributes = nAttributes {
+                            let size = attributes[FileAttributeKey.size]
+                            if let s = size {
+                                total += s as! CGFloat
+                            }
+                        }
+                    }
+                }
+            }
+            complete(total)
+        }
+    }
+    
+    fileprivate func getCacheAndShowUI() {
+        getCacheSize() { [weak self] (size) in
+            let sizeM = size / 1024 / 1024
+            DispatchQueue.main.async {
+                if sizeM >= 0 {
+                    self?.cacheActivityIndicatorView.isHidden = true
+                    self?.cacheActivityIndicatorView.stopAnimating()
+                    self?.cacheSizeLabel.text = "\(Int(sizeM)) M"
+                    self?.cacheSizeLabel.isHidden = false
+                } else {
+                    self?.cacheActivityIndicatorView.isHidden = true
+                    self?.cacheActivityIndicatorView.stopAnimating()
+                    self?.cacheSizeLabel.text = "0 M"
+                    self?.cacheSizeLabel.isHidden = false
+                }
             }
         }
     }
@@ -185,156 +228,79 @@ extension MyViewController: UITableViewDelegate, UITableViewDataSource {
     internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell")
         
-        if let function = self.tableViewDisplay[indexPath] {
-            return function(cell!)
+        if indexPath.section == 0 && indexPath.row == 0 {
+            let x: CGFloat = 20
+            let h: CGFloat = 40
+            let w: CGFloat = (kScreenWidth - CGFloat(x * 2)) / 2
+            let y = (self.tableViewRowHeight - h) / 2
+            let x2 = x + w
+            let cacheTextLabel = UILabel(frame: CGRect(x: x, y: y, width: w, height: h))
+            cacheTextLabel.text = "清除缓存"
+            cacheTextLabel.textColor = UIColor(red: 64, green: 64, blue: 64)
+            
+            self.cacheSizeLabel = UILabel(frame: CGRect(x: x2, y: y, width: w, height: h))
+            self.cacheSizeLabel.textColor = UIColor(red: 113, green: 122, blue: 132)
+            self.cacheSizeLabel.textAlignment = NSTextAlignment.right
+            
+            self.cacheActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+            self.cacheActivityIndicatorView.frame = cacheSizeLabel.frame
+            self.cacheActivityIndicatorView.startAnimating()
+            self.cacheSizeLabel.isHidden = true
+            
+            cell?.addSubview(cacheTextLabel)
+            cell?.addSubview(cacheSizeLabel)
+            cell?.addSubview(cacheActivityIndicatorView)
+            cell?.selectionStyle = UITableViewCellSelectionStyle.none
+            
+            getCacheAndShowUI()
+        } else if indexPath.section == 1 && indexPath.row == 0 {
+            cell?.backgroundColor = UIColor(red: 247, green: 33, blue: 0)
+            cell?.textLabel?.text = "退出账号"
+            cell?.textLabel?.textAlignment = NSTextAlignment.center
+            cell?.textLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+            cell?.textLabel?.textColor = .white
+            cell?.selectionStyle = UITableViewCellSelectionStyle.none
         }
-        
         return cell!
     }
     
     internal func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let function = self.tableViewSelectAction[indexPath] {
-            function()
-        }
-    }
- 
-}
-
-extension MyViewController {
-    
-    fileprivate func setTableViewDisplay() {
-        self.tableViewDisplay[IndexPath(row: 0, section: 1)] = setupQuit
-        self.tableViewDisplay[IndexPath(row: 0, section: 0)] = setupClearCache
-    }
-    
-    private func setupQuit(cell: UITableViewCell) -> UITableViewCell {
-        cell.backgroundColor = UIColor(red: 247, green: 33, blue: 0)
-        cell.textLabel?.text = "退出账号"
-        cell.textLabel?.textAlignment = NSTextAlignment.center
-        cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        cell.textLabel?.textColor = .white
-        cell.selectionStyle = UITableViewCellSelectionStyle.none
-        
-        return cell
-    }
-    
-    private func setupClearCache(cell: UITableViewCell) -> UITableViewCell {
-        let x: CGFloat = 20
-        let h: CGFloat = 40
-        let w: CGFloat = (kScreenWidth - CGFloat(x * 2)) / 2
-        let y = (self.tableViewRowHeight - h) / 2
-        let x2 = x + w
-        let cacheTextLabel = UILabel(frame: CGRect(x: x, y: y, width: w, height: h))
-        cacheTextLabel.text = "清除缓存"
-        cacheTextLabel.textColor = UIColor(red: 64, green: 64, blue: 64)
-
-        self.cacheSizeLabel = UILabel(frame: CGRect(x: x2, y: y, width: w, height: h))
-        self.cacheSizeLabel.textColor = UIColor(red: 113, green: 122, blue: 132)
-        self.cacheSizeLabel.textAlignment = NSTextAlignment.right
-        
-        self.cacheActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-        self.cacheActivityIndicatorView.frame = cacheSizeLabel.frame
-        self.cacheActivityIndicatorView.startAnimating()
-        self.cacheSizeLabel.isHidden = true
-        
-        cell.addSubview(cacheTextLabel)
-        cell.addSubview(cacheSizeLabel)
-        cell.addSubview(cacheActivityIndicatorView)
-        cell.selectionStyle = UITableViewCellSelectionStyle.none
-
-        getCacheAndShowUI()
-        
-        return cell
-    }
-    
-    private func getCacheSize(complete: @escaping (CGFloat) -> Void) {
-        DispatchQueue.global().async {
-            let fileManager = FileManager.default
-            let cache = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
-            let directoryEnumerator = fileManager.enumerator(atPath: cache!)
-            
-            var total: CGFloat = 0
-            
-            while let path = directoryEnumerator?.nextObject() as? String {
-                var isDir = ObjCBool(true)
-                let full = cache?.appending("/\(path)")
-                if fileManager.fileExists(atPath: full!, isDirectory: &isDir) {
-                    if !isDir.boolValue {
-                        let nAttributes = try? fileManager.attributesOfItem(atPath: full!)
-                        if let attributes = nAttributes {
-                            let size = attributes[FileAttributeKey.size]
-                            if let s = size {
-                                total += s as! CGFloat
+        if indexPath.section == 0 && indexPath.row == 0 {
+            let actionController = UIAlertController(title: "警告", message: "确认清除缓存？", preferredStyle: .alert)
+            let actionConfirm = UIAlertAction(title: "确认", style: .default){ [weak self] (_) -> Void in
+                
+                self?.cacheSizeLabel.isHidden = true
+                self?.cacheActivityIndicatorView.isHidden = false
+                self?.cacheActivityIndicatorView.startAnimating()
+                
+                DispatchQueue.global().async {
+                    let fileManager = FileManager.default
+                    let cache = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
+                    let nSubPaths = fileManager.subpaths(atPath: cache!)
+                    if let subPaths = nSubPaths {
+                        for subPath in subPaths {
+                            let full = cache?.appending("/\(subPath)")
+                            if fileManager.fileExists(atPath: full!) {
+                                try? fileManager.removeItem(atPath: full!)
+                                self?.getCacheAndShowUI()
                             }
                         }
                     }
                 }
             }
-            complete(total)
+            let actionCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+            actionController.addAction(actionCancel)
+            actionController.addAction(actionConfirm)
+            self.navigationController?.present(actionController, animated: true, completion: nil)
+        } else if indexPath.section == 1 && indexPath.row == 0 {
+            let view = self.presentingViewController
+            guard let mView = view else { return }
+            var main = mView as? MainViewController
+            main?.selfDismiss()
+            main = nil
         }
     }
-    
-    fileprivate func getCacheAndShowUI() {
-        getCacheSize() { (size) in
-            let sizeM = size / 1024 / 1024
-            DispatchQueue.main.async {
-                if sizeM >= 0 {
-                    self.cacheActivityIndicatorView.isHidden = true
-                    self.cacheActivityIndicatorView.stopAnimating()
-                    self.cacheSizeLabel.text = "\(Int(sizeM)) M"
-                    self.cacheSizeLabel.isHidden = false
-                } else {
-                    self.cacheActivityIndicatorView.isHidden = true
-                    self.cacheActivityIndicatorView.stopAnimating()
-                    self.cacheSizeLabel.text = "0 M"
-                    self.cacheSizeLabel.isHidden = false
-                }
-            }
-        }
-    }
-    
-}
-
-extension MyViewController {
-    
-    fileprivate func setTableViewSelectAction() {
-        self.tableViewSelectAction[IndexPath(row: 0, section: 1)] = quit
-        self.tableViewSelectAction[IndexPath(row: 0, section: 0)] = clearCache
-    }
-    
-    private func clearCache() {
-        let actionController = UIAlertController(title: "警告", message: "确认清除缓存？", preferredStyle: .alert)
-        let actionConfirm = UIAlertAction(title: "确认", style: .default){ (_) -> Void in
-            
-            self.cacheSizeLabel.isHidden = true
-            self.cacheActivityIndicatorView.isHidden = false
-            self.cacheActivityIndicatorView.startAnimating()
-            
-            DispatchQueue.global().async {
-                let fileManager = FileManager.default
-                let cache = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
-                let nSubPaths = fileManager.subpaths(atPath: cache!)
-                if let subPaths = nSubPaths {
-                    for subPath in subPaths {
-                        let full = cache?.appending("/\(subPath)")
-                        if fileManager.fileExists(atPath: full!) {
-                            try? fileManager.removeItem(atPath: full!)
-                            self.getCacheAndShowUI()
-                        }
-                    }
-                }
-            }
-        }
-        let actionCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)
-        actionController.addAction(actionCancel)
-        actionController.addAction(actionConfirm)
-        self.navigationController?.present(actionController, animated: true, completion: nil)
-    }
-    
-    private func quit() {
-        self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
-    }
-    
+ 
 }
 
 extension MyViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -344,16 +310,16 @@ extension MyViewController: UIImagePickerControllerDelegate, UINavigationControl
         picker.delegate = self
         
         let actionController = UIAlertController(title: "提示", message: "拍照或从相册选择", preferredStyle: .actionSheet)
-        let actionAlbum = UIAlertAction(title: "从相册选择", style: .default){ (action) -> Void in
+        let actionAlbum = UIAlertAction(title: "从相册选择", style: .default){ [weak self] (action) -> Void in
             picker.sourceType = .savedPhotosAlbum
-            self.navigationController?.present(picker, animated: true, completion: nil)
+            self?.navigationController?.present(picker, animated: true, completion: nil)
         }
-        let actionCamera = UIAlertAction(title: "拍照", style: .default){ (action) -> Void in
+        let actionCamera = UIAlertAction(title: "拍照", style: .default){ [weak self] (action) -> Void in
             if UIImagePickerController.isSourceTypeAvailable(.camera) {
                 picker.sourceType = .camera
-                self.navigationController?.present(picker, animated: true, completion: nil)
+                self?.navigationController?.present(picker, animated: true, completion: nil)
             } else {
-                AlertWithNoButton(view: self, title: "", message: "不支持拍照", preferredStyle: .alert, showTime: 1)
+                AlertWithNoButton(view: self!, title: "", message: "不支持拍照", preferredStyle: .alert, showTime: 1)
             }
         }
         let actionCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)
@@ -370,8 +336,8 @@ extension MyViewController: UIImagePickerControllerDelegate, UINavigationControl
         let date = getDateFormatter(dateFormatter: "yyyy-MM-dd+HH:mm:ss").string(from: Date().addingTimeInterval(kTimeInteval))
         let compressedImage = Image.instance.compressImage(originalImg: image, resolution: 300)
         if let cImg = compressedImage {
-            Image.instance.uploadImages(images: [cImg], prid: "\(loginInfo?.userId ?? 1)", typenum: "0", actualtime: date){ (prid) in
-                self.HeadPortrait(imageView: self.headPotraitImageView)
+            Image.instance.uploadImages(images: [cImg], prid: "\(loginInfo?.userId ?? 1)", typenum: "0", actualtime: date){ [weak self] (prid) in
+                self?.HeadPortrait()
             }
         } else {
             AlertWithUIAlertAction(view: self, title: msg_UploadFailed, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))

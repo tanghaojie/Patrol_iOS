@@ -103,6 +103,10 @@ class EventReportSBViewController: UIViewController {
         }, animated: true, completion: nil)
     }
     
+    deinit {
+        print("------release EventReportSBViewController ok")
+    }
+    
 }
 //func
 extension EventReportSBViewController {
@@ -364,17 +368,10 @@ extension EventReportSBViewController {
     }
     
     private func setupScrollView(){
-        //scrollView.frame = self.view.frame
-        //scrollView.showsHorizontalScrollIndicator = false
-        //scrollView.showsVerticalScrollIndicator = false
-        //scrollView.pagingEnabled = false
         scrollView.bounces = true
         scrollView.alwaysBounceVertical = true
         scrollView.alwaysBounceHorizontal = false
-        //scrollView.delegate = self
         scrollView.scrollsToTop = true
-        //scrollView.keyboardDismissMode = .onDrag
-        //scrollView.contentSize = CGSize(width: kScreenWidth, height: 900)
     }
     
     private func setupBackButton(){

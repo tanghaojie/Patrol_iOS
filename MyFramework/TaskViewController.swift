@@ -40,6 +40,10 @@ class TaskViewController: UINavigationController, UIViewControllerTransitioningD
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return JTDismissAnimatedTransitioning()
     }
+    
+    deinit {
+        print("------release taskviewcontroller ok")
+    }
 
     
     

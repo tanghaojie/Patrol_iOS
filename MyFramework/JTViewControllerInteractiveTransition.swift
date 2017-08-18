@@ -73,7 +73,6 @@ class JTViewControllerInteractiveTransition: UIPercentDrivenInteractiveTransitio
                     let max = fmax(w / kScreenWidth, 0)
                     let progress: CGFloat = fmin(max, 1.0)
                     self.shouldCompleteTransition = progress > finishPercent
-                    print(progress)
                     self.update(progress)
                 }
             }

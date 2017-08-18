@@ -27,11 +27,11 @@ class EventDetailViewController: UIViewController, JTViewControllerInteractiveTr
     fileprivate let navigationTitle_Loading = "加载中"
     fileprivate let titleActivity = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
     fileprivate let titleLabel = UILabel()
-    fileprivate let event: JSON_Event?
+    fileprivate var event: JSON_Event?
     
     static let navigationItemIncrease: CGFloat = 30.0
     fileprivate var data: [Any] = [Any]()
-    var jtViewControllerInteractiveTransition: JTViewControllerInteractiveTransition? = nil
+    weak var jtViewControllerInteractiveTransition: JTViewControllerInteractiveTransition? = nil
 
     init(_ json_Event: JSON_Event?) {
         if let event = json_Event {
@@ -64,6 +64,10 @@ class EventDetailViewController: UIViewController, JTViewControllerInteractiveTr
         
         setupNavigationbar(isBig: true)
     }
+    
+    deinit {
+        print("------release EventDetailViewController ok")
+    }
 
 }
 
@@ -84,8 +88,8 @@ extension EventDetailViewController {
     }
     
     private func setupJTPopInteractiveTransition() {
-        self.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self, scrollView: self.tableView) {
-            self.backButtonAction()
+        self.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self, scrollView: self.tableView) { [weak self] () in
+            self?.backButtonAction()
         }
     }
     
@@ -124,7 +128,6 @@ extension EventDetailViewController {
     }
     
     internal func headerRefresh() {
-        print("pull refresh")
         getData(eventId: (self.event?.id)!)
     }
 
@@ -140,7 +143,7 @@ extension EventDetailViewController {
     
     internal func backButtonAction() {
         setupNavigationbar(isBig: false)
-        
+
         let navi = self.navigationController
         navi?.popViewController(animated: true)
     }
@@ -289,58 +292,57 @@ extension EventDetailViewController {
             self.endRefreshing()
             return
         }
-        queryProcessList(request: request!, complete: {(data: JSON) in
+        queryProcessList(request: request!, complete: { [weak self] (data: JSON) in
             let processList = JSON_EventProcess(data)
             if(processList.status != 0){
                 if let msg = processList.msg {
-                    AlertWithUIAlertAction(view: self, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
+                    AlertWithUIAlertAction(view: self!, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
                 }
-                self.endRefreshing()
+                self?.endRefreshing()
                 return
             }
         
-            self.data.removeAll()
-            if let e = self.event {
-                self.data.append(e)
+            self?.data.removeAll()
+            if let e = self?.event {
+                self?.data.append(e)
             }
             
             for item in processList.datas {
-                self.data.append(item)
+                self?.data.append(item)
             }
 
-            self.tableView.reloadData()
-            self.endRefreshing()
+            self?.tableView.reloadData()
+            self?.endRefreshing()
         })
     }
     
     private func queryProcessList(request: URLRequest, complete: ((JSON) -> Void)?) {
-        NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
+        NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: { [weak self] (response : URLResponse?, data : Data?, error : Error?) -> Void in
             if error != nil {
-                AlertWithNoButton(view: self, title: msg_Error, message: "\(msg_RequestError) \(error?.localizedDescription ?? "")", preferredStyle: .alert, showTime: 1)
-                self.endRefreshing()
+                AlertWithNoButton(view: self!, title: msg_Error, message: "\(msg_RequestError) \(error?.localizedDescription ?? "")", preferredStyle: .alert, showTime: 1)
+                self?.endRefreshing()
                 return
             }
             if (data?.isEmpty)! {
-                AlertWithNoButton(view: self, title: msg_Error, message: msg_ServerNoResponse, preferredStyle: .alert, showTime: 1)
-                self.endRefreshing()
+                AlertWithNoButton(view: self!, title: msg_Error, message: msg_ServerNoResponse, preferredStyle: .alert, showTime: 1)
+                self?.endRefreshing()
                 return
             }
             if let urlResponse = response{
                 let httpResponse = urlResponse as! HTTPURLResponse
                 let statusCode = httpResponse.statusCode
                 if statusCode != 200 {
-                    AlertWithNoButton(view: self, title: msg_Error, message: msg_HttpError, preferredStyle: .alert, showTime: 1)
-                    self.endRefreshing()
+                    AlertWithNoButton(view: self!, title: msg_Error, message: msg_HttpError, preferredStyle: .alert, showTime: 1)
+                    self?.endRefreshing()
                     return
                 }
-                
-                print("Query process list success \(Date().addingTimeInterval(kTimeInteval))")
+
                 let json = JSON(data : data!)
                 if let com = complete {
                     com(json)
                 }
             } else {
-                self.endRefreshing()
+                self?.endRefreshing()
             }
         })
     }

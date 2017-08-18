@@ -37,6 +37,10 @@ class EventOverViewViewController: UIViewController, UIGestureRecognizerDelegate
         
         self.tableView.mj_header.beginRefreshing()
     }
+    
+    deinit {
+        print("------release eventoverviewviewcontroller ok")
+    }
 
 }
 
@@ -57,8 +61,8 @@ extension EventOverViewViewController {
     private func setupSuperViewJT() {
         let jtPop = self.navigationController as? JTViewControllerInteractiveTransitionDelegate
         if var jtpop = jtPop {
-            jtpop.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self, scrollView: self.tableView) {
-                self.backButtonAction()
+            jtpop.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self, scrollView: self.tableView) { [weak self] () in
+                self?.backButtonAction()
             }
         }
     }
@@ -93,8 +97,6 @@ extension EventOverViewViewController {
     }
     
     internal func headerRefresh() {
-        print("pull refresh")
-        
         getData(refresh: true)
     }
     
@@ -111,8 +113,6 @@ extension EventOverViewViewController {
     }
     
     internal func footerRefresh() {
-        print("pull load")
-        
         getData(refresh: false)
     }
     
@@ -275,7 +275,6 @@ extension EventOverViewViewController {
                     return
                 }
                 
-                print("Query relation event list success \(Date().addingTimeInterval(kTimeInteval))")
                 let json = JSON(data : data!)
                 
                 let eventList = JSON_EventList(json)

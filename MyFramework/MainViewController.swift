@@ -13,30 +13,63 @@ class MainViewController: UIViewController, AGSMapViewLayerDelegate {
 
     var mapView: AGSMapView! = AGSMapView()
     
-    var scgisTilemapServerLayer_DLG: SCGISTilemapServerLayer!
-    var scgisTilemapServerLayer_DOM: SCGISTilemapServerLayer!
-    var featureLayer: AGSFeatureLayer!
+    weak var scgisTilemapServerLayer_DLG: SCGISTilemapServerLayer!
+    weak var scgisTilemapServerLayer_DOM: SCGISTilemapServerLayer!
+    weak var featureLayer: AGSFeatureLayer!
     
     var layerBtn: UIButton!
-    var layerView: UIView?
+    weak var layerView: UIView!
     
     let dark = UIColor(red: 73, green: 73, blue: 75)
     let normal = UIColor(red: 142, green: 142, blue: 144)
-
+    
+    weak var timer1s: Timer!
+    weak var timer10s: Timer!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupUI()
         setData()
         
-        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(timer10Fire), userInfo: nil, repeats: true)
-        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timer1Fire), userInfo: nil, repeats: true)
+        timer10s = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(timer10Fire), userInfo: nil, repeats: true)
+        timer1s = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timer1Fire), userInfo: nil, repeats: true)
         
         JTLocationManager.instance.startUpdatingLocation()
         JTLocationManager.instance.startUpdatingHeading()
     }
+    
+    func selfDismiss() {
+        
+        mapView = nil
+        
+        scgisTilemapServerLayer_DLG = nil
+        scgisTilemapServerLayer_DOM = nil
+        featureLayer = nil
+        
+        layerBtn = nil
+        layerView = nil
+        
+        //let dark = UIColor(red: 73, green: 73, blue: 75)
+        //let normal = UIColor(red: 142, green: 142, blue: 144)
 
+        timer1s.invalidate()
+        timer1s = nil
+        timer10s.invalidate()
+        timer10s = nil
+        
+        JTLocationManager.instance.stopUpdatingHeading()
+        JTLocationManager.instance.stopUpdatingLocation()
 
+        self.dismiss(animated: true) {
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    deinit {
+        print("is deinit")
+    }
+ 
 }
 
 extension MainViewController {
@@ -103,12 +136,12 @@ extension MainViewController {
     
     private func setupLayerButton(pView : UIView){
         self.layerBtn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: 120, width: 40, height: 40))
-        self.layerBtn.backgroundColor = .clear
-        self.layerBtn.layer.borderColor = UIColor.black.cgColor
+        self.layerBtn?.backgroundColor = .clear
+        self.layerBtn?.layer.borderColor = UIColor.black.cgColor
         let img = UIImage(named: "layer")
-        self.layerBtn.setImage(img, for: .normal)
-        self.layerBtn.addTarget(self, action: #selector(layerButtonAction), for: .touchUpInside)
-        pView.addSubview(self.layerBtn)
+        self.layerBtn?.setImage(img, for: .normal)
+        self.layerBtn?.addTarget(self, action: #selector(layerButtonAction), for: .touchUpInside)
+        pView.addSubview(self.layerBtn!)
     }
     
     internal func layerButtonAction() {
@@ -118,8 +151,8 @@ extension MainViewController {
     private func setupLayerSelectView() {
         let w: CGFloat = kScreenWidth / 3 * 2
         let h: CGFloat = 150
-        let x: CGFloat = self.layerBtn.frame.maxX - w
-        let y: CGFloat = self.layerBtn.frame.minY
+        let x: CGFloat = self.layerBtn!.frame.maxX - w
+        let y: CGFloat = self.layerBtn!.frame.minY
         self.layerView = UIView(frame: CGRect(x: x, y: y, width: w, height: h))
         self.layerView?.backgroundColor = .gray
         
@@ -234,7 +267,7 @@ extension MainViewController{
     }
     
     private func currentTaskAsyncConnect(urlRequest : URLRequest){
-        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
+        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: { [weak self] (response : URLResponse?, data : Data?, error : Error?) -> Void in
             if let urlResponse = response{
                 let httpResponse = urlResponse as! HTTPURLResponse
                 let statusCode = httpResponse.statusCode
@@ -256,7 +289,7 @@ extension MainViewController{
                         return
                     }
                     if ndata != JSON.null {
-                        self.jumpToTask()
+                        self?.jumpToTask()
                     }
                 }
             }else{
@@ -286,14 +319,10 @@ extension MainViewController {
 extension MainViewController {
 
     @objc fileprivate func timer10Fire() {
-
         let ntaskId = loginInfo?.taskId
         if let taskId = ntaskId {
             let nPoints = getLocations_Dic()
             if let points = nPoints {
-                
-                print("fire  \(Date().addingTimeInterval(kTimeInteval))")
-                
                 var urlRequest = URLRequest(url: URL(string: url_UploadPoints)!)
                 urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)
                 urlRequest.httpMethod = HttpMethod.Post.rawValue
@@ -309,7 +338,7 @@ extension MainViewController {
                     urlRequest.httpShouldHandleCookies = true
                     urlRequest.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
                     
-                    NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
+                    NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: { [weak self] (response : URLResponse?, data : Data?, error : Error?) -> Void in
                         if let urlResponse = response{
                             let httpResponse = urlResponse as! HTTPURLResponse
                             let statusCode = httpResponse.statusCode
@@ -322,8 +351,6 @@ extension MainViewController {
                             if(data?.isEmpty)!{
                                 return
                             }
-                            print("fire success \(Date().addingTimeInterval(kTimeInteval))")
-                            
                             locationWithDate.removeFirst(points.count)
            
                             //this is for test
@@ -362,11 +389,9 @@ extension MainViewController {
             let coordinate = JTLocationManager.instance.location
             if let coor = coordinate {
                 let dateTime = Date().addingTimeInterval(kTimeInteval)
-                let logStr = "\(dateTime)   \(String(format: "%.12f", coor.coordinate.longitude))   \(String(format: "%.12f", coor.coordinate.latitude))"
-                
-                print(logStr)
                 //this is for test
-//                if TaskSBViewController.isLog {
+                if TaskSBViewController.isLog {
+//                    let logStr = "\(dateTime)   \(String(format: "%.12f", coor.coordinate.longitude))   \(String(format: "%.12f", coor.coordinate.latitude))"
 //                    let u = docPath?.appending("/\((loginInfo?.taskId)!)")
 //                    let file = u?.appending("/system1s.txt")
 //                    let url = URL(fileURLWithPath: file!)
@@ -379,10 +404,9 @@ extension MainViewController {
 //                        handle.write("\n\(logStr)".data(using: String.Encoding.utf8)!)
 //                        handle.closeFile()
 //                    }
-//                }
+                }
                 //end this is for test
                 sparseLocationArray()
-                
                 locationWithDate.append(TCoordinate(location: coor.coordinate, time: dateTime))
             }
         }
