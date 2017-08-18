@@ -48,7 +48,9 @@ class EventViewController: UINavigationController, UINavigationControllerDelegat
         return nil
     }
     
-    
+    deinit {
+        print("------release eventviewController ok")
+    }
     
     
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {

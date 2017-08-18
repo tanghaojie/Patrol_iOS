@@ -71,6 +71,10 @@ class TaskSBViewController: UIViewController {
         let navi = self.navigationController
         navi?.dismiss(animated: true, completion: nil)
     }
+    
+    deinit {
+        print("------release taskSBviewcontroller ok")
+    }
 
 }
 
@@ -98,7 +102,7 @@ extension TaskSBViewController{
         return urlRequest
     }
 
-    private func currentTaskAsyncConnect(urlRequest : URLRequest){
+    private func currentTaskAsyncConnect(urlRequest : URLRequest) {
         self.changeTitle(isLoad: true)
         self.view.isUserInteractionEnabled = false
         NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
@@ -404,8 +408,8 @@ extension TaskSBViewController{
     private func setupSuperViewJT() {
         let jtPop = self.navigationController as? JTViewControllerInteractiveTransitionDelegate
         if var jtpop = jtPop {
-            jtpop.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self, scrollView: self.scrollView) {
-                self.backButtonAction()
+            jtpop.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self, scrollView: self.scrollView) { [weak self] () in
+                self?.backButtonAction()
             }
         }
     }
@@ -484,12 +488,12 @@ extension TaskSBViewController{
             loginInfo?.taskId = model.taskid
 
             //this is for test
-//            if TaskSBViewController.isLog {
+            if TaskSBViewController.isLog {
 //                let taskDir = docPath?.appending("/\(String(describing: model.taskid!))")
 //                if let taskdir = taskDir {
 //                    try? FileManager.default.createDirectory(atPath: taskdir, withIntermediateDirectories: true, attributes: nil)
 //                }
-//            }
+            }
             //end this is for test
         }else{
             taskName.text = model.taskName

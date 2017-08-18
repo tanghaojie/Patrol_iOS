@@ -59,6 +59,10 @@ class EventTableViewCell: UITableViewCell {
         }
     }
     
+    deinit {
+        print("------release EventTableViewCell ok")
+    }
+    
 }
 
 extension EventTableViewCell {

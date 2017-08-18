@@ -67,6 +67,10 @@ class THJTableViewCell: UITableViewCell {
         
         self.navigationController = navigationController
     }
+    
+    deinit {
+        print("------release THJTableViewCell ok")
+    }
 
 }
 

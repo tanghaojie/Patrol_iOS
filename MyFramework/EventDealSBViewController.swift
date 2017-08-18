@@ -41,7 +41,7 @@ class EventDealSBViewController: UIViewController, JTViewControllerInteractiveTr
     
     fileprivate var location: CLLocationCoordinate2D?
     
-    var jtViewControllerInteractiveTransition: JTViewControllerInteractiveTransition? = nil
+    weak var jtViewControllerInteractiveTransition: JTViewControllerInteractiveTransition? = nil
 
     //for save self.eventImage collectionViewCell and for display data   ps. an add image button image is also in the array
     var imageArray: NSMutableArray = NSMutableArray()
@@ -70,14 +70,13 @@ class EventDealSBViewController: UIViewController, JTViewControllerInteractiveTr
     
     @IBAction func currentLocationTouchUpInSide(_ sender: Any) {
         let navi = self.navigationController
-        navi?.present(JTSelectLocationViewController(){ (latitude,longitude) in
+        navi?.present(JTSelectLocationViewController(){ [weak self] (latitude,longitude) in
             let coor = CLLocationCoordinate2D(latitude: CLLocationDegrees().advanced(by: latitude), longitude: CLLocationDegrees().advanced(by: longitude))
-            self.setupLocation(location: coor)
+            self?.setupLocation(location: coor)
         }, animated: true, completion: nil)
     }
     
     @IBAction func eventLocationTouchUpInSide(_ sender: Any) {
-        
         if let e = self.event {
             if let lo = e.location {
                 let point = AGSPoint(location: CLLocation(latitude: lo.latitude, longitude: lo.longitude))
@@ -87,6 +86,10 @@ class EventDealSBViewController: UIViewController, JTViewControllerInteractiveTr
                 }
             }
         }
+    }
+    
+    deinit {
+        print("------release EventDealSBViewController ok")
     }
     
 }
@@ -110,7 +113,7 @@ extension EventDealSBViewController {
         }
     }
     
-    fileprivate func setupLocation(location: CLLocationCoordinate2D?){
+    fileprivate func setupLocation(location: CLLocationCoordinate2D?) {
         if let lo = location {
             dealLocation.setTitle("已选择位置（点击选择位置）", for: .normal)
             self.location = lo
@@ -121,23 +124,23 @@ extension EventDealSBViewController {
     }
     
     fileprivate func createProcessExecute(request: URLRequest, complete: (() -> Void)?) {
-        NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
+        NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: { [weak self] (response : URLResponse?, data : Data?, error : Error?) -> Void in
             if error != nil {
-                AlertWithNoButton(view: self, title: msg_Error, message: "\(msg_RequestError) \(error?.localizedDescription ?? "")", preferredStyle: .alert, showTime: 1)
-                self.setLoading(isLoading: false)
+                AlertWithNoButton(view: self!, title: msg_Error, message: "\(msg_RequestError) \(error?.localizedDescription ?? "")", preferredStyle: .alert, showTime: 1)
+                self?.setLoading(isLoading: false)
                 return
             }
             if (data?.isEmpty)! {
-                AlertWithNoButton(view: self, title: msg_Error, message: msg_ServerNoResponse, preferredStyle: .alert, showTime: 1)
-                self.setLoading(isLoading: false)
+                AlertWithNoButton(view: self!, title: msg_Error, message: msg_ServerNoResponse, preferredStyle: .alert, showTime: 1)
+                self?.setLoading(isLoading: false)
                 return
             }
             if let urlResponse = response {
                 let httpResponse = urlResponse as! HTTPURLResponse
                 let statusCode = httpResponse.statusCode
                 if statusCode != 200 {
-                    AlertWithNoButton(view: self, title: msg_Error, message: msg_HttpError, preferredStyle: .alert, showTime: 1)
-                    self.setLoading(isLoading: false)
+                    AlertWithNoButton(view: self!, title: msg_Error, message: msg_HttpError, preferredStyle: .alert, showTime: 1)
+                    self?.setLoading(isLoading: false)
                     return
                 }
                 
@@ -150,17 +153,17 @@ extension EventDealSBViewController {
                 if let status = nStatus{
                     if(status != 0){
                         if let msg = nMsg{
-                            AlertWithUIAlertAction(view: self, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
+                            AlertWithUIAlertAction(view: self!, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
                         }
-                        self.setLoading(isLoading: false)
+                        self?.setLoading(isLoading: false)
                         return
                     }
                     if data != JSON.null  {
                         let nId = data["id"].int
                         if let processId = nId {
-                            if self.imageArray.count > 0 {
-                                let thisProcessDir = self.saveImages(processId: processId, images: self.imageArray)
-                                self.uploadImages(processDir: thisProcessDir)
+                            if (self?.imageArray.count)! > 0 {
+                                let thisProcessDir = self?.saveImages(processId: processId, images: (self?.imageArray)!)
+                                self?.uploadImages(processDir: thisProcessDir!)
                             }
                             if complete != nil {
                                 complete!()
@@ -173,7 +176,7 @@ extension EventDealSBViewController {
                     // running there must be webapi error
                 }
             }
-            self.setLoading(isLoading: false)
+            self?.setLoading(isLoading: false)
         })
     }
     
@@ -183,7 +186,7 @@ extension EventDealSBViewController {
         urlRequest.httpMethod = HttpMethod.Post.rawValue
         
         let jsonDic = getRequestData()
-        do{
+        do {
             let jsonData = try JSONSerialization.data(withJSONObject: jsonDic, options: .prettyPrinted)
             urlRequest.httpBody = jsonData
             urlRequest.httpShouldHandleCookies = true
@@ -323,8 +326,8 @@ extension EventDealSBViewController {
     }
     
     private func setupJTPopInteractiveTransition() {
-        self.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self, scrollView: self.scrollView ) {
-            self.backButtonAction()
+        self.jtViewControllerInteractiveTransition = JTViewControllerInteractiveTransition(fromVc: self, scrollView: self.scrollView ) { [weak self] () in
+            self?.backButtonAction()
         }
     }
     
@@ -504,16 +507,16 @@ extension EventDealSBViewController: UIImagePickerControllerDelegate, UINavigati
         picker.delegate = self
 
         let actionController = UIAlertController(title: "提示", message: "拍照或从相册选择", preferredStyle: .actionSheet)
-        let actionAlbum = UIAlertAction(title: "从相册选择", style: .default){ (action) -> Void in
+        let actionAlbum = UIAlertAction(title: "从相册选择", style: .default){ [weak self] (action) -> Void in
             picker.sourceType = .savedPhotosAlbum
-            self.navigationController?.present(picker, animated: true, completion: nil)
+            self?.navigationController?.present(picker, animated: true, completion: nil)
         }
-        let actionCamera = UIAlertAction(title: "拍照", style: .default){ (action) -> Void in
+        let actionCamera = UIAlertAction(title: "拍照", style: .default){ [weak self] (action) -> Void in
             if UIImagePickerController.isSourceTypeAvailable(.camera) {
                 picker.sourceType = .camera
-                self.navigationController?.present(picker, animated: true, completion: nil)
+                self?.navigationController?.present(picker, animated: true, completion: nil)
             } else {
-                AlertWithNoButton(view: self, title: "", message: "不支持拍照", preferredStyle: .alert, showTime: 1)
+                AlertWithNoButton(view: self!, title: "", message: "不支持拍照", preferredStyle: .alert, showTime: 1)
             }
         }
         let actionCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)
