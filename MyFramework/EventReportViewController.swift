@@ -19,9 +19,5 @@ class EventReportViewController: UINavigationController {
         let vc = sb.instantiateViewController(withIdentifier: "EventReportSBViewController") as! EventReportSBViewController
         self.pushViewController(vc, animated: true)
     }
-    
-    deinit {
-        print("------release EventReportViewController ok")
-    }
 
 }

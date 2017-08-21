@@ -29,10 +29,7 @@ class JTTabbarView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    deinit {
-        print("------release JTTabbarView ok")
-    }
+
 }
 
 extension JTTabbarView {

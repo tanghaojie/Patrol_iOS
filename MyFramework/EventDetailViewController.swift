@@ -64,10 +64,6 @@ class EventDetailViewController: UIViewController, JTViewControllerInteractiveTr
         
         setupNavigationbar(isBig: true)
     }
-    
-    deinit {
-        print("------release EventDetailViewController ok")
-    }
 
 }
 

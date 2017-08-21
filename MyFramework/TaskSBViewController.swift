@@ -72,10 +72,6 @@ class TaskSBViewController: UIViewController {
         navi?.dismiss(animated: true, completion: nil)
     }
     
-    deinit {
-        print("------release taskSBviewcontroller ok")
-    }
-
 }
 
 extension TaskSBViewController{

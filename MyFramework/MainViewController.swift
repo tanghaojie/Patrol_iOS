@@ -52,11 +52,7 @@ class MainViewController: UIViewController, AGSMapViewLayerDelegate {
             self.dismiss(animated: true, completion: nil)
         }
     }
-    
-    deinit {
-        print("is deinit")
-    }
- 
+
 }
 
 extension MainViewController {
