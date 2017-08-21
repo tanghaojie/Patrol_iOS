@@ -31,7 +31,7 @@ class EventDetailViewController: UIViewController, JTViewControllerInteractiveTr
     
     static let navigationItemIncrease: CGFloat = 30.0
     fileprivate var data: [Any] = [Any]()
-    weak var jtViewControllerInteractiveTransition: JTViewControllerInteractiveTransition? = nil
+    var jtViewControllerInteractiveTransition: JTViewControllerInteractiveTransition? = nil
 
     init(_ json_Event: JSON_Event?) {
         if let event = json_Event {
@@ -297,7 +297,6 @@ extension EventDetailViewController {
                 self?.endRefreshing()
                 return
             }
-        
             self?.data.removeAll()
             if let e = self?.event {
                 self?.data.append(e)
