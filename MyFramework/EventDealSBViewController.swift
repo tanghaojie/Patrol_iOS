@@ -41,7 +41,7 @@ class EventDealSBViewController: UIViewController, JTViewControllerInteractiveTr
     
     fileprivate var location: CLLocationCoordinate2D?
     
-    weak var jtViewControllerInteractiveTransition: JTViewControllerInteractiveTransition? = nil
+    var jtViewControllerInteractiveTransition: JTViewControllerInteractiveTransition? = nil
 
     //for save self.eventImage collectionViewCell and for display data   ps. an add image button image is also in the array
     var imageArray: NSMutableArray = NSMutableArray()

@@ -11,7 +11,7 @@ import UIKit
 class JTViewControllerInteractiveTransition: UIPercentDrivenInteractiveTransition, UIGestureRecognizerDelegate {
 
     private let finishPercent: CGFloat = 0.36
-    private let fromVc: UIViewController
+    weak private var fromVc: UIViewController?
     private let popInteractiveTransition: () -> Void
     private let scrollView: UIScrollView?
     
@@ -52,7 +52,7 @@ class JTViewControllerInteractiveTransition: UIPercentDrivenInteractiveTransitio
         self.pan.maximumNumberOfTouches = 1
         self.pan.minimumNumberOfTouches = 1
         
-        self.fromVc.view.addGestureRecognizer(self.pan)
+        self.fromVc?.view.addGestureRecognizer(self.pan)
     }
 
     internal func panGestureRecognizer(_ pan: UIPanGestureRecognizer) {

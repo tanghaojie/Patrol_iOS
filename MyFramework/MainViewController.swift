@@ -329,7 +329,7 @@ extension MainViewController {
                     urlRequest.httpShouldHandleCookies = true
                     urlRequest.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
                     
-                    NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: { [weak self] (response : URLResponse?, data : Data?, error : Error?) -> Void in
+                    NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
                         if let urlResponse = response{
                             let httpResponse = urlResponse as! HTTPURLResponse
                             let statusCode = httpResponse.statusCode
