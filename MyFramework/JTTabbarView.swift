@@ -14,7 +14,7 @@ class JTTabbarView: UIView {
     fileprivate var images : [String?]
     fileprivate var jumps : [(()->())?]
     
-    init(frame : CGRect,titles : [String] , images : [String?] , jumps : [(()->())?]){
+    init(frame : CGRect,titles : [String] , images : [String?] , jumps : [(()->())?] ){
         self.titles = titles
         self.images = images
         self.jumps = jumps
@@ -22,15 +22,17 @@ class JTTabbarView: UIView {
         super.init(frame: frame)
         
         self.backgroundColor = UIColor(red: 37, green: 140, blue: 201)
-        
+        self.jumps = jumps
         setupUI()
-      
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        print("------release JTTabbarView ok")
+    }
 }
 
 extension JTTabbarView {
@@ -46,7 +48,6 @@ extension JTTabbarView {
         
         for (index,title) in self.titles.enumerated(){
             let btn = UIButton(type: .system)
-
             btn.tag = index
             btn.setTitle(title, for: .normal)
             btn.setTitleColor(UIColor(red: 68, green: 82, blue: 82), for: .normal)
@@ -67,11 +68,13 @@ extension JTTabbarView {
     
     @objc private func buttonClick(btn : UIButton){
         let btnIndex = btn.tag
-        //print("button click" + String(btnIndex))
-        if(btnIndex < self.jumps.count){
-            let jump = self.jumps[btnIndex]
-            if(jump != nil){
-                jump!()}
+
+        if(btnIndex < self.jumps.count) {
+            let jump = jumps[btnIndex]
+            if jump != nil {
+                jump!()
+            }
         }
     }
 }
+

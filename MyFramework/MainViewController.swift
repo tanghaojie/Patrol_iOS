@@ -13,18 +13,18 @@ class MainViewController: UIViewController, AGSMapViewLayerDelegate {
 
     var mapView: AGSMapView! = AGSMapView()
     
-    weak var scgisTilemapServerLayer_DLG: SCGISTilemapServerLayer!
-    weak var scgisTilemapServerLayer_DOM: SCGISTilemapServerLayer!
-    weak var featureLayer: AGSFeatureLayer!
+    var scgisTilemapServerLayer_DLG: SCGISTilemapServerLayer!
+    var scgisTilemapServerLayer_DOM: SCGISTilemapServerLayer!
+    var featureLayer: AGSFeatureLayer!
     
     var layerBtn: UIButton!
-    weak var layerView: UIView!
+    var layerView: UIView!
     
     let dark = UIColor(red: 73, green: 73, blue: 75)
     let normal = UIColor(red: 142, green: 142, blue: 144)
     
-    weak var timer1s: Timer!
-    weak var timer10s: Timer!
+    var timer1s: Timer!
+    var timer10s: Timer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,19 +40,6 @@ class MainViewController: UIViewController, AGSMapViewLayerDelegate {
     }
     
     func selfDismiss() {
-        
-        mapView = nil
-        
-        scgisTilemapServerLayer_DLG = nil
-        scgisTilemapServerLayer_DOM = nil
-        featureLayer = nil
-        
-        layerBtn = nil
-        layerView = nil
-        
-        //let dark = UIColor(red: 73, green: 73, blue: 75)
-        //let normal = UIColor(red: 142, green: 142, blue: 144)
-
         timer1s.invalidate()
         timer1s = nil
         timer10s.invalidate()
@@ -74,7 +61,7 @@ class MainViewController: UIViewController, AGSMapViewLayerDelegate {
 
 extension MainViewController {
     
-    fileprivate func setupUI(){
+    fileprivate func setupUI() {
         self.setupMapView()
         self.setupBottomBar()
         self.addTapListener()
@@ -233,10 +220,19 @@ extension MainViewController {
         
         let titles = ["任务","事件","我的"]
         let images = ["task","event","my"]
-        let jumps : Array<(()->())?>  = [ jumpToTask , jumpToEvent , jumpToHome  ]
+        let task: (() -> ())? = { [weak self] in
+            self?.jumpToTask()
+        }
+        let event: (() -> ())? = { [weak self] in
+            self?.jumpToEvent()
+        }
+        let home: (() -> ())? = { [weak self] in
+            self?.jumpToHome()
+        }
         
-        let customTBV = JTTabbarView(frame: frame, titles: titles , images : images ,jumps : jumps)
+        let jumps = [ task , event , home ]
 
+        let customTBV = JTTabbarView(frame: frame, titles: titles , images : images ,jumps : jumps)
         self.view.addSubview(customTBV)
     }
 }
@@ -297,7 +293,6 @@ extension MainViewController{
             }
         })
     }
-    
 }
 
 extension MainViewController {
