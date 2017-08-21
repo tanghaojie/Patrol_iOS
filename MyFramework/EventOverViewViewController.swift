@@ -37,10 +37,6 @@ class EventOverViewViewController: UIViewController, UIGestureRecognizerDelegate
         
         self.tableView.mj_header.beginRefreshing()
     }
-    
-    deinit {
-        print("------release eventoverviewviewcontroller ok")
-    }
 
 }
 

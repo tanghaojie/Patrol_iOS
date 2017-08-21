@@ -87,11 +87,7 @@ class EventDealSBViewController: UIViewController, JTViewControllerInteractiveTr
             }
         }
     }
-    
-    deinit {
-        print("------release EventDealSBViewController ok")
-    }
-    
+
 }
 //func
 extension EventDealSBViewController {

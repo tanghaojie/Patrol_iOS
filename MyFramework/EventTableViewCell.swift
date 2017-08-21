@@ -58,11 +58,7 @@ class EventTableViewCell: UITableViewCell {
             bootomDateLabel.text = getDateFormatter(dateFormatter: kDateTimeFormate).string(from: date)
         }
     }
-    
-    deinit {
-        print("------release EventTableViewCell ok")
-    }
-    
+
 }
 
 extension EventTableViewCell {

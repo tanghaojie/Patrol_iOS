@@ -28,10 +28,6 @@ class MyViewController: UIViewController {
         self.tableView.dataSource = self
     }
 
-    deinit {
-        print("------release myViewController ok")
-    }
-
 }
 
 extension MyViewController {

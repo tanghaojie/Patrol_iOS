@@ -102,11 +102,7 @@ class EventReportSBViewController: UIViewController {
             self.setupLocation(location: coor)
         }, animated: true, completion: nil)
     }
-    
-    deinit {
-        print("------release EventReportSBViewController ok")
-    }
-    
+ 
 }
 //func
 extension EventReportSBViewController {

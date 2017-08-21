@@ -17,7 +17,6 @@
 		6B1BDE961EEBB2DA00B29DA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6B1BDE951EEBB2DA00B29DA8 /* Assets.xcassets */; };
 		6B1BDE991EEBB2DA00B29DA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B1BDE971EEBB2DA00B29DA8 /* LaunchScreen.storyboard */; };
 		6B1BDEA11EEBB64500B29DA8 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1BDEA01EEBB64500B29DA8 /* MainViewController.swift */; };
-		6B1BDEA91EEBB9C600B29DA8 /* test.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B1BDEA81EEBB9C600B29DA8 /* test.storyboard */; };
 		6B1BDEAB1EEBC52700B29DA8 /* JTTabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1BDEAA1EEBC52700B29DA8 /* JTTabbarView.swift */; };
 		6B1BDEAD1EEBC64100B29DA8 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1BDEAC1EEBC64100B29DA8 /* Common.swift */; };
 		6B227C251F1EEC0500D180A1 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B227C241F1EEC0500D180A1 /* Image.swift */; };
@@ -119,7 +118,6 @@
 		6B1BDE981EEBB2DA00B29DA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6B1BDE9A1EEBB2DA00B29DA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6B1BDEA01EEBB64500B29DA8 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		6B1BDEA81EEBB9C600B29DA8 /* test.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = test.storyboard; sourceTree = "<group>"; };
 		6B1BDEAA1EEBC52700B29DA8 /* JTTabbarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTTabbarView.swift; sourceTree = "<group>"; };
 		6B1BDEAC1EEBC64100B29DA8 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		6B227C241F1EEC0500D180A1 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
@@ -187,7 +185,6 @@
 		6BDEB5FE1F37FF59008E0050 /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		6BDEB6001F380738008E0050 /* TxtHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TxtHelper.swift; sourceTree = "<group>"; };
 		6BE3751D1F175B47007B95BF /* ShareData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareData.swift; sourceTree = "<group>"; };
-		6BE3751F1F175F60007B95BF /* test.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = test.playground; sourceTree = "<group>"; };
 		6BE375201F176BF3007B95BF /* TCoordinate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCoordinate.swift; sourceTree = "<group>"; };
 		6BE97E951F2585CB00A979E5 /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		6BF046ED1EF2296F006C362E /* TaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
@@ -259,7 +256,6 @@
 				6BF046F01EF22FBB006C362E /* Controller */,
 				6BF046F11EF22FF2006C362E /* Common */,
 				6BF046EF1EF22EA6006C362E /* SupportingFiles */,
-				6BF046F21EF22FFD006C362E /* Other */,
 			);
 			path = MyFramework;
 			sourceTree = "<group>";
@@ -454,15 +450,6 @@
 			name = Common;
 			sourceTree = "<group>";
 		};
-		6BF046F21EF22FFD006C362E /* Other */ = {
-			isa = PBXGroup;
-			children = (
-				6B1BDEA81EEBB9C600B29DA8 /* test.storyboard */,
-				6BE3751F1F175F60007B95BF /* test.playground */,
-			);
-			name = Other;
-			sourceTree = "<group>";
-		};
 		6BF046F31EF23024006C362E /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -601,7 +588,6 @@
 				6B1BDE991EEBB2DA00B29DA8 /* LaunchScreen.storyboard in Resources */,
 				6B1BDE961EEBB2DA00B29DA8 /* Assets.xcassets in Resources */,
 				6BDEB5FD1F37FE62008E0050 /* Setting.storyboard in Resources */,
-				6B1BDEA91EEBB9C600B29DA8 /* test.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
