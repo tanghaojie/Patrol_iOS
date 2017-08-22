@@ -169,8 +169,8 @@ extension THJTableViewCell {
     
     fileprivate func setupImages(imageCount: Int, prid: Int, typenum: Int) {
         if imageCount > 0 && line4.subviews.count < imageCount {
-            line4.snp.remakeConstraints({(make) in
-                make.top.equalTo(self.line3.snp.bottom).offset(8)
+            line4.snp.remakeConstraints({ [weak self] (make) in
+                make.top.equalTo((self?.line3.snp.bottom)!).offset(8)
                 make.left.equalTo(10)
                 make.right.equalTo(-10)
                 

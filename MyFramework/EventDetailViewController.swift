@@ -32,6 +32,8 @@ class EventDetailViewController: UIViewController, JTViewControllerInteractiveTr
     static let navigationItemIncrease: CGFloat = 30.0
     fileprivate var data: [Any] = [Any]()
     var jtViewControllerInteractiveTransition: JTViewControllerInteractiveTransition? = nil
+    
+    public var dealSuccess: (()->())?
 
     init(_ json_Event: JSON_Event?) {
         if let event = json_Event {
@@ -64,7 +66,10 @@ class EventDetailViewController: UIViewController, JTViewControllerInteractiveTr
         
         setupNavigationbar(isBig: true)
     }
-
+    
+    deinit {
+        print("---released EventDetailViewController")
+    }
 }
 
 extension EventDetailViewController {
@@ -72,7 +77,6 @@ extension EventDetailViewController {
     fileprivate func setupUI() {
         
         setupBackButton()
-        setupRightBarButton()
         setupTitle()
 
         setupTableView()
@@ -144,7 +148,7 @@ extension EventDetailViewController {
         navi?.popViewController(animated: true)
     }
     
-    private func setupRightBarButton() {
+    fileprivate func setupRightBarButton() {
         if event?.statecode == "0001010500000002" {
             let img = UIImage(named: "dealEvent")?.withRenderingMode(.alwaysOriginal)
             self.rightBtn = UIBarButtonItem(image: img, style: .plain, target: self, action: #selector(rightBarButtonClicked))
@@ -158,8 +162,14 @@ extension EventDetailViewController {
         vc.setEvent(self.event)
         setupNavigationbar(isBig: false)
         vc.dealSuccess = { [weak self] () in
-            self?.navigationItem.rightBarButtonItem = nil
+            self?.tableView.mj_header.endRefreshingCompletionBlock = { [weak self] in
+                self?.navigationItem.rightBarButtonItem = nil
+                self?.tableView.mj_header.endRefreshingCompletionBlock = nil
+            }
             self?.tableView.mj_header.beginRefreshing()
+            if let fun = self?.dealSuccess {
+                fun()
+            }
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -307,6 +317,12 @@ extension EventDetailViewController {
             }
             
             for item in processList.datas {
+                let flag = item.uids.contains(where: { (uid) -> Bool in
+                    return uid.id == loginInfo?.userId
+                })
+                if flag {
+                    self?.setupRightBarButton()
+                }
                 self?.data.append(item)
             }
 

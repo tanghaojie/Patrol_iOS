@@ -101,26 +101,26 @@ extension TaskSBViewController{
     private func currentTaskAsyncConnect(urlRequest : URLRequest) {
         self.changeTitle(isLoad: true)
         self.view.isUserInteractionEnabled = false
-        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
+        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: { [weak self](response : URLResponse?, data : Data?, error : Error?) -> Void in
             if let urlResponse = response{
                 let httpResponse = urlResponse as! HTTPURLResponse
                 let statusCode = httpResponse.statusCode
                 if(statusCode != 200){
-                    self.alertAndLog(msg: String(statusCode) + msg_HttpError, showTime: 0.5, log: String(statusCode) + msg_HttpError + url_CurrentTask)
-                    self.changeTitle(isLoad: false)
-                    self.view.isUserInteractionEnabled = true
+                    self?.alertAndLog(msg: String(statusCode) + msg_HttpError, showTime: 0.5, log: String(statusCode) + msg_HttpError + url_CurrentTask)
+                    self?.changeTitle(isLoad: false)
+                    self?.view.isUserInteractionEnabled = true
                     return
                 }
                 if(error != nil){
-                    self.alertAndLog(msg: msg_ConnectTimeout, showTime: 0.5, log: String(describing: error) + log_Timeout + url_CurrentTask)
-                    self.changeTitle(isLoad: false)
-                    self.view.isUserInteractionEnabled = true
+                    self?.alertAndLog(msg: msg_ConnectTimeout, showTime: 0.5, log: String(describing: error) + log_Timeout + url_CurrentTask)
+                    self?.changeTitle(isLoad: false)
+                    self?.view.isUserInteractionEnabled = true
                     return
                 }
                 if(data?.isEmpty)!{
-                    self.alertAndLog(msg: msg_ServerNoResponse, showTime: 0.5, log: log_ServerNoResponse + url_CurrentTask)
-                    self.changeTitle(isLoad: false)
-                    self.view.isUserInteractionEnabled = true
+                    self?.alertAndLog(msg: msg_ServerNoResponse, showTime: 0.5, log: log_ServerNoResponse + url_CurrentTask)
+                    self?.changeTitle(isLoad: false)
+                    self?.view.isUserInteractionEnabled = true
                     return
                 }
                 
@@ -132,10 +132,10 @@ extension TaskSBViewController{
                 if let status = nStatus{
                     if(status != 0){
                         if let msg = nMsg{
-                            AlertWithNoButton(view: self, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
+                            AlertWithNoButton(view: self!, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
                         }
-                        self.changeTitle(isLoad: false)
-                        self.view.isUserInteractionEnabled = true
+                        self?.changeTitle(isLoad: false)
+                        self?.view.isUserInteractionEnabled = true
                         return
                     }
                     if ndata != JSON.null {
@@ -152,26 +152,26 @@ extension TaskSBViewController{
                         let formatter = getDateFormatter(dateFormatter: "yyyy-MM-dd HH:mm:ss")
                         let startTime = formatter.date(from: ssstartTime!)
                         
-                        self.taskModel = TaskModel(isStarted: true, tid: taskId!, uid: uId!, tName: tName!, tType: tType!, tLineCode: tTaskLine, startTime: startTime!, remark: remark!)
-                        self.setTaskView(model: self.taskModel)
+                        self?.taskModel = TaskModel(isStarted: true, tid: taskId!, uid: uId!, tName: tName!, tType: tType!, tLineCode: tTaskLine, startTime: startTime!, remark: remark!)
+                        self?.setTaskView(model: (self?.taskModel)!)
                     }else{
                         var now = Date()
                         now.addTimeInterval(TimeInterval(Double(TimeZone.current.secondsFromGMT())))
                         let dateTxt = getDateFormatter(dateFormatter: "yyyyMMdd").string(from: now)
-                        self.taskModel = TaskModel(isStarted: false, tid: nil, uid: nil, tName: dateTxt, tType: nil, tLineCode: nil, startTime: nil, remark: nil)
-                        self.setTaskView(model: self.taskModel)
+                        self?.taskModel = TaskModel(isStarted: false, tid: nil, uid: nil, tName: dateTxt, tType: nil, tLineCode: nil, startTime: nil, remark: nil)
+                        self?.setTaskView(model: (self?.taskModel)!)
                     }
                 }else{
                     // running there must be webapi error
                 }
             }else{
-                self.alertAndLog(msg: msg_ServerNoResponse, showTime: 0.5, log: log_ServerNoResponse + url_Login)
-                self.changeTitle(isLoad: false)
-                self.view.isUserInteractionEnabled = true
+                self?.alertAndLog(msg: msg_ServerNoResponse, showTime: 0.5, log: log_ServerNoResponse + url_Login)
+                self?.changeTitle(isLoad: false)
+                self?.view.isUserInteractionEnabled = true
                 return
             }
-            self.changeTitle(isLoad: false)
-            self.view.isUserInteractionEnabled = true
+            self?.changeTitle(isLoad: false)
+            self?.view.isUserInteractionEnabled = true
         })
     }
 
@@ -216,26 +216,26 @@ extension TaskSBViewController{
     private func createTaskAsyncConnect(urlRequest : URLRequest){
         self.changeTitle(isLoad: true)
         self.view.isUserInteractionEnabled = false
-        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
+        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: { [weak self](response : URLResponse?, data : Data?, error : Error?) -> Void in
             if let urlResponse = response{
                 let httpResponse = urlResponse as! HTTPURLResponse
                 let statusCode = httpResponse.statusCode
                 if(statusCode != 200){
-                    self.alertAndLog(msg: String(statusCode) + msg_HttpError, showTime: 1, log: String(statusCode) + msg_HttpError + url_CreateTask)
-                    self.changeTitle(isLoad: false)
-                    self.view.isUserInteractionEnabled = true
+                    self?.alertAndLog(msg: String(statusCode) + msg_HttpError, showTime: 1, log: String(statusCode) + msg_HttpError + url_CreateTask)
+                    self?.changeTitle(isLoad: false)
+                    self?.view.isUserInteractionEnabled = true
                     return
                 }
                 if(error != nil){
-                    self.alertAndLog(msg: msg_ConnectTimeout, showTime: 1, log: String(describing: error) + log_Timeout + url_CreateTask)
-                    self.changeTitle(isLoad: false)
-                    self.view.isUserInteractionEnabled = true
+                    self?.alertAndLog(msg: msg_ConnectTimeout, showTime: 1, log: String(describing: error) + log_Timeout + url_CreateTask)
+                    self?.changeTitle(isLoad: false)
+                    self?.view.isUserInteractionEnabled = true
                     return
                 }
                 if(data?.isEmpty)!{
-                    self.alertAndLog(msg: msg_ServerNoResponse, showTime: 1, log: log_ServerNoResponse + url_CreateTask)
-                    self.changeTitle(isLoad: false)
-                    self.view.isUserInteractionEnabled = true
+                    self?.alertAndLog(msg: msg_ServerNoResponse, showTime: 1, log: log_ServerNoResponse + url_CreateTask)
+                    self?.changeTitle(isLoad: false)
+                    self?.view.isUserInteractionEnabled = true
                     return
                 }
                 
@@ -247,17 +247,17 @@ extension TaskSBViewController{
                 if let status = nStatus{
                     if(status != 0){
                         if let msg = nMsg{
-                            AlertWithNoButton(view: self, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
+                            AlertWithNoButton(view: self!, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
                         }
-                        self.changeTitle(isLoad: false)
-                        self.view.isUserInteractionEnabled = true
+                        self?.changeTitle(isLoad: false)
+                        self?.view.isUserInteractionEnabled = true
                         return
                     }
                     if ndata != JSON.null {
                         let taskId = ndata["id"].int
-                        self.taskModel.taskid = taskId
-                        self.taskModel.isStarted = true
-                        self.setTaskView(model: self.taskModel)
+                        self?.taskModel.taskid = taskId
+                        self?.taskModel.isStarted = true
+                        self?.setTaskView(model: (self?.taskModel)!)
                     }else{
                         //can not be here
                     }
@@ -265,13 +265,13 @@ extension TaskSBViewController{
                     // running there must be webapi error
                 }
             }else{
-                self.alertAndLog(msg: msg_ServerNoResponse, showTime: 0.5, log: log_ServerNoResponse + url_Login)
-                self.changeTitle(isLoad: false)
-                self.view.isUserInteractionEnabled = true
+                self?.alertAndLog(msg: msg_ServerNoResponse, showTime: 0.5, log: log_ServerNoResponse + url_Login)
+                self?.changeTitle(isLoad: false)
+                self?.view.isUserInteractionEnabled = true
                 return
             }
-            self.changeTitle(isLoad: false)
-            self.view.isUserInteractionEnabled = true
+            self?.changeTitle(isLoad: false)
+            self?.view.isUserInteractionEnabled = true
         })
     }
 
@@ -301,26 +301,26 @@ extension TaskSBViewController{
     private func endTaskAsyncConnect(urlRequest : URLRequest){
         self.changeTitle(isLoad: true)
         self.view.isUserInteractionEnabled = false
-        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
+        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: { [weak self](response : URLResponse?, data : Data?, error : Error?) -> Void in
             if let urlResponse = response{
                 let httpResponse = urlResponse as! HTTPURLResponse
                 let statusCode = httpResponse.statusCode
                 if(statusCode != 200){
-                    self.alertAndLog(msg: String(statusCode) + msg_HttpError, showTime: 1, log: String(statusCode) + msg_HttpError + url_EndTask)
-                    self.changeTitle(isLoad: false)
-                    self.view.isUserInteractionEnabled = true
+                    self?.alertAndLog(msg: String(statusCode) + msg_HttpError, showTime: 1, log: String(statusCode) + msg_HttpError + url_EndTask)
+                    self?.changeTitle(isLoad: false)
+                    self?.view.isUserInteractionEnabled = true
                     return
                 }
                 if(error != nil){
-                    self.alertAndLog(msg: msg_ConnectTimeout, showTime: 1, log: String(describing: error) + log_Timeout + url_EndTask)
-                    self.changeTitle(isLoad: false)
-                    self.view.isUserInteractionEnabled = true
+                    self?.alertAndLog(msg: msg_ConnectTimeout, showTime: 1, log: String(describing: error) + log_Timeout + url_EndTask)
+                    self?.changeTitle(isLoad: false)
+                    self?.view.isUserInteractionEnabled = true
                     return
                 }
                 if(data?.isEmpty)!{
-                    self.alertAndLog(msg: msg_ServerNoResponse, showTime: 1, log: log_ServerNoResponse + url_EndTask)
-                    self.changeTitle(isLoad: false)
-                    self.view.isUserInteractionEnabled = true
+                    self?.alertAndLog(msg: msg_ServerNoResponse, showTime: 1, log: log_ServerNoResponse + url_EndTask)
+                    self?.changeTitle(isLoad: false)
+                    self?.view.isUserInteractionEnabled = true
                     return
                 }
                 
@@ -331,26 +331,26 @@ extension TaskSBViewController{
                 if let status = nStatus{
                     if(status != 0){
                         if let msg = nMsg{
-                            AlertWithNoButton(view: self, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
+                            AlertWithNoButton(view: self!, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
                         }
-                        self.changeTitle(isLoad: false)
-                        self.view.isUserInteractionEnabled = true
+                        self?.changeTitle(isLoad: false)
+                        self?.view.isUserInteractionEnabled = true
                         return
                     }else{
-                        self.taskModel = TaskModel(isStarted: false, tid: self.taskModel.taskid, uid: self.taskModel.userid, tName: "", tType: self.taskModel.taskTypeCode, tLineCode: self.taskModel.taskLineCode, startTime: Date(), remark: "")
-                        self.setTaskView(model: self.taskModel)
+                        self?.taskModel = TaskModel(isStarted: false, tid: self?.taskModel.taskid, uid: self?.taskModel.userid, tName: "", tType: self?.taskModel.taskTypeCode, tLineCode: self?.taskModel.taskLineCode, startTime: Date(), remark: "")
+                        self?.setTaskView(model: (self?.taskModel)!)
                     }
                 }else{
                     // running there must be webapi error
                 }
             }else{
-                self.alertAndLog(msg: msg_ServerNoResponse, showTime: 1, log: log_ServerNoResponse + url_Login)
-                self.changeTitle(isLoad: false)
-                self.view.isUserInteractionEnabled = true
+                self?.alertAndLog(msg: msg_ServerNoResponse, showTime: 1, log: log_ServerNoResponse + url_Login)
+                self?.changeTitle(isLoad: false)
+                self?.view.isUserInteractionEnabled = true
                 return
             }
-            self.changeTitle(isLoad: false)
-            self.view.isUserInteractionEnabled = true
+            self?.changeTitle(isLoad: false)
+            self?.view.isUserInteractionEnabled = true
         })
     }
     
@@ -565,12 +565,12 @@ extension TaskSBViewController: UITableViewDataSource , UITableViewDelegate{
     func switchTaskTypeTable(){
         if(self.taskTypeTableView.isHidden){
             self.view.bringSubview(toFront: taskTypeTableView)
-            UIView.animate(withDuration: 0.5, animations: {
-                self.taskTypeTableView?.isHidden = false
+            UIView.animate(withDuration: 0.5, animations: { [weak self] in
+                self?.taskTypeTableView?.isHidden = false
             })
         }else{
-            UIView.animate(withDuration: 0.5, animations: {
-                self.taskTypeTableView?.isHidden = true
+            UIView.animate(withDuration: 0.5, animations: { [weak self] in
+                self?.taskTypeTableView?.isHidden = true
             })
         }
     }
@@ -578,12 +578,12 @@ extension TaskSBViewController: UITableViewDataSource , UITableViewDelegate{
     func switchTaskLineTable(){
         if(self.taskLineTableView.isHidden){
             self.view.bringSubview(toFront: taskLineTableView)
-            UIView.animate(withDuration: 0.5, animations: {
-                self.taskLineTableView?.isHidden = false
+            UIView.animate(withDuration: 0.5, animations: { [weak self] in
+                self?.taskLineTableView?.isHidden = false
             })
         }else{
-            UIView.animate(withDuration: 0.5, animations: {
-                self.taskLineTableView?.isHidden = true
+            UIView.animate(withDuration: 0.5, animations: { [weak self] in
+                self?.taskLineTableView?.isHidden = true
             })
         }
     }

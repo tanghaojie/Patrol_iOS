@@ -76,7 +76,7 @@
                                     <constraint firstAttribute="trailing" secondItem="XkI-e5-mcq" secondAttribute="trailing" constant="8" id="fXK-3l-IER"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="登陆" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Je-GW-8Vg">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="登陆" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Je-GW-8Vg">
                                 <rect key="frame" x="162.5" y="20" width="50" height="42"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="GBn-sV-VGm"/>

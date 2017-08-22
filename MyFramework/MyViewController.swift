@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class MyViewController: UIViewController {
     
@@ -106,7 +107,6 @@ extension MyViewController {
     func backButtonAction(){
         let navi = self.navigationController
         navi?.dismiss(animated: true, completion: nil)
-        
     }
     
     private func setupTitle() {
@@ -289,6 +289,41 @@ extension MyViewController: UITableViewDelegate, UITableViewDataSource {
             actionController.addAction(actionConfirm)
             self.navigationController?.present(actionController, animated: true, completion: nil)
         } else if indexPath.section == 1 && indexPath.row == 0 {
+            
+            var urlRequest = URLRequest(url: URL(string: url_Logout)!)
+            urlRequest.timeoutInterval = TimeInterval(kMoreShortTimeoutInterval)
+            urlRequest.httpMethod = HttpMethod.Post.rawValue
+            urlRequest.httpShouldHandleCookies = true
+            var jsonDic = Dictionary<String,Any>()
+            jsonDic["id"] = loginInfo?.userId
+            let jsonData = try? JSONSerialization.data(withJSONObject: jsonDic, options: .prettyPrinted)
+            urlRequest.httpBody = jsonData
+            urlRequest.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+
+            var response : URLResponse?
+            let data = try? NSURLConnection.sendSynchronousRequest(urlRequest, returning: &response)
+            guard let _ = response else {
+                AlertWithNoButton(view: self, title: "退出失败，请重试", message: nil, preferredStyle: .alert, showTime: 1)
+                return
+            }
+            if data == nil || data!.isEmpty {
+                AlertWithNoButton(view: self, title: "退出失败，请重试", message: nil, preferredStyle: .alert, showTime: 1)
+                return
+            }
+            
+            let json = JSON(data : data!)
+            let nStatus = json["status"].int
+            let nMsg = json["msg"].string
+            
+            guard let status = nStatus else {
+                AlertWithNoButton(view: self, title: "退出失败，请重试", message: nMsg, preferredStyle: .alert, showTime: 1)
+                return
+            }
+            if status != 0 {
+                AlertWithNoButton(view: self, title: "退出失败，请重试", message: nMsg, preferredStyle: .alert, showTime: 1)
+                return
+            }
+
             let view = self.presentingViewController
             guard let mView = view else { return }
             var main = mView as? MainViewController

@@ -73,11 +73,11 @@ class ImagePreviewCollectionViewCell: UICollectionViewCell {
         if let nav = self.responderViewController()?.navigationController{
             nav.setNavigationBarHidden(true, animated: true)
         }
-        UIView.animate(withDuration: 0.5, animations: {
-            if self.scrollView.zoomScale == 1.0 {
-                self.scrollView.zoomScale = 3.0
+        UIView.animate(withDuration: 0.5, animations: { [weak self] in
+            if self?.scrollView.zoomScale == 1.0 {
+                self?.scrollView.zoomScale = 3.0
             }else{
-                self.scrollView.zoomScale = 1.0
+                self?.scrollView.zoomScale = 1.0
             }
         })
     }

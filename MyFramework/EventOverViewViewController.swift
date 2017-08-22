@@ -212,7 +212,13 @@ extension EventOverViewViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let data = events[indexPath.row]
         let navi = self.navigationController
-        navi?.pushViewController(EventDetailViewController(data), animated: true)
+        
+        let eventDetail = EventDetailViewController(data)
+        eventDetail.dealSuccess = { [weak self] () in
+            self?.tableView.mj_header.beginRefreshing()
+        }
+        
+        navi?.pushViewController(eventDetail, animated: true)
     }
     
 }
@@ -232,48 +238,48 @@ extension EventOverViewViewController {
             self.endRefreshing()
             return
         }
-        queryRelationEventList(request: request!, complete: {(eventList: JSON_EventList) in
+        queryRelationEventList(request: request!, complete: { [weak self] (eventList: JSON_EventList) in
             
             if refresh {
-                self.total = 0
-                self.pageNum = 1
-                self.events = [JSON_Event]()
-                self.tableView.mj_footer.state = .idle
+                self?.total = 0
+                self?.pageNum = 1
+                self?.events = [JSON_Event]()
+                self?.tableView.mj_footer.state = .idle
             }
             
-            self.total = eventList.total
+            self?.total = eventList.total
             let datas = eventList.datas
-            self.events.append(contentsOf: datas)
-            self.tableView.reloadData()
+            self?.events.append(contentsOf: datas)
+            self?.tableView.reloadData()
             if datas.count > 0 {
-                self.pageNum += 1
+                self?.pageNum += 1
             }
-            let page = ceil(Double(self.total) / Double(self.pageSize))
-            if Double(self.pageNum) > page {
-                self.tableView.mj_footer.state = .noMoreData
+            let page = ceil(Double((self?.total)!) / Double((self?.pageSize)!))
+            if Double((self?.pageNum)!) > page {
+                self?.tableView.mj_footer.state = .noMoreData
             }
-            self.endRefreshing()
+            self?.endRefreshing()
         })
     }
     
     private func queryRelationEventList(request: URLRequest, complete: ((JSON_EventList) -> Void)?) {
-        NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
+        NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: { [weak self] (response : URLResponse?, data : Data?, error : Error?) -> Void in
             if error != nil {
-                AlertWithNoButton(view: self, title: msg_Error, message: "\(msg_RequestError) \(error?.localizedDescription ?? "")", preferredStyle: .alert, showTime: 1)
-                self.endRefreshing()
+                AlertWithNoButton(view: self!, title: msg_Error, message: "\(msg_RequestError) \(error?.localizedDescription ?? "")", preferredStyle: .alert, showTime: 1)
+                self?.endRefreshing()
                 return
             }
             if (data?.isEmpty)! {
-                AlertWithNoButton(view: self, title: msg_Error, message: msg_ServerNoResponse, preferredStyle: .alert, showTime: 1)
-                self.endRefreshing()
+                AlertWithNoButton(view: self!, title: msg_Error, message: msg_ServerNoResponse, preferredStyle: .alert, showTime: 1)
+                self?.endRefreshing()
                 return
             }
             if let urlResponse = response{
                 let httpResponse = urlResponse as! HTTPURLResponse
                 let statusCode = httpResponse.statusCode
                 if statusCode != 200 {
-                    AlertWithNoButton(view: self, title: msg_Error, message: msg_HttpError, preferredStyle: .alert, showTime: 1)
-                    self.endRefreshing()
+                    AlertWithNoButton(view: self!, title: msg_Error, message: msg_HttpError, preferredStyle: .alert, showTime: 1)
+                    self?.endRefreshing()
                     return
                 }
                 
@@ -282,9 +288,9 @@ extension EventOverViewViewController {
                 let eventList = JSON_EventList(json)
                 if(eventList.status != 0){
                     if let msg = eventList.msg {
-                        AlertWithUIAlertAction(view: self, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
+                        AlertWithUIAlertAction(view: self!, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
                     }
-                    self.endRefreshing()
+                    self?.endRefreshing()
                     return
                 }
                 
@@ -292,7 +298,7 @@ extension EventOverViewViewController {
                     com(eventList)
                 }
             } else {
-                self.endRefreshing()
+                self?.endRefreshing()
             }
         })
     }

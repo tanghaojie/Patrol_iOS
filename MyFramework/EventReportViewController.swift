@@ -20,11 +20,7 @@ class EventReportViewController: UINavigationController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    deinit {
-        print("---released EventReportViewController")
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         

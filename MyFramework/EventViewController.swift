@@ -24,7 +24,6 @@ class EventViewController: UINavigationController, UINavigationControllerDelegat
         self.pushViewController(EventOverViewViewController(), animated: true)
     }
 
-    
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         
         if operation == .pop {
@@ -63,7 +62,5 @@ class EventViewController: UINavigationController, UINavigationControllerDelegat
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return JTDismissAnimatedTransitioning()
     }
-    
-    
 
 }
