@@ -47,6 +47,8 @@ class EventReportSBViewController: UIViewController {
     //for save self.eventImage collectionViewCell and for display data   ps. an add image button image is also in the array
     var imageArray: NSMutableArray = NSMutableArray()
     
+    public var reportSuccessFunc: (()->())?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -80,6 +82,10 @@ class EventReportSBViewController: UIViewController {
     
     @IBAction func commitTouchUpInSide(_ sender: Any) {
         commitTouchUpInSide()
+    }
+    
+    deinit {
+        print("---released EventReportSBViewController")
     }
 
     @IBAction func eventTypeTouchUpInSide(_ sender: Any) {
@@ -125,6 +131,9 @@ extension EventReportSBViewController {
     
     private func createEventComplete() {
         backButtonAction()
+        if let successFunc = self.reportSuccessFunc {
+            successFunc()
+        }
     }
     
     private func createEvent(request: URLRequest, complete: (() -> Void)?) {
@@ -566,11 +575,7 @@ extension EventReportSBViewController: UICollectionViewDelegate, UICollectionVie
         let rowCount = Int(ceil(CGFloat(count) / countPerRow))
         let height = rowCount * collectionViewCellHeight
         if self.eventImage.frame.height != CGFloat(height) {
-            
             self.eventImageHeight.constant = CGFloat(height)
-            //self.eventImage.frame = CGRect(x: self.eventImage.frame.minX, y: self.eventImage.frame.minY, width: self.eventImage.frame.width, height: CGFloat(height))
-            
-            //self.commit.frame = CGRect(x: self.commit.frame.minX, y: self.eventImage.frame.maxY + 10, width: self.commit.frame.width, height: self.commit.frame.height)
         }
         return count
     }
@@ -625,9 +630,16 @@ extension EventReportSBViewController: UICollectionViewDelegate, UICollectionVie
                 let image = self.imageArray[nIndexPath!.row] as? UIImage
                 if image != nil {
                     if image?.accessibilityIdentifier != defaultAddImageAccessibilityIdentifier {
-                        let actionDel = UIAlertAction(title: "删除", style: .default){ (_) -> Void in
-                            self.imageArray.remove(image as Any)
-                            self.eventImage.reloadData()
+                        let actionDel = UIAlertAction(title: "删除", style: .default){ [weak self] (_) -> Void in
+                            self?.imageArray.remove(image as Any)
+                            if (self?.imageArray.count)! < (self?.maxImageCount)! {
+                                if let addImg = self?.imageArray.lastObject as? UIImage {
+                                    if addImg.accessibilityIdentifier != self?.defaultAddImageAccessibilityIdentifier {
+                                        self?.setupInitBtnImage()
+                                    }
+                                }
+                            }
+                            self?.eventImage.reloadData()
                         }
                         let actionCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)
                         actionController.addAction(actionDel)
@@ -652,12 +664,12 @@ extension EventReportSBViewController: UIImagePickerControllerDelegate, UINaviga
             picker.sourceType = .savedPhotosAlbum
             self.navigationController?.present(picker, animated: true, completion: nil)
         }
-        let actionCamera = UIAlertAction(title: "拍照", style: .default){ (action) -> Void in
+        let actionCamera = UIAlertAction(title: "拍照", style: .default){ [weak self] (action) -> Void in
             if UIImagePickerController.isSourceTypeAvailable(.camera) {
                 picker.sourceType = .camera
-                self.navigationController?.present(picker, animated: true, completion: nil)
+                self?.navigationController?.present(picker, animated: true, completion: nil)
             } else {
-                AlertWithNoButton(view: self, title: "", message: "不支持拍照", preferredStyle: .alert, showTime: 1)
+                AlertWithNoButton(view: self!, title: "", message: "不支持拍照", preferredStyle: .alert, showTime: 1)
             }
         }
         let actionCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)

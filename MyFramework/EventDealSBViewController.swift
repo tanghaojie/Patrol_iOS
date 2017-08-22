@@ -42,6 +42,9 @@ class EventDealSBViewController: UIViewController, JTViewControllerInteractiveTr
     fileprivate var location: CLLocationCoordinate2D?
     
     var jtViewControllerInteractiveTransition: JTViewControllerInteractiveTransition? = nil
+    
+    
+    public var dealSuccess: (()->())?
 
     //for save self.eventImage collectionViewCell and for display data   ps. an add image button image is also in the array
     var imageArray: NSMutableArray = NSMutableArray()
@@ -214,6 +217,9 @@ extension EventDealSBViewController {
     
     private func createEventComplete() {
         backButtonAction()
+        if let success = self.dealSuccess {
+            success()
+        }
     }
     
     private func uploadImages(processDir: String) {
@@ -480,9 +486,16 @@ extension EventDealSBViewController: UICollectionViewDelegate, UICollectionViewD
                 let image = self.imageArray[nIndexPath!.row] as? UIImage
                 if image != nil {
                     if image?.accessibilityIdentifier != defaultAddImageAccessibilityIdentifier {
-                        let actionDel = UIAlertAction(title: "删除", style: .default){ (_) -> Void in
-                            self.imageArray.remove(image as Any)
-                            self.dealImage.reloadData()
+                        let actionDel = UIAlertAction(title: "删除", style: .default){ [weak self] (_) -> Void in
+                            self?.imageArray.remove(image as Any)
+                            if (self?.imageArray.count)! < (self?.maxImageCount)! {
+                                if let addImg = self?.imageArray.lastObject as? UIImage {
+                                    if addImg.accessibilityIdentifier != self?.defaultAddImageAccessibilityIdentifier {
+                                        self?.setupInitBtnImage()
+                                    }
+                                }
+                            }
+                            self?.dealImage.reloadData()
                         }
                         let actionCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)
                         actionController.addAction(actionDel)

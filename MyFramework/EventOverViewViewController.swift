@@ -37,6 +37,10 @@ class EventOverViewViewController: UIViewController, UIGestureRecognizerDelegate
         
         self.tableView.mj_header.beginRefreshing()
     }
+    
+    deinit {
+        print("---released EventOverViewViewController")
+    }
 
 }
 
@@ -137,7 +141,9 @@ extension EventOverViewViewController {
     }
     
     internal func rightBarButtonClicked() {
-        self.present(EventReportViewController(), animated: true, completion: nil)
+        self.present(EventReportViewController(reportSuccessFunc: { [weak self] () in
+            self?.tableView.mj_header.beginRefreshing()
+        }), animated: true, completion: nil)
     }
     
     private func setupTitle() {
