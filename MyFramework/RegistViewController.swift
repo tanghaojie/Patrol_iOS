@@ -187,20 +187,20 @@ extension RegistViewController{
     }
     
     fileprivate func registAsyncConnect(urlRequest : URLRequest){
-        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
+        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: { [weak self](response : URLResponse?, data : Data?, error : Error?) -> Void in
             if let urlResponse = response{
                 let httpResponse = urlResponse as! HTTPURLResponse
                 let statusCode = httpResponse.statusCode
                 if(statusCode != 200){
-                    self.alertAndLog(msg: String(statusCode) + msg_HttpError, showTime: 1, log: String(statusCode) + msg_HttpError + url_Regist)
+                    self?.alertAndLog(msg: String(statusCode) + msg_HttpError, showTime: 1, log: String(statusCode) + msg_HttpError + url_Regist)
                     return
                 }
                 if(error != nil){
-                    self.alertAndLog(msg: msg_ConnectTimeout, showTime: 1, log: String(describing: error) + log_Timeout + url_Regist)
+                    self?.alertAndLog(msg: msg_ConnectTimeout, showTime: 1, log: String(describing: error) + log_Timeout + url_Regist)
                     return
                 }
                 if(data?.isEmpty)!{
-                    self.alertAndLog(msg: msg_ServerNoResponse, showTime: 1, log: log_ServerNoResponse + url_Regist)
+                    self?.alertAndLog(msg: msg_ServerNoResponse, showTime: 1, log: log_ServerNoResponse + url_Regist)
                     return
                 }
                 
@@ -212,36 +212,35 @@ extension RegistViewController{
                     if(status != 0){
                         if let msg = nMsg{
                             //AlertWithNoButton(view: self, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
-                            AlertWithUIAlertAction(view: self, title: msg_Remind, message: msg, preferredStyle: .alert ,
+                            AlertWithUIAlertAction(view: self!, title: msg_Remind, message: msg, preferredStyle: .alert ,
                                                    uiAlertAction: UIAlertAction(title: msg_OK, style: UIAlertActionStyle.default, handler: nil))
                         }
-                        self.activity.stopAnimating()
-                        self.view.isUserInteractionEnabled = true
+                        self?.activity.stopAnimating()
+                        self?.view.isUserInteractionEnabled = true
 
                         return
                     }
                     
-                    AlertWithUIAlertAction(view: self, title: msg_Remind, message: msg_RegistSuccess, preferredStyle: .alert ,
-                                           uiAlertAction: UIAlertAction(title: msg_OK, style: UIAlertActionStyle.default, handler: {
-                                            (alertAction: UIAlertAction) -> Void in
-                                                self.delegate?.clearUsernamePassword()
-                                                self.dismiss(animated: true, completion: nil)
+                    AlertWithUIAlertAction(view: self!, title: msg_Remind, message: msg_RegistSuccess, preferredStyle: .alert ,
+                                           uiAlertAction: UIAlertAction(title: msg_OK, style: UIAlertActionStyle.default, handler: { [weak self] (alertAction: UIAlertAction) -> Void in
+                                                self?.delegate?.clearUsernamePassword()
+                                                self?.dismiss(animated: true, completion: nil)
                                            }))
                     
-                    self.activity.stopAnimating()
-                    self.view.isUserInteractionEnabled = true
+                    self?.activity.stopAnimating()
+                    self?.view.isUserInteractionEnabled = true
                 }else{
                     // running there must be webapi error
                 }
             }else{
-                self.alertAndLog(msg: msg_ServerNoResponse, showTime: 0.5, log: log_ServerNoResponse + url_Login)
+                self?.alertAndLog(msg: msg_ServerNoResponse, showTime: 0.5, log: log_ServerNoResponse + url_Login)
                 return
             }
         })
     }
     
     fileprivate func usernameUniqueCheck(urlRequest : URLRequest){
-        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
+        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: { [weak self](response : URLResponse?, data : Data?, error : Error?) -> Void in
             if let urlResponse = response{
                 let httpResponse = urlResponse as! HTTPURLResponse
                 let statusCode = httpResponse.statusCode
@@ -253,16 +252,16 @@ extension RegistViewController{
                     if let status = nStatus{
                         if(status != 0){
                             if let msg = nMsg{
-                                self.username.layer.borderColor = UIColor.red.cgColor
-                                self.username.layer.borderWidth = 1
-                                AlertWithNoButton(view: self, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
+                                self?.username.layer.borderColor = UIColor.red.cgColor
+                                self?.username.layer.borderWidth = 1
+                                AlertWithNoButton(view: self!, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
                                 return
                             }
                         }
                     }
                 }
             }
-            self.username.layer.borderColor = UIColor.clear.cgColor
+            self?.username.layer.borderColor = UIColor.clear.cgColor
         })
     }
 

@@ -181,20 +181,20 @@ extension LoginViewController {
     }
     
     fileprivate func loginAsyncConnect(urlRequest : URLRequest, user: String?, pass: String?) {
-        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
+        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main, completionHandler: { [weak self] (response : URLResponse?, data : Data?, error : Error?) -> Void in
             if let urlResponse = response{
                 let httpResponse = urlResponse as! HTTPURLResponse
                 let statusCode = httpResponse.statusCode
                 if(statusCode != 200){
-                    self.alertAndLog(msg: String(statusCode) + msg_HttpError, showTime: 1, log: String(statusCode) + msg_HttpError + url_Login)
+                    self?.alertAndLog(msg: String(statusCode) + msg_HttpError, showTime: 1, log: String(statusCode) + msg_HttpError + url_Login)
                     return
                 }
                 if(error != nil){
-                    self.alertAndLog(msg: msg_ConnectTimeout, showTime: 1, log: String(describing: error) + log_Timeout + url_Login)
+                    self?.alertAndLog(msg: msg_ConnectTimeout, showTime: 1, log: String(describing: error) + log_Timeout + url_Login)
                     return
                 }
                 if(data?.isEmpty)!{
-                    self.alertAndLog(msg: msg_ServerNoResponse, showTime: 1, log: log_ServerNoResponse + url_Login)
+                    self?.alertAndLog(msg: msg_ServerNoResponse, showTime: 1, log: log_ServerNoResponse + url_Login)
                     return
                 }
                 
@@ -206,13 +206,13 @@ extension LoginViewController {
                 if let status = nStatus{
                     if(status != 0){
                         if let msg = nMsg{
-                            AlertWithNoButton(view: self, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
+                            AlertWithNoButton(view: self!, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
                         }
                         
-                        self.activity.stopAnimating()
-                        self.view.isUserInteractionEnabled = true
+                        self?.activity.stopAnimating()
+                        self?.view.isUserInteractionEnabled = true
                         
-                        self.saveDefaultUsernamePassword(username: user!, password: "")
+                        self?.saveDefaultUsernamePassword(username: user!, password: "")
                         return
                     }
                     if data != JSON.null {
@@ -227,18 +227,18 @@ extension LoginViewController {
                         loginInfo?.username = username
                         loginInfo?.protraiurl = portraiturl
                         
-                        self.activity.stopAnimating()
-                        self.view.isUserInteractionEnabled = true
+                        self?.activity.stopAnimating()
+                        self?.view.isUserInteractionEnabled = true
                         
                         loginInfo?.config = Config(id: id!)
                         if(!((loginInfo?.config?.success)!)){
                             let msg = loginInfo?.config?.msg
-                            self.alertAndLog(msg: msg!, showTime: 1, log: msg!)
+                            self?.alertAndLog(msg: msg!, showTime: 1, log: msg!)
                             return
                         }
                         
-                        self.saveDefaultUsernamePassword(username: user!, password: pass!)
-                        self.present(MainViewController(), animated: true, completion: nil)
+                        self?.saveDefaultUsernamePassword(username: user!, password: pass!)
+                        self?.present(MainViewController(), animated: true, completion: nil)
                     }else{
                         // running there must be webapi error
                     }
@@ -246,7 +246,7 @@ extension LoginViewController {
                     // running there must be webapi error
                 }
             }else{
-                self.alertAndLog(msg: msg_ServerNoResponse, showTime: 0.5, log: log_ServerNoResponse + url_Login)
+                self?.alertAndLog(msg: msg_ServerNoResponse, showTime: 0.5, log: log_ServerNoResponse + url_Login)
                 return
             }
         })

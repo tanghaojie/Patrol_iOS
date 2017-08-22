@@ -274,7 +274,6 @@ extension MainViewController{
                 }
                 let json = JSON(data : data!)
                 let nStatus = json["status"].int
-//                let nMsg = json["msg"].string
                 let ndata = json["data"]
                 if let status = nStatus{
                     if(status != 0){

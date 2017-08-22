@@ -46,7 +46,7 @@
                                             <constraint firstAttribute="height" constant="50" id="zve-Ax-TGK"/>
                                         </constraints>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="设置" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NMy-Y1-CLI">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="设置" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NMy-Y1-CLI">
                                         <rect key="frame" x="182" y="25" width="50" height="42"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="42" id="8Hc-RL-uBG"/>

@@ -83,10 +83,6 @@ class EventReportSBViewController: UIViewController {
     @IBAction func commitTouchUpInSide(_ sender: Any) {
         commitTouchUpInSide()
     }
-    
-    deinit {
-        print("---released EventReportSBViewController")
-    }
 
     @IBAction func eventTypeTouchUpInSide(_ sender: Any) {
         switchEventTypeTableView()
@@ -137,27 +133,25 @@ extension EventReportSBViewController {
     }
     
     private func createEvent(request: URLRequest, complete: (() -> Void)?) {
-        NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: {(response : URLResponse?, data : Data?, error : Error?) -> Void in
+        NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: { [weak self] (response : URLResponse?, data : Data?, error : Error?) -> Void in
             if error != nil {
-                AlertWithNoButton(view: self, title: msg_Error, message: msg_RequestError, preferredStyle: .alert, showTime: 1)
-                self.setLoading(isLoading: false)
+                AlertWithNoButton(view: self!, title: msg_Error, message: msg_RequestError, preferredStyle: .alert, showTime: 1)
+                self?.setLoading(isLoading: false)
                 return
             }
             if (data?.isEmpty)! {
-                AlertWithNoButton(view: self, title: msg_Error, message: msg_ServerNoResponse, preferredStyle: .alert, showTime: 1)
-                self.setLoading(isLoading: false)
+                AlertWithNoButton(view: self!, title: msg_Error, message: msg_ServerNoResponse, preferredStyle: .alert, showTime: 1)
+                self?.setLoading(isLoading: false)
                 return
             }
             if let urlResponse = response{
                 let httpResponse = urlResponse as! HTTPURLResponse
                 let statusCode = httpResponse.statusCode
                 if statusCode != 200 {
-                    AlertWithNoButton(view: self, title: msg_Error, message: msg_HttpError, preferredStyle: .alert, showTime: 1)
-                    self.setLoading(isLoading: false)
+                    AlertWithNoButton(view: self!, title: msg_Error, message: msg_HttpError, preferredStyle: .alert, showTime: 1)
+                    self?.setLoading(isLoading: false)
                     return
                 }
-                
-                print("create event success \(Date().addingTimeInterval(kTimeInteval))")
                 let json = JSON(data : data!)
                 let nStatus = json["status"].int
                 let nMsg = json["msg"].string
@@ -166,17 +160,17 @@ extension EventReportSBViewController {
                 if let status = nStatus{
                     if(status != 0){
                         if let msg = nMsg{
-                            AlertWithUIAlertAction(view: self, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
+                            AlertWithUIAlertAction(view: self!, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
                         }
-                        self.setLoading(isLoading: false)
+                        self?.setLoading(isLoading: false)
                         return
                     }
                     if data != JSON.null  {
                         let eventId = data["id"].int
-                        if let images = self.eventModel.images {
+                        if let images = self?.eventModel.images {
                             if images.count > 0 {
-                                let thisEventDir = self.saveImages(eventId: eventId!, images: images)
-                                self.uploadImages(eventDir: thisEventDir)
+                                let thisEventDir = self?.saveImages(eventId: eventId!, images: images)
+                                self?.uploadImages(eventDir: thisEventDir!)
                             }
                         }
                         if complete != nil {
@@ -189,7 +183,7 @@ extension EventReportSBViewController {
                     // running there must be webapi error
                 }
             }
-            self.setLoading(isLoading: false)
+            self?.setLoading(isLoading: false)
         })
     }
     
@@ -430,39 +424,39 @@ extension EventReportSBViewController {
 extension EventReportSBViewController: UITableViewDataSource , UITableViewDelegate {
     
     fileprivate func switchEventTypeTableView(isHidden: Bool? = nil){
-        if(isHidden != nil){
-            UIView.animate(withDuration: 0.5, animations: {
-                self.eventTypeTableView?.isHidden = isHidden!
+        if isHidden != nil {
+            UIView.animate(withDuration: 0.5, animations: { [weak self] in
+                self?.eventTypeTableView?.isHidden = isHidden!
             })
             return
         }
         if(self.eventTypeTableView.isHidden){
             self.view.bringSubview(toFront: eventTypeTableView)
-            UIView.animate(withDuration: 0.5, animations: {
-                self.eventTypeTableView?.isHidden = false
+            UIView.animate(withDuration: 0.5, animations: { [weak self] in
+                self?.eventTypeTableView?.isHidden = false
             })
         }else{
-            UIView.animate(withDuration: 0.5, animations: {
-                self.eventTypeTableView?.isHidden = true
+            UIView.animate(withDuration: 0.5, animations: { [weak self] in
+                self?.eventTypeTableView?.isHidden = true
             })
         }
     }
     
     fileprivate func switchEventLevelTableView(isHidden: Bool? = nil){
         if(isHidden != nil){
-            UIView.animate(withDuration: 0.5, animations: {
-                self.eventLevelTableView?.isHidden = isHidden!
+            UIView.animate(withDuration: 0.5, animations: { [weak self] in
+                self?.eventLevelTableView?.isHidden = isHidden!
             })
             return
         }
         if(self.eventLevelTableView.isHidden){
             self.view.bringSubview(toFront: eventLevelTableView)
-            UIView.animate(withDuration: 0.5, animations: {
-                self.eventLevelTableView?.isHidden = false
+            UIView.animate(withDuration: 0.5, animations: { [weak self] in
+                self?.eventLevelTableView?.isHidden = false
             })
         }else{
-            UIView.animate(withDuration: 0.5, animations: {
-                self.eventLevelTableView?.isHidden = true
+            UIView.animate(withDuration: 0.5, animations: { [weak self] in
+                self?.eventLevelTableView?.isHidden = true
             })
         }
     }

@@ -18,6 +18,12 @@ var url_Login: String {
     }
 }
 
+var url_Logout: String {
+    get{
+        return getUrl("/api/user/logout")
+    }
+}
+
 var url_Regist: String {
     get{
         return getUrl("/api/user/regist")
@@ -106,6 +112,7 @@ public func getUploadImage(prid: String,typenum: String,actualtime: String) -> S
     return "\(url_UploadImage)?prid=\(prid)&typenum=\(typenum)&actualtime=\(actualtime)"
 }
 
+let kMoreShortTimeoutInterval = 3
 let kShortTimeoutInterval = 5
 let kLongTimeoutInterval = 20
 

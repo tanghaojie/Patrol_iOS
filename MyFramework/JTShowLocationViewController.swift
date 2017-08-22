@@ -49,6 +49,7 @@ extension JTShowLocationViewController {
     
     private func setupMapView() {
         
+        SCGISUtility.registerESRI()
         mapView = AGSMapView()
 
         mapView.frame = CGRect(x: 0, y: 0, width: kScreenWidth, height: kScrennHeight)
@@ -56,7 +57,7 @@ extension JTShowLocationViewController {
 
         mapView.gridLineWidth = 10
         graphicslayer.isVisible = true
-        mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
+        //mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
 
         let scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DLG, token: nil)
         if(scgisTilemapServerLayer != nil){

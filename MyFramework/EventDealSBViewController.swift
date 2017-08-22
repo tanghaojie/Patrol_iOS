@@ -90,6 +90,10 @@ class EventDealSBViewController: UIViewController, JTViewControllerInteractiveTr
             }
         }
     }
+    
+    deinit {
+        print("---released EventDealSBViewController")
+    }
 
 }
 //func
@@ -105,7 +109,7 @@ extension EventDealSBViewController {
         
         let nRequest = getCreateProcessExecuteRequest()
         if let request = nRequest {
-            createProcessExecute(request: request, complete: createEventComplete)
+            createProcessExecute(request: request, complete: dealEventComplete)
         }else {
             AlertWithNoButton(view: self, title: msg_SomethingWrongTryAgain, message: "", preferredStyle: .alert, showTime: 1)
             setLoading(isLoading: false)
@@ -215,7 +219,7 @@ extension EventDealSBViewController {
         return jsonDic
     }
     
-    private func createEventComplete() {
+    private func dealEventComplete() {
         backButtonAction()
         if let success = self.dealSuccess {
             success()

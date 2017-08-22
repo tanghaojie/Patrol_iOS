@@ -10,6 +10,7 @@ import Foundation
 import SwiftyJSON
 
 class JSON_Event {
+    
     var id: Int = 0
     var uid: Int = 0
     var realname: String?

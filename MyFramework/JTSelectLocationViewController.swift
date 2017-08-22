@@ -45,17 +45,16 @@ extension JTSelectLocationViewController {
     
     private func setupMapView() {
         
+        SCGISUtility.registerESRI()
         mapView = AGSMapView()
-        
-        //SCGISUtility.registerESRI()
-        
+
         mapView.frame = CGRect(x: 0, y: 0, width: kScreenWidth, height: kScrennHeight)
         mapView.layerDelegate = self
         mapView.gridLineWidth = 10
         mapView.maxScale = maxScale
         mapView.minScale = minScale
         
-        mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
+        //mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
         
         let scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DLG, token: nil)
         if(scgisTilemapServerLayer != nil){
