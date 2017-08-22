@@ -157,6 +157,10 @@ extension EventDetailViewController {
         let vc = sb.instantiateViewController(withIdentifier: "EventDealSBViewController") as! EventDealSBViewController
         vc.setEvent(self.event)
         setupNavigationbar(isBig: false)
+        vc.dealSuccess = { [weak self] () in
+            self?.navigationItem.rightBarButtonItem = nil
+            self?.tableView.mj_header.beginRefreshing()
+        }
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

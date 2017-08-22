@@ -155,7 +155,10 @@ extension TaskSBViewController{
                         self.taskModel = TaskModel(isStarted: true, tid: taskId!, uid: uId!, tName: tName!, tType: tType!, tLineCode: tTaskLine, startTime: startTime!, remark: remark!)
                         self.setTaskView(model: self.taskModel)
                     }else{
-                        self.taskModel = TaskModel(isStarted: false, tid: nil, uid: nil, tName: nil, tType: nil, tLineCode: nil, startTime: nil, remark: nil)
+                        var now = Date()
+                        now.addTimeInterval(TimeInterval(Double(TimeZone.current.secondsFromGMT())))
+                        let dateTxt = getDateFormatter(dateFormatter: "yyyyMMdd").string(from: now)
+                        self.taskModel = TaskModel(isStarted: false, tid: nil, uid: nil, tName: dateTxt, tType: nil, tLineCode: nil, startTime: nil, remark: nil)
                         self.setTaskView(model: self.taskModel)
                     }
                 }else{

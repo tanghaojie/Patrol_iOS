@@ -189,7 +189,7 @@ extension MainViewController {
     }
     
     func addEventButtonClicked() {
-        self.present(EventReportViewController(), animated: true, completion: nil)
+        self.present(EventReportViewController(reportSuccessFunc: nil), animated: true, completion: nil)
     }
     
     private func setupLocationButton(pView : UIView) {
