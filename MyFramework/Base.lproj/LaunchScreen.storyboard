@@ -37,7 +37,7 @@
                                         <color key="textColor" red="0.60784313725490191" green="0.60784313725490191" blue="0.60784313725490191" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="highlightedColor" red="0.92156862745098034" green="0.92156862745098034" blue="0.92156862745098034" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="l.png" translatesAutoresizingMaskIntoConstraints="NO" id="Pyo-ey-D7M">
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="q.png" translatesAutoresizingMaskIntoConstraints="NO" id="Pyo-ey-D7M">
                                         <rect key="frame" x="61.666666666666664" y="10" width="59.999999999999993" height="60"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="9yo-w5-FGP"/>
@@ -70,6 +70,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="l.png" width="60" height="60"/>
+        <image name="q.png" width="60" height="60"/>
     </resources>
 </document>
