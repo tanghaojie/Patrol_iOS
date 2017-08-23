@@ -265,12 +265,16 @@ extension EventOverViewViewController {
     private func queryRelationEventList(request: URLRequest, complete: ((JSON_EventList) -> Void)?) {
         NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: { [weak self] (response : URLResponse?, data : Data?, error : Error?) -> Void in
             if error != nil {
-                AlertWithNoButton(view: self!, title: msg_Error, message: "\(msg_RequestError) \(error?.localizedDescription ?? "")", preferredStyle: .alert, showTime: 1)
+                if let xself = self {
+                    AlertWithNoButton(view: xself, title: msg_Error, message: "\(msg_RequestError) \(error?.localizedDescription ?? "")", preferredStyle: .alert, showTime: 1)
+                }
                 self?.endRefreshing()
                 return
             }
             if (data?.isEmpty)! {
-                AlertWithNoButton(view: self!, title: msg_Error, message: msg_ServerNoResponse, preferredStyle: .alert, showTime: 1)
+                if let xself = self {
+                    AlertWithNoButton(view: xself, title: msg_Error, message: msg_ServerNoResponse, preferredStyle: .alert, showTime: 1)
+                }
                 self?.endRefreshing()
                 return
             }
@@ -278,7 +282,9 @@ extension EventOverViewViewController {
                 let httpResponse = urlResponse as! HTTPURLResponse
                 let statusCode = httpResponse.statusCode
                 if statusCode != 200 {
-                    AlertWithNoButton(view: self!, title: msg_Error, message: msg_HttpError, preferredStyle: .alert, showTime: 1)
+                    if let xself = self {
+                        AlertWithNoButton(view: xself, title: msg_Error, message: msg_HttpError, preferredStyle: .alert, showTime: 1)
+                    }
                     self?.endRefreshing()
                     return
                 }
@@ -288,7 +294,9 @@ extension EventOverViewViewController {
                 let eventList = JSON_EventList(json)
                 if(eventList.status != 0){
                     if let msg = eventList.msg {
-                        AlertWithUIAlertAction(view: self!, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
+                        if let xself = self {
+                            AlertWithUIAlertAction(view: xself, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
+                        }
                     }
                     self?.endRefreshing()
                     return

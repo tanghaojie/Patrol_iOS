@@ -129,12 +129,16 @@ extension EventDealSBViewController {
     fileprivate func createProcessExecute(request: URLRequest, complete: (() -> Void)?) {
         NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: { [weak self] (response : URLResponse?, data : Data?, error : Error?) -> Void in
             if error != nil {
-                AlertWithNoButton(view: self!, title: msg_Error, message: "\(msg_RequestError) \(error?.localizedDescription ?? "")", preferredStyle: .alert, showTime: 1)
+                if let xself = self {
+                    AlertWithNoButton(view: xself, title: msg_Error, message: "\(msg_RequestError) \(error?.localizedDescription ?? "")", preferredStyle: .alert, showTime: 1)
+                }
                 self?.setLoading(isLoading: false)
                 return
             }
             if (data?.isEmpty)! {
-                AlertWithNoButton(view: self!, title: msg_Error, message: msg_ServerNoResponse, preferredStyle: .alert, showTime: 1)
+                if let xself = self {
+                    AlertWithNoButton(view: xself, title: msg_Error, message: msg_ServerNoResponse, preferredStyle: .alert, showTime: 1)
+                }
                 self?.setLoading(isLoading: false)
                 return
             }
@@ -142,7 +146,9 @@ extension EventDealSBViewController {
                 let httpResponse = urlResponse as! HTTPURLResponse
                 let statusCode = httpResponse.statusCode
                 if statusCode != 200 {
-                    AlertWithNoButton(view: self!, title: msg_Error, message: msg_HttpError, preferredStyle: .alert, showTime: 1)
+                    if let xself = self {
+                        AlertWithNoButton(view: xself, title: msg_Error, message: msg_HttpError, preferredStyle: .alert, showTime: 1)
+                    }
                     self?.setLoading(isLoading: false)
                     return
                 }
@@ -156,7 +162,9 @@ extension EventDealSBViewController {
                 if let status = nStatus{
                     if(status != 0){
                         if let msg = nMsg{
-                            AlertWithUIAlertAction(view: self!, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
+                            if let xself = self {
+                                AlertWithUIAlertAction(view: xself, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
+                            }
                         }
                         self?.setLoading(isLoading: false)
                         return
@@ -529,7 +537,9 @@ extension EventDealSBViewController: UIImagePickerControllerDelegate, UINavigati
                 picker.sourceType = .camera
                 self?.navigationController?.present(picker, animated: true, completion: nil)
             } else {
-                AlertWithNoButton(view: self!, title: "", message: "不支持拍照", preferredStyle: .alert, showTime: 1)
+                if let xself = self {
+                    AlertWithNoButton(view: xself, title: "", message: "不支持拍照", preferredStyle: .alert, showTime: 1)
+                }
             }
         }
         let actionCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)

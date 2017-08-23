@@ -350,7 +350,9 @@ extension MyViewController: UIImagePickerControllerDelegate, UINavigationControl
                 picker.sourceType = .camera
                 self?.navigationController?.present(picker, animated: true, completion: nil)
             } else {
-                AlertWithNoButton(view: self!, title: "", message: "不支持拍照", preferredStyle: .alert, showTime: 1)
+                if let xself = self {
+                    AlertWithNoButton(view: xself, title: "", message: "不支持拍照", preferredStyle: .alert, showTime: 1)
+                }
             }
         }
         let actionCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)

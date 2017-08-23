@@ -114,6 +114,7 @@ public func getUploadImage(prid: String,typenum: String,actualtime: String) -> S
 
 let kMoreShortTimeoutInterval = 3
 let kShortTimeoutInterval = 5
+let kLittleShortTimeoutInterval = 8
 let kLongTimeoutInterval = 20
 
 public enum HttpMethod: String{

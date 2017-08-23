@@ -32,6 +32,7 @@
 		6B2B08611F02337000B99B5C /* T_User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2B08601F02337000B99B5C /* T_User.swift */; };
 		6B3076861F29D7E2007C5D30 /* EventDealSB.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B3076841F29D7E2007C5D30 /* EventDealSB.storyboard */; };
 		6B3076871F29D7E2007C5D30 /* EventDealSBViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3076851F29D7E2007C5D30 /* EventDealSBViewController.swift */; };
+		6B3AA7A81F4D7AD100EE5A22 /* test.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B3AA7A71F4D7AD100EE5A22 /* test.storyboard */; };
 		6B55903E1EEE8894008149FD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B55903D1EEE8894008149FD /* HomeViewController.swift */; };
 		6B5590441EF12053008149FD /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B5590431EF12053008149FD /* Login.storyboard */; };
 		6B5590461EF12078008149FD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5590451EF12078008149FD /* LoginViewController.swift */; };
@@ -133,6 +134,7 @@
 		6B2B08601F02337000B99B5C /* T_User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = T_User.swift; sourceTree = "<group>"; };
 		6B3076841F29D7E2007C5D30 /* EventDealSB.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EventDealSB.storyboard; sourceTree = "<group>"; };
 		6B3076851F29D7E2007C5D30 /* EventDealSBViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDealSBViewController.swift; sourceTree = "<group>"; };
+		6B3AA7A71F4D7AD100EE5A22 /* test.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = test.storyboard; sourceTree = "<group>"; };
 		6B55903D1EEE8894008149FD /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		6B5590431EF12053008149FD /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
 		6B5590451EF12078008149FD /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -414,6 +416,7 @@
 				6B1BDE9A1EEBB2DA00B29DA8 /* Info.plist */,
 				6B6F52A31F00EB9000B09846 /* MyFramework-Bridging-Header.h */,
 				6B6C621F1F04DA83000FC91B /* LoginInfo.swift */,
+				6B3AA7A71F4D7AD100EE5A22 /* test.storyboard */,
 			);
 			name = SupportingFiles;
 			sourceTree = "<group>";
@@ -581,6 +584,7 @@
 				6B93CECB1F0E3B3A004E0890 /* ArcGIS.bundle in Resources */,
 				6B5590441EF12053008149FD /* Login.storyboard in Resources */,
 				6B24B20A1F4C237700FE1DB2 /* q@2x.png in Resources */,
+				6B3AA7A81F4D7AD100EE5A22 /* test.storyboard in Resources */,
 				6BB823851EFBA32800468956 /* Regist.storyboard in Resources */,
 				6BCA085C1F1C51D0003FBA70 /* EventReportSB.storyboard in Resources */,
 				6B93CECC1F0E3B3A004E0890 /* iTile.db in Resources */,
