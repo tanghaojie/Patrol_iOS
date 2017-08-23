@@ -59,7 +59,7 @@ extension JTShowLocationViewController {
         graphicslayer.isVisible = true
         //mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
 
-        let scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DLG, token: nil)
+        let scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DLG, token: nil, cacheType: SCGISTilemapCacheTypeSqliteDB)
         if(scgisTilemapServerLayer != nil){
             self.mapView.addMapLayer(scgisTilemapServerLayer)
         }

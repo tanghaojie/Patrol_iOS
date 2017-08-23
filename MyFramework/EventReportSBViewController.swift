@@ -314,6 +314,11 @@ extension EventReportSBViewController {
             AlertWithNoButton(view: self, title: msg_PleaseSelectEventLocation, message: nil, preferredStyle: .alert, showTime: 1)
             return false
         }
+        let min: Double = 0
+        if (self.eventModel.location?.latitude)! <= min || (self.eventModel.location?.longitude)! <= min {
+            AlertWithNoButton(view: self, title: msg_PleaseSelectEventLocation, message: nil, preferredStyle: .alert, showTime: 1)
+            return false
+        }
         return true
     }
     

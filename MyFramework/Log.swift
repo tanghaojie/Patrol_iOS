@@ -18,10 +18,10 @@ public func printLog<T>(message: T, file: String = #file, function: String = #fu
     let dateFormat = DateFormatter()
     dateFormat.dateFormat = kDateTimeFormate
     var now = Date()
-    now.addTimeInterval(kTimeInteval)
+    //now.addTimeInterval(kTimeInteval)
     let dateStr = dateFormat.string(from: now)
     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first
-    let filePath = path?.appending(logFileName)
+    let filePath = path?.appending("/\(logFileName)")
     guard let f = filePath else { return }
     let url = URL(fileURLWithPath: f)
     let logStr = "\(dateStr) | \(file) line:\(line) \(function) | \(message)"

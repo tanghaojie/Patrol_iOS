@@ -89,13 +89,13 @@ extension MainViewController {
         mapView.layerDelegate = self
         mapView.gridLineWidth = 10
         mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
-        
-        self.scgisTilemapServerLayer_DLG = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DLG, token: nil)
+
+        self.scgisTilemapServerLayer_DLG = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DLG, token: nil, cacheType: SCGISTilemapCacheTypeSqliteDB)
         if(scgisTilemapServerLayer_DLG != nil){
             self.mapView.addMapLayer(scgisTilemapServerLayer_DLG)
         }
         
-        self.scgisTilemapServerLayer_DOM = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DOM, token: nil)
+        self.scgisTilemapServerLayer_DOM = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DOM, token: nil, cacheType: SCGISTilemapCacheTypeSqliteDB)
         if(scgisTilemapServerLayer_DOM != nil){
             self.mapView.addMapLayer(scgisTilemapServerLayer_DOM)
             scgisTilemapServerLayer_DOM.isVisible = false
