@@ -56,7 +56,7 @@ extension JTSelectLocationViewController {
         
         //mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
         
-        let scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DLG, token: nil)
+        let scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DLG, token: nil, cacheType: SCGISTilemapCacheTypeSqliteDB)
         if(scgisTilemapServerLayer != nil){
             self.mapView.addMapLayer(scgisTilemapServerLayer)
         }
@@ -144,10 +144,7 @@ extension JTSelectLocationViewController {
 extension JTSelectLocationViewController: AGSMapViewLayerDelegate {
     
     func mapViewDidLoad(_ mapView: AGSMapView!) {
-        //let map = self.mapView.mapLayers[0] as! AGSTiledLayer
-        //let envelop = map.initialEnvelope
         self.mapView.zoom(toScale: minScale, animated: true)
-        //self.mapView.zoom(to: envelop, animated: false)
         self.mapView.locationDisplay.startDataSource()
         self.mapView.locationDisplay.autoPanMode = .default
     }

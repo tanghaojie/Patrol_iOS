@@ -89,13 +89,13 @@ extension MainViewController {
         mapView.layerDelegate = self
         mapView.gridLineWidth = 10
         mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
-        
-        self.scgisTilemapServerLayer_DLG = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DLG, token: nil)
+
+        self.scgisTilemapServerLayer_DLG = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DLG, token: nil, cacheType: SCGISTilemapCacheTypeSqliteDB)
         if(scgisTilemapServerLayer_DLG != nil){
             self.mapView.addMapLayer(scgisTilemapServerLayer_DLG)
         }
         
-        self.scgisTilemapServerLayer_DOM = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DOM, token: nil)
+        self.scgisTilemapServerLayer_DOM = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DOM, token: nil, cacheType: SCGISTilemapCacheTypeSqliteDB)
         if(scgisTilemapServerLayer_DOM != nil){
             self.mapView.addMapLayer(scgisTilemapServerLayer_DOM)
             scgisTilemapServerLayer_DOM.isVisible = false
@@ -344,26 +344,26 @@ extension MainViewController {
                             locationWithDate.removeFirst(points.count)
            
                             //this is for test
-//                            if TaskSBViewController.isLog {
-//                                let u = docPath?.appending("/\(taskId)")
-//                                let file = u?.appending("/system10s.txt")
-//                                let url = URL(fileURLWithPath: file!)
-//                                if !FileManager.default.fileExists(atPath: url.path) {
-//                                    FileManager.default.createFile(atPath: url.path, contents: nil, attributes: nil)
-//                                }
-//                                
-//                                let fileHandle = try? FileHandle(forWritingTo: url)
-//                                if let handle = fileHandle {
-//                                    handle.seekToEndOfFile()
-//                                    
-//                                    var str = "\nupload success"
-//                                    for xp in points {
-//                                        str = str.appending("\n\(String(describing: xp["t"]!))   \(String(format: "%.12f", xp["x"] as! Double))  \(String(format: "%.12f", xp["y"] as! Double))")
-//                                    }
-//                                    handle.write(str.data(using: String.Encoding.utf8)!)
-//                                    handle.closeFile()
-//                                }
-//                            }
+                            if TaskSBViewController.isLog {
+                                let u = docPath?.appending("/\(taskId)")
+                                let file = u?.appending("/system10s.txt")
+                                let url = URL(fileURLWithPath: file!)
+                                if !FileManager.default.fileExists(atPath: url.path) {
+                                    FileManager.default.createFile(atPath: url.path, contents: nil, attributes: nil)
+                                }
+                                
+                                let fileHandle = try? FileHandle(forWritingTo: url)
+                                if let handle = fileHandle {
+                                    handle.seekToEndOfFile()
+                                    
+                                    var str = "\nupload success"
+                                    for xp in points {
+                                        str = str.appending("\n\(String(describing: xp["t"]!))   \(String(format: "%.12f", xp["x"] as! Double))  \(String(format: "%.12f", xp["y"] as! Double))")
+                                    }
+                                    handle.write(str.data(using: String.Encoding.utf8)!)
+                                    handle.closeFile()
+                                }
+                            }
                             //end this is for test
                         }
                     })
@@ -381,19 +381,19 @@ extension MainViewController {
                 let dateTime = Date().addingTimeInterval(kTimeInteval)
                 //this is for test
                 if TaskSBViewController.isLog {
-//                    let logStr = "\(dateTime)   \(String(format: "%.12f", coor.coordinate.longitude))   \(String(format: "%.12f", coor.coordinate.latitude))"
-//                    let u = docPath?.appending("/\((loginInfo?.taskId)!)")
-//                    let file = u?.appending("/system1s.txt")
-//                    let url = URL(fileURLWithPath: file!)
-//                    if !FileManager.default.fileExists(atPath: url.path) {
-//                        FileManager.default.createFile(atPath: url.path, contents: nil, attributes: nil)
-//                    }
-//                    let fileHandle = try? FileHandle(forWritingTo: url)
-//                    if let handle = fileHandle {
-//                        handle.seekToEndOfFile()
-//                        handle.write("\n\(logStr)".data(using: String.Encoding.utf8)!)
-//                        handle.closeFile()
-//                    }
+                    let logStr = "\(dateTime)   \(String(format: "%.12f", coor.coordinate.longitude))   \(String(format: "%.12f", coor.coordinate.latitude))"
+                    let u = docPath?.appending("/\((loginInfo?.taskId)!)")
+                    let file = u?.appending("/system1s.txt")
+                    let url = URL(fileURLWithPath: file!)
+                    if !FileManager.default.fileExists(atPath: url.path) {
+                        FileManager.default.createFile(atPath: url.path, contents: nil, attributes: nil)
+                    }
+                    let fileHandle = try? FileHandle(forWritingTo: url)
+                    if let handle = fileHandle {
+                        handle.seekToEndOfFile()
+                        handle.write("\n\(logStr)".data(using: String.Encoding.utf8)!)
+                        handle.closeFile()
+                    }
                 }
                 //end this is for test
                 sparseLocationArray()
@@ -410,30 +410,26 @@ extension MainViewController {
         var result = [Dictionary<String,Any>]()
         var nowSec : Int? = nil
         for index in 0..<count{
-            //let x = locationWithDate.popLast()
             let tl = locationWithDate[index]
-            //if let tl = x {
-                let df = getDateFormatter(dateFormatter: "HH:mm:ss")
-                let strTime = df.string(from: tl.time)
-                let xTime = strTime.characters.split(separator: ":").map(String.init)
-                let hour = Int(xTime[0])
-                let minute = Int(xTime[1])
-                let second = Int(xTime[2])
-                if(nowSec == second){
-                    continue
-                }
-                nowSec = second
+            let df = getDateFormatter(dateFormatter: "HH:mm:ss")
+            let strTime = df.string(from: tl.time)
+            let xTime = strTime.characters.split(separator: ":").map(String.init)
+            let hour = Int(xTime[0])
+            let minute = Int(xTime[1])
+            let second = Int(xTime[2])
+            if(nowSec == second){
+                continue
+            }
+            nowSec = second
                 
-                let secondOfCurrentDay = hour! * 3600 + minute! * 60 + second!
-                var dicc = Dictionary<String,Any>()
-                dicc["x"] = tl.location.longitude
-                dicc["y"] = tl.location.latitude
-                dicc["t"] = secondOfCurrentDay
-                result.append(dicc)
-            //}
+            let secondOfCurrentDay = hour! * 3600 + minute! * 60 + second!
+            var dicc = Dictionary<String,Any>()
+            dicc["x"] = tl.location.longitude
+            dicc["y"] = tl.location.latitude
+            dicc["t"] = secondOfCurrentDay
+            result.append(dicc)
         }
         return result
-        //return result.reversed()
     }
     
     private func sparseLocationArray() {
