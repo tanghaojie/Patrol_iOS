@@ -74,7 +74,9 @@ class SettingViewController: UIViewController {
     static func getServiceInfoFromFile() {
         let docPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first
         let settingUrl = docPath?.appending("/\(SettingViewController.settingFileName)")
-        
+        guard (settingUrl != nil) else {
+            return
+        }
         let nS = readText(fileUrl: URL.init(string: settingUrl!)!)
         if let s = nS {
             url_Main = s

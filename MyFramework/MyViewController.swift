@@ -27,6 +27,16 @@ class MyViewController: UIViewController {
         
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        
+        let btn = UIButton(frame: CGRect(x: 50, y: 50, width: 50, height: 50))
+        btn.backgroundColor = .red
+        btn.addTarget(self, action: #selector(xx), for: .touchUpInside)
+        self.view.addSubview(btn)
+        self.view.bringSubview(toFront: btn)
+    }
+    
+    func xx() {
+        SCGISConfig.default()
     }
 
 }

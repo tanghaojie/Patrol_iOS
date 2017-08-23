@@ -11,7 +11,7 @@ import SwiftyJSON
 
 class TaskSBViewController: UIViewController {
     
-    static let isLog: Bool = true
+    static let isLog: Bool = false
 
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet weak var taskName: UITextField!
@@ -417,7 +417,6 @@ extension TaskSBViewController{
         scrollView.bounces = true
         scrollView.alwaysBounceVertical = true
         scrollView.alwaysBounceHorizontal = false
-        //scrollView.delegate = self
         scrollView.scrollsToTop = true
     }
     
@@ -488,10 +487,10 @@ extension TaskSBViewController{
 
             //this is for test
             if TaskSBViewController.isLog {
-//                let taskDir = docPath?.appending("/\(String(describing: model.taskid!))")
-//                if let taskdir = taskDir {
-//                    try? FileManager.default.createDirectory(atPath: taskdir, withIntermediateDirectories: true, attributes: nil)
-//                }
+                let taskDir = docPath?.appending("/\(String(describing: model.taskid!))")
+                if let taskdir = taskDir {
+                    try? FileManager.default.createDirectory(atPath: taskdir, withIntermediateDirectories: true, attributes: nil)
+                }
             }
             //end this is for test
         }else{
