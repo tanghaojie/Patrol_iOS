@@ -140,21 +140,39 @@ extension MainViewController {
         self.layerView?.backgroundColor = .gray
         
         let btn1 = UIButton(frame: CGRect(x: 0, y: 0, width: w, height: 50))
-        btn1.backgroundColor = scgisTilemapServerLayer_DLG.isVisible ? dark : normal
         btn1.setTitle("底图", for: .normal)
         btn1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        if scgisTilemapServerLayer_DLG.isVisible {
+            btn1.backgroundColor = dark
+            btn1.setImage(UIImage(named: "check"), for: .normal)
+        } else {
+            btn1.backgroundColor = normal
+            btn1.setImage(UIImage(named: "uncheck"), for: .normal)
+        }
         btn1.addTarget(self, action: #selector(layerBtn1Action(btn:)), for: .touchUpInside)
         
         let btn2 = UIButton(frame: CGRect(x: 0, y: 50, width: w, height: 50))
-        btn2.backgroundColor = featureLayer.isVisible ? dark : normal
         btn2.setTitle("管线", for: .normal)
         btn2.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        if featureLayer.isVisible {
+            btn2.backgroundColor = dark
+            btn2.setImage(UIImage(named: "check"), for: .normal)
+        } else {
+            btn2.backgroundColor = normal
+            btn2.setImage(UIImage(named: "uncheck"), for: .normal)
+        }
         btn2.addTarget(self, action: #selector(layerBtn2Action(btn:)), for: .touchUpInside)
         
         let btn3 = UIButton(frame: CGRect(x: 0, y: 100, width: w, height: 50))
-        btn3.backgroundColor = scgisTilemapServerLayer_DOM.isVisible ? dark : normal
         btn3.setTitle("影像", for: .normal)
         btn3.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        if scgisTilemapServerLayer_DOM.isVisible {
+            btn3.backgroundColor = dark
+            btn3.setImage(UIImage(named: "check"), for: .normal)
+        } else {
+            btn3.backgroundColor = normal
+            btn3.setImage(UIImage(named: "uncheck"), for: .normal)
+        }
         btn3.addTarget(self, action: #selector(layerBtn3Action(btn:)), for: .touchUpInside)
         
         self.layerView?.addSubview(btn1)
@@ -166,17 +184,38 @@ extension MainViewController {
     
     func layerBtn1Action(btn: UIButton) {
         scgisTilemapServerLayer_DLG.isVisible = !scgisTilemapServerLayer_DLG.isVisible
-        btn.backgroundColor = scgisTilemapServerLayer_DLG.isVisible ? dark : normal
+        //btn.backgroundColor = scgisTilemapServerLayer_DLG.isVisible ? dark : normal
+        if scgisTilemapServerLayer_DLG.isVisible {
+            btn.backgroundColor = dark
+            btn.setImage(UIImage(named: "check"), for: .normal)
+        } else {
+            btn.backgroundColor = normal
+            btn.setImage(UIImage(named: "uncheck"), for: .normal)
+        }
     }
-    
+
     func layerBtn2Action(btn: UIButton) {
         featureLayer.isVisible = !featureLayer.isVisible
-        btn.backgroundColor = featureLayer.isVisible ? dark : normal
+        //btn.backgroundColor = featureLayer.isVisible ? dark : normal
+        if featureLayer.isVisible {
+            btn.backgroundColor = dark
+            btn.setImage(UIImage(named: "check"), for: .normal)
+        } else {
+            btn.backgroundColor = normal
+            btn.setImage(UIImage(named: "uncheck"), for: .normal)
+        }
     }
     
     func layerBtn3Action(btn: UIButton) {
         scgisTilemapServerLayer_DOM.isVisible = !scgisTilemapServerLayer_DOM.isVisible
-        btn.backgroundColor = scgisTilemapServerLayer_DOM.isVisible ? dark : normal
+        //btn.backgroundColor = scgisTilemapServerLayer_DOM.isVisible ? dark : normal
+        if scgisTilemapServerLayer_DOM.isVisible {
+            btn.backgroundColor = dark
+            btn.setImage(UIImage(named: "check"), for: .normal)
+        } else {
+            btn.backgroundColor = normal
+            btn.setImage(UIImage(named: "uncheck"), for: .normal)
+        }
     }
 
     private func setupAddEventButton(pView : UIView){

@@ -132,7 +132,9 @@ extension TaskSBViewController{
                 if let status = nStatus{
                     if(status != 0){
                         if let msg = nMsg{
-                            AlertWithNoButton(view: self!, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
+                            if let xself = self {
+                                AlertWithNoButton(view: xself, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
+                            }
                         }
                         self?.changeTitle(isLoad: false)
                         self?.view.isUserInteractionEnabled = true
@@ -247,7 +249,9 @@ extension TaskSBViewController{
                 if let status = nStatus{
                     if(status != 0){
                         if let msg = nMsg{
-                            AlertWithNoButton(view: self!, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
+                            if let xself = self {
+                                AlertWithNoButton(view: xself, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
+                            }
                         }
                         self?.changeTitle(isLoad: false)
                         self?.view.isUserInteractionEnabled = true
@@ -331,13 +335,19 @@ extension TaskSBViewController{
                 if let status = nStatus{
                     if(status != 0){
                         if let msg = nMsg{
-                            AlertWithNoButton(view: self!, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
+                            if let xself = self {
+                                AlertWithNoButton(view: xself, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
+                            }
                         }
                         self?.changeTitle(isLoad: false)
                         self?.view.isUserInteractionEnabled = true
                         return
                     }else{
-                        self?.taskModel = TaskModel(isStarted: false, tid: self?.taskModel.taskid, uid: self?.taskModel.userid, tName: "", tType: self?.taskModel.taskTypeCode, tLineCode: self?.taskModel.taskLineCode, startTime: Date(), remark: "")
+                        var now = Date()
+                        now.addTimeInterval(TimeInterval(Double(TimeZone.current.secondsFromGMT())))
+                        let dateTxt = getDateFormatter(dateFormatter: "yyyyMMdd").string(from: now)
+                        
+                        self?.taskModel = TaskModel(isStarted: false, tid: self?.taskModel.taskid, uid: self?.taskModel.userid, tName: dateTxt, tType: self?.taskModel.taskTypeCode, tLineCode: self?.taskModel.taskLineCode, startTime: Date(), remark: "")
                         self?.setTaskView(model: (self?.taskModel)!)
                     }
                 }else{

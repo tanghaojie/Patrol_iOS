@@ -211,21 +211,21 @@ extension RegistViewController{
                 if let status = nStatus{
                     if(status != 0){
                         if let msg = nMsg{
-                            //AlertWithNoButton(view: self, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
-                            AlertWithUIAlertAction(view: self!, title: msg_Remind, message: msg, preferredStyle: .alert ,
-                                                   uiAlertAction: UIAlertAction(title: msg_OK, style: UIAlertActionStyle.default, handler: nil))
+                            if let xself = self {
+                                AlertWithUIAlertAction(view: xself, title: msg_Remind, message: msg, preferredStyle: .alert , uiAlertAction: UIAlertAction(title: msg_OK, style: UIAlertActionStyle.default, handler: nil))
+                            }
                         }
                         self?.activity.stopAnimating()
                         self?.view.isUserInteractionEnabled = true
 
                         return
                     }
-                    
-                    AlertWithUIAlertAction(view: self!, title: msg_Remind, message: msg_RegistSuccess, preferredStyle: .alert ,
-                                           uiAlertAction: UIAlertAction(title: msg_OK, style: UIAlertActionStyle.default, handler: { [weak self] (alertAction: UIAlertAction) -> Void in
+                    if let xself = self {
+                        AlertWithUIAlertAction(view: xself, title: msg_Remind, message: msg_RegistSuccess, preferredStyle: .alert , uiAlertAction: UIAlertAction(title: msg_OK, style: UIAlertActionStyle.default, handler: { [weak self] (alertAction: UIAlertAction) -> Void in
                                                 self?.delegate?.clearUsernamePassword()
                                                 self?.dismiss(animated: true, completion: nil)
                                            }))
+                    }
                     
                     self?.activity.stopAnimating()
                     self?.view.isUserInteractionEnabled = true
@@ -254,7 +254,9 @@ extension RegistViewController{
                             if let msg = nMsg{
                                 self?.username.layer.borderColor = UIColor.red.cgColor
                                 self?.username.layer.borderWidth = 1
-                                AlertWithNoButton(view: self!, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
+                                if let xself = self {
+                                    AlertWithNoButton(view: xself, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
+                                }
                                 return
                             }
                         }

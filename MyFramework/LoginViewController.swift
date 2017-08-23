@@ -206,7 +206,9 @@ extension LoginViewController {
                 if let status = nStatus{
                     if(status != 0){
                         if let msg = nMsg{
-                            AlertWithNoButton(view: self!, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
+                            if let xself = self {
+                                AlertWithNoButton(view: xself, title: msg, message: nil, preferredStyle: .alert, showTime: 1)
+                            }
                         }
                         
                         self?.activity.stopAnimating()
