@@ -165,7 +165,7 @@ extension LoginViewController {
     
     fileprivate func getLoginRequest(para: String) -> URLRequest{
         var urlRequest = URLRequest(url: URL(string: url_Login)!)
-        urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)
+        urlRequest.timeoutInterval = TimeInterval(kLittleShortTimeoutInterval)
         urlRequest.httpMethod = HttpMethod.Post.rawValue
         urlRequest.httpBody = para.data(using: String.Encoding.utf8)
         urlRequest.httpShouldHandleCookies = true
