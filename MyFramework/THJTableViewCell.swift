@@ -16,7 +16,7 @@ class THJTableViewCell: UITableViewCell {
     var line1: UILabel!
     var line2: UILabel!
     var line3: UILabel!
-    var line4: UIView!
+    var imageViewContainer: UIView!
     var line5: UILabel!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -38,7 +38,7 @@ class THJTableViewCell: UITableViewCell {
             eAddress = event.address!
         }
         line2.text = "事件地址 \(eAddress)"
-        line3.text = "\(event.remark ?? " ")"
+        line3.text = event.remark
         setupImages(imageCount: event.picturecount, prid: event.id, typenum: 1)
         if let date = event.actualtime {
             line5.text = "\(getDateFormatter(dateFormatter: kDateTimeFormate).string(from: date))"
@@ -57,10 +57,12 @@ class THJTableViewCell: UITableViewCell {
             names = names.substring(to: names.index(names.endIndex, offsetBy: -1))
             line2.text = "处理人员 \(names)"
         } else {
-            line2.text = "  "
+            line2.text = nil
         }
-        line3.text = "\(process.remark ?? " ")"
+        line3.text = process.remark
+        
         setupImages(imageCount: process.picturecount, prid: process.id, typenum: 2)
+        
         if let date = process.actualtime {
             line5.text = "\(getDateFormatter(dateFormatter: kDateTimeFormate).string(from: date))"
         }
@@ -116,10 +118,10 @@ extension THJTableViewCell {
     }
     
     private func setupLine4() {
-        line4 = UIView()
+        imageViewContainer = UIView()
         
         //line4.backgroundColor = .darkGray
-        self.addSubview(line4)
+        self.addSubview(imageViewContainer)
     }
     
     private func setupLine5() {
@@ -134,33 +136,37 @@ extension THJTableViewCell {
     
     private func setupConstraints() {
         
-        line1.snp.remakeConstraints({(make) in
+        line1.snp.makeConstraints({(make) in
             make.top.equalTo(20)
             make.left.equalTo(10)
             make.right.equalTo(-10)
         })
         
-        line2.snp.remakeConstraints({(make) in
-            make.top.equalTo(self.line1.snp.bottom).offset(8)
+        line2.snp.makeConstraints({ [weak self] (make) in
+            if self == nil { return }
+            make.top.equalTo(self!.line1.snp.bottom).offset(8)
             make.left.equalTo(10)
             make.right.equalTo(-10)
         })
         
-        line3.snp.remakeConstraints({(make) in
-            make.top.equalTo(self.line2.snp.bottom).offset(8)
+        line3.snp.makeConstraints({ [weak self] (make) in
+            if self == nil { return }
+            make.top.equalTo(self!.line2.snp.bottom).offset(8)
             make.left.equalTo(10)
             make.right.equalTo(-10)
         })
         
-        line4.snp.remakeConstraints({(make) in
-            make.top.equalTo(self.line3.snp.bottom).offset(4)
+        imageViewContainer.snp.makeConstraints({ [weak self] (make) in
+            if self == nil { return }
+            make.top.equalTo(self!.line3.snp.bottom).offset(4)
             make.left.equalTo(10)
             make.right.equalTo(-10)
             make.height.equalTo(4)
         })
         
-        line5.snp.remakeConstraints({(make) in
-            make.top.equalTo(self.line4.snp.bottom).offset(8)
+        line5.snp.makeConstraints({ [weak self] (make) in
+            if self == nil { return }
+            make.top.equalTo(self!.imageViewContainer.snp.bottom).offset(8)
             make.left.equalTo(10)
             make.right.equalTo(-10)
             make.bottom.equalTo(-20)
@@ -168,30 +174,30 @@ extension THJTableViewCell {
     }
     
     fileprivate func setupImages(imageCount: Int, prid: Int, typenum: Int) {
-        if imageCount > 0 && line4.subviews.count < imageCount {
-            line4.snp.remakeConstraints({ [weak self] (make) in
-                make.top.equalTo((self?.line3.snp.bottom)!).offset(8)
-                make.left.equalTo(10)
-                make.right.equalTo(-10)
-                
+        if imageCount > 0 && imageViewContainer.subviews.count < imageCount {
+            imageViewContainer.snp.updateConstraints({ (make) in
                 let h = ceil(Double(imageCount) / 3.0) * 85
                 make.height.equalTo(h)
             })
-            
+
             for index in 0..<imageCount {
                 let x = (index % 3) * 85
                 let y = (index / 3) * 85
                 let imgView = UIImageView(frame: CGRect(x: Double(x) + 2.5, y: Double(y) + 2.5, width: 80, height: 80))
                 imgView.contentMode = .scaleAspectFill
                 imgView.clipsToBounds = true
-                self.line4.addSubview(imgView)
+                imgView.backgroundColor = UIColor(red: CGFloat(index*100), green: CGFloat(index*100), blue: CGFloat(index*100))
+                imgView.tag = index
+                self.imageViewContainer.addSubview(imgView)
             }
 
-            Image.instance.getImageInfo(prid: prid, typenum: typenum){ (uiimage, index) in
+            Image.instance.getImageInfo(prid: prid, typenum: typenum){ [weak self] (uiimage, index) in
                 if index < imageCount {
-                    if let imgView = self.line4.subviews[index] as? UIImageView {
-                        DispatchQueue.main.async {
-                            imgView.image = uiimage
+                    if let imgView = self?.imageViewContainer.subviews[index] as? UIImageView {
+                        if imgView.tag == index {
+                            DispatchQueue.main.async {
+                                imgView.image = uiimage
+                            }
                         }
                     }
                 }
@@ -200,14 +206,22 @@ extension THJTableViewCell {
             let tap = UITapGestureRecognizer(target:self, action:#selector(imageViewTap(_:)))
             tap.numberOfTapsRequired = 1
             tap.numberOfTouchesRequired = 1
-            line4.addGestureRecognizer(tap)
+            imageViewContainer.addGestureRecognizer(tap)
+        } else if imageCount <= 0 {
+            // do not delete the code after 'else if' , it's magic
+            for view in imageViewContainer.subviews {
+                view.removeFromSuperview()
+            }
+            imageViewContainer.snp.updateConstraints({ (make) in
+                make.height.equalTo(4)
+            })
         }
     }
     
     func imageViewTap(_ recognizer: UITapGestureRecognizer){
         
         var imgs = [UIImage]()
-        for subView in line4.subviews {
+        for subView in imageViewContainer.subviews {
             let imgView = subView as? UIImageView
             if let imgV = imgView {
                 if let img = imgV.image {

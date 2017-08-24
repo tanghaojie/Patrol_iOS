@@ -474,19 +474,29 @@ extension MainViewController {
     private func sparseLocationArray() {
         if locationWithDate.count > locationArrayMax {
             dangerLock.lock()
-            if locationWithDate.count > locationArrayMax {
-                var keepCount = 0
-                for i in 0...locationArrayMax - 1{
-                    if keepCount >= locationWithDate.count {
-                        break
+            let nowCount = locationWithDate.count
+            if nowCount > locationArrayMax {
+//                var keepCount = 0
+//                for i in 0...locationArrayMax - 1{
+//                    if keepCount >= locationWithDate.count {
+//                        break
+//                    }
+//                    locationWithDate.remove(at: keepCount)
+//                    if i % 3 == 0 {
+//                        keepCount += 1
+//                    }
+//                }
+                var temp = [TCoordinate]()
+                for i in stride(from: 0, to: nowCount, by: 2) {
+                    if let last = temp.last {
+                        let p2 = locationWithDate[i]
+                        if last.location.longitude == p2.location.longitude && last.location.latitude == p2.location.latitude {
+                            continue
+                        }
                     }
-                    locationWithDate.remove(at: keepCount)
-                    if i % 3 == 0 {
-                        keepCount += 1
-                        print(keepCount)
-                        print(locationWithDate.count)
-                    }
+                    temp.append(locationWithDate[i])
                 }
+                locationWithDate = temp
             }
             dangerLock.unlock()
         }

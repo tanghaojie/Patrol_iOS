@@ -281,14 +281,20 @@ extension EventDetailViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "THJCell") as! THJTableViewCell
-        let any = data[indexPath.row]
-        if let event = any as? JSON_Event {
-            cell.setData(event: event, navigationController: self.navigationController)
-        } else if let process = any as? JSON_Process {
-            cell.setData(process: process, navigationController: self.navigationController)
+        var cell = tableView.cellForRow(at: indexPath)
+        if cell == nil {
+            let xcell = THJTableViewCell(style: .default, reuseIdentifier: "THJCell")
+            
+            let any = data[indexPath.row]
+            if let event = any as? JSON_Event {
+                xcell.setData(event: event, navigationController: self.navigationController)
+            } else if let process = any as? JSON_Process {
+                print("--pid:\(process.id)  -- pic:\(process.picturecount)")
+                xcell.setData(process: process, navigationController: self.navigationController)
+            }
+            cell = xcell
         }
-        return cell
+        return cell!
     }
     
 }

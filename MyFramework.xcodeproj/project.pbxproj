@@ -132,6 +132,7 @@
 		6B2A58CD1F31CD050071C275 /* MapServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapServer.swift; sourceTree = "<group>"; };
 		6B2A58CF1F31D1000071C275 /* JTShowLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTShowLocationViewController.swift; sourceTree = "<group>"; };
 		6B2B08601F02337000B99B5C /* T_User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = T_User.swift; sourceTree = "<group>"; };
+		6B2F8D931F4EA13A001BD243 /* test.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = test.playground; sourceTree = "<group>"; };
 		6B3076841F29D7E2007C5D30 /* EventDealSB.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EventDealSB.storyboard; sourceTree = "<group>"; };
 		6B3076851F29D7E2007C5D30 /* EventDealSBViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDealSBViewController.swift; sourceTree = "<group>"; };
 		6B3AA7A71F4D7AD100EE5A22 /* test.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = test.storyboard; sourceTree = "<group>"; };
@@ -417,6 +418,7 @@
 				6B6F52A31F00EB9000B09846 /* MyFramework-Bridging-Header.h */,
 				6B6C621F1F04DA83000FC91B /* LoginInfo.swift */,
 				6B3AA7A71F4D7AD100EE5A22 /* test.storyboard */,
+				6B2F8D931F4EA13A001BD243 /* test.playground */,
 			);
 			name = SupportingFiles;
 			sourceTree = "<group>";

@@ -89,7 +89,7 @@ extension EventTableViewCell {
     
     private func setupTitle() {
         let w = itemView.frame.width - margin_Content * 2
-        let h: CGFloat = 21
+        let h: CGFloat = 24
         titleLabel = UILabel(frame: CGRect(x: margin_Content, y: margin_Content, width: w, height: h))
         titleLabel.font = UIFont.boldSystemFont(ofSize: 20)
         titleLabel.textColor = UIColor(red: 64, green: 64, blue: 64)
@@ -172,7 +172,7 @@ extension EventTableViewCell {
         let w = bottomView.frame.width / 2
         let h = bottomView.frame.height
         bottomLabel = UILabel(frame: CGRect(x: 0, y: 0, width: w, height: h))
-        bottomLabel.font = UIFont.systemFont(ofSize: 18)
+        bottomLabel.font = UIFont.systemFont(ofSize: 16)
         bottomLabel.textColor = UIColor(red: 155, green: 155, blue: 155)
         bottomView.addSubview(bottomLabel)
     }
@@ -182,7 +182,7 @@ extension EventTableViewCell {
         let x = bottomView.frame.width - w
         let h = bottomView.frame.height
         bootomDateLabel = UILabel(frame: CGRect(x: x, y: 0, width: w, height: h))
-        bootomDateLabel.font = UIFont.systemFont(ofSize: 16)
+        bootomDateLabel.font = UIFont.systemFont(ofSize: 14)
         bootomDateLabel.textColor = UIColor(red: 155, green: 155, blue: 155)
         bottomView.addSubview(bootomDateLabel)
     }
