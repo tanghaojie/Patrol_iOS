@@ -11,7 +11,7 @@ import SwiftyJSON
 
 class TaskSBViewController: UIViewController {
     
-    static let isLog: Bool = true
+    static let isLog: Bool = false
 
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet weak var taskName: UITextField!

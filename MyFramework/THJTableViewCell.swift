@@ -186,12 +186,11 @@ extension THJTableViewCell {
                 let imgView = UIImageView(frame: CGRect(x: Double(x) + 2.5, y: Double(y) + 2.5, width: 80, height: 80))
                 imgView.contentMode = .scaleAspectFill
                 imgView.clipsToBounds = true
-                imgView.backgroundColor = UIColor(red: CGFloat(index*100), green: CGFloat(index*100), blue: CGFloat(index*100))
                 imgView.tag = index
                 self.imageViewContainer.addSubview(imgView)
             }
-
-            Image.instance.getImageInfo(prid: prid, typenum: typenum){ [weak self] (uiimage, index) in
+            
+            Image.instance.getImages(prid: prid, typenum: typenum, useCache: true) { [weak self] (uiimage, index) in
                 if index < imageCount {
                     if let imgView = self?.imageViewContainer.subviews[index] as? UIImageView {
                         if imgView.tag == index {
@@ -202,7 +201,7 @@ extension THJTableViewCell {
                     }
                 }
             }
-            
+
             let tap = UITapGestureRecognizer(target:self, action:#selector(imageViewTap(_:)))
             tap.numberOfTapsRequired = 1
             tap.numberOfTouchesRequired = 1

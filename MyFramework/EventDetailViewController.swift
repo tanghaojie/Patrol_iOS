@@ -289,7 +289,6 @@ extension EventDetailViewController: UITableViewDelegate, UITableViewDataSource 
             if let event = any as? JSON_Event {
                 xcell.setData(event: event, navigationController: self.navigationController)
             } else if let process = any as? JSON_Process {
-                print("--pid:\(process.id)  -- pic:\(process.picturecount)")
                 xcell.setData(process: process, navigationController: self.navigationController)
             }
             cell = xcell

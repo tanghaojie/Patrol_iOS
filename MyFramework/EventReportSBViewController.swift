@@ -177,8 +177,8 @@ extension EventReportSBViewController {
                         let eventId = data["id"].int
                         if let images = self?.eventModel.images {
                             if images.count > 0 {
-                                let thisEventDir = self?.saveImages(eventId: eventId!, images: images)
-                                self?.uploadImages(eventDir: thisEventDir!)
+                                let date = getDateFormatter(dateFormatter: "yyyy-MM-dd+HH:mm:ss").string(from: Date().addingTimeInterval(kTimeInteval))
+                                Image.instance.uploadImages(images: images, prid: String(eventId!), typenum: "1", actualtime: date, compress: Image.instance.wechatCompressImage(originalImg:), isCache: true, imagesUploadComplete: nil)
                             }
                         }
                         if complete != nil {
@@ -194,49 +194,7 @@ extension EventReportSBViewController {
             self?.setLoading(isLoading: false)
         })
     }
-    
-    private func uploadImages(eventDir: String) {
-        var images: [UIImage] = [UIImage]()
-        let enumerator = FileManager.default.enumerator(atPath: eventDir)
-        while let path = enumerator?.nextObject() as? String {
-            let nImage = UIImage(named: "\(eventDir)/\(path)")
-            if let image = nImage {
-                images.append(image)
-            }
-        }
-        if images.count > 0 {
-            let dirName = URL(fileURLWithPath: eventDir).lastPathComponent
-            let uid_eid = dirName.components(separatedBy: "_")
-            if uid_eid.count < 2 {
-                return
-            }
-            let eid = uid_eid[1]
-            let date = getDateFormatter(dateFormatter: "yyyy-MM-dd+HH:mm:ss").string(from: Date().addingTimeInterval(kTimeInteval))
-            Image.instance.uploadImages(images: images, prid: eid, typenum: "1", actualtime: date, imagesUploadComplete: eventImagesUploadCompleted)
-        }
-    }
-    
-    private func saveImages(eventId: Int, images: [UIImage]) -> String {
-        let uid = loginInfo?.userId
-        let directoryName = "\(uid ?? -1)_\(eventId)"
-        var fullDir = cachePath?.appending("/\(imagePathName)")
-        fullDir = fullDir?.appending("/\(directoryName)")
-        Image.instance.saveImages(path: fullDir!, images: images, compressFunc: Image.instance.wechatCompressImage_720(originalImg:))
-        
-        return fullDir!
-    }
-    
-    internal func eventImagesUploadCompleted(eventId: Int) {
-        let uid = loginInfo?.userId
-        let directoryName = "\(uid ?? -1)_\(eventId)"
-        var fullDir = cachePath?.appending("/\(imagePathName)")
-        fullDir = fullDir?.appending("/\(directoryName)")
-        var x = ObjCBool(true)
-        if FileManager.default.fileExists(atPath: fullDir!, isDirectory: &x) {
-            try! FileManager.default.copyItem(atPath: fullDir!, toPath: "\(fullDir!)_")
-        }
-    }
-    
+
     private func getCreateEventRequest() -> URLRequest? {
         var urlRequest = URLRequest(url: URL(string: url_CreateEvent)!)
         urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)

@@ -247,6 +247,7 @@ extension MainViewController {
         if let loca = location {
             let point = AGSPoint(location: loca)
             self.mapView.zoom(toScale: 10000, withCenter: point, animated: true)
+            self.mapView.locationDisplay.autoPanMode = .default
         }
     }
     
@@ -476,16 +477,6 @@ extension MainViewController {
             dangerLock.lock()
             let nowCount = locationWithDate.count
             if nowCount > locationArrayMax {
-//                var keepCount = 0
-//                for i in 0...locationArrayMax - 1{
-//                    if keepCount >= locationWithDate.count {
-//                        break
-//                    }
-//                    locationWithDate.remove(at: keepCount)
-//                    if i % 3 == 0 {
-//                        keepCount += 1
-//                    }
-//                }
                 var temp = [TCoordinate]()
                 for i in stride(from: 0, to: nowCount, by: 2) {
                     if let last = temp.last {

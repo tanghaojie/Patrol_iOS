@@ -14,7 +14,7 @@ class Image {
     
     private init() {}
 
-    func saveImages(path: String, images: [UIImage], compressFunc: (UIImage) -> UIImage?){
+    func saveImages(path: String, images: [UIImage], compressFunc: (UIImage) -> UIImage?) {
         for image in images {
             let nCompressedImg = compressFunc(image)
             if let compressedImg = nCompressedImg {
@@ -206,6 +206,59 @@ class Image {
         }
     }
     
+    private func getImagesRequest(images: [UIImage], prid: String, typenum: String, actualtime: String, compress: ((UIImage) -> UIImage?)? ) -> URLRequest {
+        
+        var urlRequest = URLRequest(url: URL(string: getUploadImage(prid: prid, typenum: typenum, actualtime: actualtime))!)
+        urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)
+        urlRequest.httpMethod = HttpMethod.Post.rawValue
+        urlRequest.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        var body = Data()
+        for image in images {
+            var img = image
+            if let compressing = compress {
+                let i = compressing(img)
+                if i != nil {
+                    img = i!
+                }
+            }
+            let sBody = setImageInfo(image: img)
+            body.append(sBody)
+        }
+        body.append("--\(boundary)--".data(using: .utf8)!)
+        body.append("\r\n".data(using: .utf8)!)
+        let len = String(body.count)
+        urlRequest.setValue(len, forHTTPHeaderField: "Content-Length")
+        urlRequest.httpBody = body
+        
+        return urlRequest
+    }
+    
+    func uploadImages(images: [UIImage], prid: String, typenum: String, actualtime: String, compress: ((UIImage) -> UIImage?)?, isCache: Bool, imagesUploadComplete: ((_ prid: Int) -> Void)?) {
+        
+        let urlRequest = getImagesRequest(images: images, prid: prid, typenum: typenum, actualtime: actualtime, compress: compress)
+        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue.main) {(response : URLResponse?, data : Data?, error : Error?) -> Void in
+            if error != nil { return }
+            if data == nil || data!.isEmpty { return }
+            guard let urlResponse = response else { return }
+            let httpResponse = urlResponse as! HTTPURLResponse
+            let statusCode = httpResponse.statusCode
+            if statusCode != 200 { return }
+            let json = JSON(data : data!)
+            let nStatus = json["status"].int
+            guard let status = nStatus else { return }
+            if status != 0 { return }
+            
+            if isCache {
+                cacheImages(images: images, typenum: typenum, prid: prid, isCover: true)
+            }
+
+            if imagesUploadComplete != nil {
+                imagesUploadComplete?(Int(prid)!)
+            }
+        }
+    }
+    
     func setImageInfo(image: UIImage) -> Data {
         var body = Data()
         let data: Data
@@ -283,6 +336,100 @@ class Image {
                 }
             }
         }.resume()
+    }
+    
+    func getImages(prid: Int, typenum: Int, useCache: Bool, complete: ((UIImage,Int) -> Void)?) {
+        
+        let nurlRequest = getImagesUrlRequest(prid: prid, typenum: typenum)
+        guard let urlRequest = nurlRequest else { return }
+        URLSession.shared.dataTask(with: urlRequest){ (data1, response, error) in
+            if error != nil { return }
+            if data1 == nil || (data1?.isEmpty)!{ return }
+            let json = JSON(data : data1!)
+            if json == JSON.null { return }
+            let data = json["data"]
+            if data == JSON.null { return }
+            let count = data.count
+            
+            if useCache {
+                var cacheImgCount = 0
+                let cachePath = getCacheDirPath(cachePath: getCacheDirPath(), typenum: String(typenum), prid: String(prid), isCover: false)
+                let enumerator = FileManager.default.enumerator(atPath: cachePath)
+                while let _ = enumerator?.nextObject() as? String {
+                    cacheImgCount += 1
+                }
+                if count == cacheImgCount {
+                    var index = 0
+                    let enumerator = FileManager.default.enumerator(atPath: cachePath)
+                    while let filename = enumerator?.nextObject() as? String {
+                        let nImage = UIImage(contentsOfFile: "\(cachePath)/\(filename)")
+                        if let image = nImage {
+                            if let com = complete {
+                                com(image, index)
+                            }
+                        }
+                        index += 1
+                    }
+                } else {
+                    var images = [UIImage]()
+                    for index in 0..<count {
+                        let item = data[index]
+                        if item == JSON.null { continue }
+                        let name = item["path"].string
+                        if name == nil || (name?.isEmpty)! { continue }
+                        let date = getDateFormatter(dateFormatter: "yyyy-MM-dd+HH:mm:ss").string(from: Date().addingTimeInterval(kTimeInteval))
+                        let urlStr = "\(url_Picture)?typenum=\(typenum)&prid=\(prid)&filename=\(name!)&t=\(date)"
+                        let url = URL(string: urlStr)
+                        let data = try? Data(contentsOf: url!)
+                        if data == nil || (data?.isEmpty)! { continue }
+                        let image = UIImage(data: data!)
+                        if let img = image {
+                            images.append(img)
+                            if let com = complete {
+                                com(img, index)
+                            }
+                        }
+                    }
+                    cacheImages(images: images, typenum: String(typenum), prid: String(prid), isCover: true)
+                }
+                return
+            }
+            for index in 0..<count {
+                let item = data[index]
+                if item == JSON.null { continue }
+                let name = item["path"].string
+                if name == nil || (name?.isEmpty)! { continue }
+                let date = getDateFormatter(dateFormatter: "yyyy-MM-dd+HH:mm:ss").string(from: Date().addingTimeInterval(kTimeInteval))
+                let urlStr = "\(url_Picture)?typenum=\(typenum)&prid=\(prid)&filename=\(name!)&t=\(date)"
+                let url = URL(string: urlStr)
+                let data = try? Data(contentsOf: url!)
+                if data == nil || (data?.isEmpty)! { continue }
+                let image = UIImage(data: data!)
+                if let img = image {
+                    if let com = complete {
+                        com(img, index)
+                    }
+                }
+            }
+        }.resume()
+    }
+    
+    private func getImagesUrlRequest(prid: Int, typenum: Int) -> URLRequest? {
+        var urlRequest = URLRequest(url: URL(string: url_QueryImage)!)
+        urlRequest.timeoutInterval = TimeInterval(kLongTimeoutInterval)
+        urlRequest.httpMethod = HttpMethod.Post.rawValue
+        urlRequest.httpShouldHandleCookies = true
+        urlRequest.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        var jsonDic = Dictionary<String,Any>()
+        jsonDic["prid"] = prid
+        jsonDic["typenum"] = typenum
+        let jsonData = try? JSONSerialization.data(withJSONObject: jsonDic, options: .prettyPrinted)
+        if jsonData == nil {
+            return nil
+        }
+        urlRequest.httpBody = jsonData!
+        
+        return urlRequest
     }
     
 }
