@@ -9,3 +9,4 @@
 import Foundation
 
 let docPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first
+let cachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first

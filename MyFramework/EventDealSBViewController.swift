@@ -152,8 +152,7 @@ extension EventDealSBViewController {
                     self?.setLoading(isLoading: false)
                     return
                 }
-                
-                print("create process success \(Date().addingTimeInterval(kTimeInteval))")
+
                 let json = JSON(data : data!)
                 let nStatus = json["status"].int
                 let nMsg = json["msg"].string
@@ -173,8 +172,17 @@ extension EventDealSBViewController {
                         let nId = data["id"].int
                         if let processId = nId {
                             if (self?.imageArray.count)! > 0 {
-                                let thisProcessDir = self?.saveImages(processId: processId, images: (self?.imageArray)!)
-                                self?.uploadImages(processDir: thisProcessDir!)
+                                var images = [UIImage]()
+                                if let arr  = self?.imageArray {
+                                    for item in arr {
+                                        let img = item as! UIImage
+                                        if img.accessibilityIdentifier != self?.defaultAddImageAccessibilityIdentifier {
+                                            images.append(img)
+                                        }
+                                    }
+                                    let date = getDateFormatter(dateFormatter: "yyyy-MM-dd+HH:mm:ss").string(from: Date().addingTimeInterval(kTimeInteval))
+                                    Image.instance.uploadImages(images: images, prid: String(processId), typenum: "2", actualtime: date, compress: Image.instance.wechatCompressImage(originalImg:), isCache: true, imagesUploadComplete: nil)
+                                }
                             }
                             if complete != nil {
                                 complete!()
@@ -233,56 +241,7 @@ extension EventDealSBViewController {
             success()
         }
     }
-    
-    private func uploadImages(processDir: String) {
-        var images: [UIImage] = [UIImage]()
-        let enumerator = FileManager.default.enumerator(atPath: processDir)
-        while let path = enumerator?.nextObject() as? String {
-            let nImage = UIImage(named: "\(processDir)/\(path)")
-            if let image = nImage {
-                images.append(image)
-            }
-        }
-        if images.count > 0 {
-            let dirName = URL(fileURLWithPath: processDir).lastPathComponent
-            let uid_pid = dirName.components(separatedBy: "_")
-            if uid_pid.count < 2 {
-                return
-            }
-            let pid = uid_pid[1]
-            let date = getDateFormatter(dateFormatter: "yyyy-MM-dd+HH:mm:ss").string(from: Date().addingTimeInterval(kTimeInteval))
-            Image.instance.uploadImages(images: images, prid: pid, typenum: "2", actualtime: date, imagesUploadComplete: processImagesUploadCompleted)
-        }
-    }
-    
-    private func saveImages(processId: Int, images: NSMutableArray) -> String {
-        let uid = loginInfo?.userId
-        let directoryName = "\(uid ?? -1)_\(processId)"
-        var fullDir = cachePath?.appending("/\(imagePathName)")
-        fullDir = fullDir?.appending("/\(directoryName)")
-        var uiImages = [UIImage]()
-        for item in images {
-            let img = item as! UIImage
-            if img.accessibilityIdentifier != defaultAddImageAccessibilityIdentifier {
-                uiImages.append(img)
-            }
-        }
-        Image.instance.saveImages(path: fullDir!, images: uiImages, compressFunc: Image.instance.wechatCompressImage_720(originalImg:))
-        
-        return fullDir!
-    }
-    
-    internal func processImagesUploadCompleted(processId: Int) {
-        let uid = loginInfo?.userId
-        let directoryName = "\(uid ?? -1)_\(processId)"
-        var fullDir = cachePath?.appending("/\(imagePathName)")
-        fullDir = fullDir?.appending("/\(directoryName)")
-        var x = ObjCBool(true)
-        if FileManager.default.fileExists(atPath: fullDir!, isDirectory: &x) {
-            try! FileManager.default.copyItem(atPath: fullDir!, toPath: "\(fullDir!)_")
-        }
-    }
-    
+
     private func getLocationDictionary(location: CLLocationCoordinate2D) -> Dictionary<String,Any> {
         var locationDic = Dictionary<String,Any>()
         locationDic["x"] = location.longitude
@@ -318,9 +277,6 @@ extension EventDealSBViewController {
         }
     }
     
-    private func getImagePath() -> String {
-        return "\(cachePath ?? "")/\(imagePathName)"
-    }
     
 }
 
@@ -442,8 +398,6 @@ extension EventDealSBViewController: UICollectionViewDelegate, UICollectionViewD
         if self.dealImage.frame.height != CGFloat(height) {
             
             self.dealImageHeight.constant = CGFloat(height)
-//            self.dealImage.frame = CGRect(x: self.dealImage.frame.minX, y: self.dealImage.frame.minY, width: self.dealImage.frame.width, height: CGFloat(height))
-//            self.commit.frame = CGRect(x: self.commit.frame.minX, y: self.dealImage.frame.maxY + 10, width: self.commit.frame.width, height: self.commit.frame.height)
         }
         return count
     }

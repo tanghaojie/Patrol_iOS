@@ -157,11 +157,11 @@ extension TaskSBViewController{
                         self?.taskModel = TaskModel(isStarted: true, tid: taskId!, uid: uId!, tName: tName!, tType: tType!, tLineCode: tTaskLine, startTime: startTime!, remark: remark!)
                         self?.setTaskView(model: (self?.taskModel)!)
                     }else{
-                        var now = Date()
-                        now.addTimeInterval(TimeInterval(Double(TimeZone.current.secondsFromGMT())))
-                        let dateTxt = getDateFormatter(dateFormatter: "yyyyMMdd").string(from: now)
-                        self?.taskModel = TaskModel(isStarted: false, tid: nil, uid: nil, tName: dateTxt, tType: nil, tLineCode: nil, startTime: nil, remark: nil)
+                        self?.taskModel = TaskModel(isStarted: false, tid: nil, uid: nil, tName: nil, tType: nil, tLineCode: nil, startTime: nil, remark: nil)
+                        
                         self?.setTaskView(model: (self?.taskModel)!)
+                        self?.viewDidAppearSetTableView()
+                        self?.setupTaskName()
                     }
                 }else{
                     // running there must be webapi error
@@ -373,7 +373,7 @@ extension TaskSBViewController{
         setupTaskName()
     }
     
-    private func setupTaskName() {
+    fileprivate func setupTaskName() {
         if !self.taskModel.isStarted {
             var now = Date()
             now.addTimeInterval(TimeInterval(Double(TimeZone.current.secondsFromGMT())))
@@ -381,7 +381,7 @@ extension TaskSBViewController{
         }
     }
     
-    private func viewDidAppearSetTableView() {
+    fileprivate func viewDidAppearSetTableView() {
         if((loginInfo?.config?.taskType.count)! > 0){
             if(taskType.title(for: .normal) == nil && !self.taskModel.isStarted){
                 let code = loginInfo?.config?.taskType[0].code

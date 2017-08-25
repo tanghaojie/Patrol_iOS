@@ -151,7 +151,7 @@ extension MainViewController {
         }
         btn1.addTarget(self, action: #selector(layerBtn1Action(btn:)), for: .touchUpInside)
         
-        let btn2 = UIButton(frame: CGRect(x: 0, y: 50, width: w, height: 50))
+        let btn2 = UIButton(frame: CGRect(x: 0, y: 100, width: w, height: 50))
         btn2.setTitle("管线", for: .normal)
         btn2.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         if featureLayer.isVisible {
@@ -163,7 +163,7 @@ extension MainViewController {
         }
         btn2.addTarget(self, action: #selector(layerBtn2Action(btn:)), for: .touchUpInside)
         
-        let btn3 = UIButton(frame: CGRect(x: 0, y: 100, width: w, height: 50))
+        let btn3 = UIButton(frame: CGRect(x: 0, y: 50, width: w, height: 50))
         btn3.setTitle("影像", for: .normal)
         btn3.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         if scgisTilemapServerLayer_DOM.isVisible {
@@ -247,6 +247,7 @@ extension MainViewController {
         if let loca = location {
             let point = AGSPoint(location: loca)
             self.mapView.zoom(toScale: 10000, withCenter: point, animated: true)
+            self.mapView.locationDisplay.autoPanMode = .default
         }
     }
     
@@ -474,19 +475,19 @@ extension MainViewController {
     private func sparseLocationArray() {
         if locationWithDate.count > locationArrayMax {
             dangerLock.lock()
-            if locationWithDate.count > locationArrayMax {
-                var keepCount = 0
-                for i in 0...locationArrayMax - 1{
-                    if keepCount >= locationWithDate.count {
-                        break
+            let nowCount = locationWithDate.count
+            if nowCount > locationArrayMax {
+                var temp = [TCoordinate]()
+                for i in stride(from: 0, to: nowCount, by: 2) {
+                    if let last = temp.last {
+                        let p2 = locationWithDate[i]
+                        if last.location.longitude == p2.location.longitude && last.location.latitude == p2.location.latitude {
+                            continue
+                        }
                     }
-                    locationWithDate.remove(at: keepCount)
-                    if i % 3 == 0 {
-                        keepCount += 1
-                        print(keepCount)
-                        print(locationWithDate.count)
-                    }
+                    temp.append(locationWithDate[i])
                 }
+                locationWithDate = temp
             }
             dangerLock.unlock()
         }

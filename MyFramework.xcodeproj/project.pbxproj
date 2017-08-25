@@ -30,6 +30,7 @@
 		6B2A58CE1F31CD060071C275 /* MapServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2A58CD1F31CD050071C275 /* MapServer.swift */; };
 		6B2A58D01F31D1000071C275 /* JTShowLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2A58CF1F31D1000071C275 /* JTShowLocationViewController.swift */; };
 		6B2B08611F02337000B99B5C /* T_User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2B08601F02337000B99B5C /* T_User.swift */; };
+		6B2F8D951F4ED51C001BD243 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2F8D941F4ED51C001BD243 /* Cache.swift */; };
 		6B3076861F29D7E2007C5D30 /* EventDealSB.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B3076841F29D7E2007C5D30 /* EventDealSB.storyboard */; };
 		6B3076871F29D7E2007C5D30 /* EventDealSBViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3076851F29D7E2007C5D30 /* EventDealSBViewController.swift */; };
 		6B3AA7A81F4D7AD100EE5A22 /* test.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B3AA7A71F4D7AD100EE5A22 /* test.storyboard */; };
@@ -132,6 +133,8 @@
 		6B2A58CD1F31CD050071C275 /* MapServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapServer.swift; sourceTree = "<group>"; };
 		6B2A58CF1F31D1000071C275 /* JTShowLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTShowLocationViewController.swift; sourceTree = "<group>"; };
 		6B2B08601F02337000B99B5C /* T_User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = T_User.swift; sourceTree = "<group>"; };
+		6B2F8D931F4EA13A001BD243 /* test.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = test.playground; sourceTree = "<group>"; };
+		6B2F8D941F4ED51C001BD243 /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		6B3076841F29D7E2007C5D30 /* EventDealSB.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EventDealSB.storyboard; sourceTree = "<group>"; };
 		6B3076851F29D7E2007C5D30 /* EventDealSBViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDealSBViewController.swift; sourceTree = "<group>"; };
 		6B3AA7A71F4D7AD100EE5A22 /* test.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = test.storyboard; sourceTree = "<group>"; };
@@ -417,6 +420,7 @@
 				6B6F52A31F00EB9000B09846 /* MyFramework-Bridging-Header.h */,
 				6B6C621F1F04DA83000FC91B /* LoginInfo.swift */,
 				6B3AA7A71F4D7AD100EE5A22 /* test.storyboard */,
+				6B2F8D931F4EA13A001BD243 /* test.playground */,
 			);
 			name = SupportingFiles;
 			sourceTree = "<group>";
@@ -449,6 +453,7 @@
 				6BE3751D1F175B47007B95BF /* ShareData.swift */,
 				6B2A58CD1F31CD050071C275 /* MapServer.swift */,
 				6BDEB6001F380738008E0050 /* TxtHelper.swift */,
+				6B2F8D941F4ED51C001BD243 /* Cache.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -660,6 +665,7 @@
 				6B65CCA41F332ADA00459F9A /* JTPresentAnimatedTransitioning.swift in Sources */,
 				6B5590461EF12078008149FD /* LoginViewController.swift in Sources */,
 				6BAAD82E1EFCA75D00FFE413 /* Log.swift in Sources */,
+				6B2F8D951F4ED51C001BD243 /* Cache.swift in Sources */,
 				6B9585F11F15C424001A24A2 /* TaskModel.swift in Sources */,
 				6B2B08611F02337000B99B5C /* T_User.swift in Sources */,
 				6BB187361F21D83B00E14239 /* JSON_EventList.swift in Sources */,

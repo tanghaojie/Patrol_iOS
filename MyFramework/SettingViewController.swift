@@ -48,12 +48,21 @@ class SettingViewController: UIViewController {
         urlRequest.timeoutInterval = TimeInterval(kShortTimeoutInterval)
         urlRequest.httpMethod = HttpMethod.Get.rawValue
         urlRequest.httpShouldHandleCookies = true
+        urlRequest.cachePolicy = .reloadIgnoringCacheData
         var response : URLResponse?
         let data = try? NSURLConnection.sendSynchronousRequest(urlRequest, returning: &response)
         if data == nil || data!.isEmpty {
             return false
         } else {
-            return true
+            let json = JSON(data!)
+            let nstatus = json["status"].int
+            guard let status = nstatus else {
+                return false
+            }
+            if status == 0 {
+                return true
+            }
+            return false
         }
     }
     

@@ -10,5 +10,5 @@ import Foundation
 
 var dangerLock = NSLock()
 
-let locationArrayMax = 300
+let locationArrayMax = 180
 var locationWithDate = [TCoordinate]()
