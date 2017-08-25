@@ -151,7 +151,7 @@ extension MainViewController {
         }
         btn1.addTarget(self, action: #selector(layerBtn1Action(btn:)), for: .touchUpInside)
         
-        let btn2 = UIButton(frame: CGRect(x: 0, y: 50, width: w, height: 50))
+        let btn2 = UIButton(frame: CGRect(x: 0, y: 100, width: w, height: 50))
         btn2.setTitle("管线", for: .normal)
         btn2.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         if featureLayer.isVisible {
@@ -163,7 +163,7 @@ extension MainViewController {
         }
         btn2.addTarget(self, action: #selector(layerBtn2Action(btn:)), for: .touchUpInside)
         
-        let btn3 = UIButton(frame: CGRect(x: 0, y: 100, width: w, height: 50))
+        let btn3 = UIButton(frame: CGRect(x: 0, y: 50, width: w, height: 50))
         btn3.setTitle("影像", for: .normal)
         btn3.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         if scgisTilemapServerLayer_DOM.isVisible {

@@ -280,7 +280,7 @@ class Image {
         return body
     }
     
-    func getImageInfo(prid: Int, typenum: Int, complete: ((UIImage,Int) -> Void)?) {
+    func getImageInfo(prid: Int, typenum: Int, useSmallPic: Bool = false, complete: ((UIImage,Int) -> Void)?) {
         var urlRequest = URLRequest(url: URL(string: url_QueryImage)!)
         urlRequest.timeoutInterval = TimeInterval(kLongTimeoutInterval)
         urlRequest.httpMethod = HttpMethod.Post.rawValue
@@ -322,7 +322,12 @@ class Image {
                     continue
                 }
                 let date = getDateFormatter(dateFormatter: "yyyy-MM-dd+HH:mm:ss").string(from: Date().addingTimeInterval(kTimeInteval))
-                let urlStr = "\(url_Picture)?typenum=\(typenum)&prid=\(prid)&filename=\(name!)&t=\(date)"
+                var urlStr = ""
+                if useSmallPic {
+                    urlStr = "\(url_Picture)?typenum=\(typenum)&prid=\(prid)&filename=m\(name!)&t=\(date)"
+                } else {
+                    urlStr = "\(url_Picture)?typenum=\(typenum)&prid=\(prid)&filename=\(name!)&t=\(date)"
+                }
                 let url = URL(string: urlStr)
                 let data = try? Data(contentsOf: url!)
                 if data == nil || (data?.isEmpty)! {

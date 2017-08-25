@@ -48,7 +48,13 @@ class EventTableViewCell: UITableViewCell {
     
     private func setDataToUI() {
         titleLabel.text = self.data.eventname
-        bottomLabel.text = self.data.statecode_alias
+        let stateCodeAlias = self.data.statecode_alias
+        bottomLabel.text = stateCodeAlias
+        if stateCodeAlias == "处理中" {
+            bottomLabel.textColor = .red
+        } else {
+            bottomLabel.textColor = UIColor(red: 155, green: 155, blue: 155)
+        }
         mainViewTopLeftLabel.text = self.data.typecode_alias
         mainViewTopRightLabel.text = self.data.levelcode_alias
         if let remark = self.data.remark {

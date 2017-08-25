@@ -243,12 +243,16 @@ extension LoginViewController {
                         self?.present(MainViewController(), animated: true, completion: nil)
                     }else{
                         // running there must be webapi error
+                        self?.activity.stopAnimating()
+                        self?.view.isUserInteractionEnabled = true
                     }
                 }else{
                     // running there must be webapi error
+                    self?.activity.stopAnimating()
+                    self?.view.isUserInteractionEnabled = true
                 }
             }else{
-                self?.alertAndLog(msg: msg_ServerNoResponse, showTime: 0.5, log: log_ServerNoResponse + url_Login)
+                self?.alertAndLog(msg: msg_ServerNoResponse, showTime: 1, log: log_ServerNoResponse + url_Login)
                 return
             }
         })

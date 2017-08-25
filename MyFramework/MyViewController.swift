@@ -132,7 +132,7 @@ extension MyViewController {
 extension MyViewController {
     
     fileprivate func HeadPortrait() {
-        Image.instance.getImageInfo(prid: (loginInfo?.userId)!, typenum: 0) { [weak self] (image,index) in
+        Image.instance.getImageInfo(prid: (loginInfo?.userId)!, typenum: 0, useSmallPic: true) { [weak self] (image,index) in
             DispatchQueue.main.async {
                 //imageView.image = image
                 self?.headPotraitImageView?.image = image
