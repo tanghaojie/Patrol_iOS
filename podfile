@@ -6,5 +6,4 @@ target 'MyFramework' do
 	pod 'SwiftyJSON'
         pod 'MJRefresh'
         pod 'SnapKit', '~> 3.2.0'
-	pod 'MLeaksFinder'
 end

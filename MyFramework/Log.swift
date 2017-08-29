@@ -17,7 +17,7 @@ public func printLog<T>(message: T, file: String = #file, function: String = #fu
 
     let dateFormat = DateFormatter()
     dateFormat.dateFormat = kDateTimeFormate
-    var now = Date()
+    let now = Date()
     //now.addTimeInterval(kTimeInteval)
     let dateStr = dateFormat.string(from: now)
     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first
