@@ -14,6 +14,18 @@ class JTTabbarView: UIView {
     fileprivate var images : [String?]
     fileprivate var jumps : [(()->())?]
     
+    init(width: Int, height: Int, titles : [String] , images : [String?] , jumps : [(()->())?] ){
+        self.titles = titles
+        self.images = images
+        self.jumps = jumps
+        
+        super.init(frame: CGRect(x: 0, y: 0, width: width, height: height))
+
+        self.backgroundColor = UIColor(red: 37, green: 140, blue: 201)
+        self.jumps = jumps
+        setupUI()
+    }
+    
     init(frame : CGRect,titles : [String] , images : [String?] , jumps : [(()->())?] ){
         self.titles = titles
         self.images = images

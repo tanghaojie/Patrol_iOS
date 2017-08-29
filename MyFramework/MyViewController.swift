@@ -28,6 +28,10 @@ class MyViewController: UIViewController {
         self.tableView.delegate = self
         self.tableView.dataSource = self
     }
+    
+    deinit {
+        print("--release MyViewController")
+    }
 
 }
 
@@ -143,26 +147,23 @@ extension MyViewController {
     private func getCacheSize(complete: @escaping (CGFloat) -> Void) {
         DispatchQueue.global().async {
             let fileManager = FileManager.default
-            let cache = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
-            let directoryEnumerator = fileManager.enumerator(atPath: cache!)
-            
+            var directoryEnumerator = fileManager.enumerator(atPath: cachePath!)
+            var isDir = ObjCBool(true)
             var total: CGFloat = 0
-            
             while let path = directoryEnumerator?.nextObject() as? String {
-                var isDir = ObjCBool(true)
-                let full = cache?.appending("/\(path)")
-                if fileManager.fileExists(atPath: full!, isDirectory: &isDir) {
-                    if !isDir.boolValue {
-                        let nAttributes = try? fileManager.attributesOfItem(atPath: full!)
-                        if let attributes = nAttributes {
-                            let size = attributes[FileAttributeKey.size]
-                            if let s = size {
-                                total += s as! CGFloat
-                            }
-                        }
-                    }
+                isDir = ObjCBool(true)
+                let nFull = cachePath?.appending("/\(path)")
+                guard let full = nFull else { continue }
+                guard fileManager.fileExists(atPath: full, isDirectory: &isDir) else { continue }
+                guard !isDir.boolValue else { continue }
+                let nAttributes = try? fileManager.attributesOfItem(atPath: full)
+                guard let attributes = nAttributes else { continue }
+                let size = attributes[FileAttributeKey.size]
+                if let s = size {
+                    total += s as! CGFloat
                 }
             }
+            directoryEnumerator = nil
             complete(total)
         }
     }
@@ -278,11 +279,11 @@ extension MyViewController: UITableViewDelegate, UITableViewDataSource {
                             let full = cache?.appending("/\(subPath)")
                             if fileManager.fileExists(atPath: full!) {
                                 try? fileManager.removeItem(atPath: full!)
-                                self?.getCacheAndShowUI()
                             }
                         }
                     }
                 }
+                self?.getCacheAndShowUI()
             }
             let actionCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)
             actionController.addAction(actionCancel)

@@ -46,6 +46,10 @@ class EventDetailViewController: UIViewController, JTViewControllerInteractiveTr
         super.init(nibName: nil, bundle: nil)
     }
     
+    deinit {
+        print("--release EventDetailViewController")
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -66,10 +70,7 @@ class EventDetailViewController: UIViewController, JTViewControllerInteractiveTr
         
         setupNavigationbar(isBig: true)
     }
-    
-    deinit {
-        print("---released EventDetailViewController")
-    }
+
 }
 
 extension EventDetailViewController {

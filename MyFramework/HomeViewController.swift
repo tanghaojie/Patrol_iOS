@@ -21,6 +21,10 @@ class HomeViewController: UINavigationController, UIViewControllerTransitioningD
 
         self.pushViewController(MyViewController(), animated: true)
     }
+    
+    deinit {
+        print("--release HomeViewController")
+    }
 
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         

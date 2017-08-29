@@ -39,7 +39,7 @@ class EventOverViewViewController: UIViewController, UIGestureRecognizerDelegate
     }
     
     deinit {
-        print("---released EventOverViewViewController")
+        print("--release EventOverViewViewController")
     }
 
 }
@@ -239,7 +239,9 @@ extension EventOverViewViewController {
             return
         }
         queryRelationEventList(request: request!, complete: { [weak self] (eventList: JSON_EventList) in
-            
+            if self == nil {
+                return
+            }
             if refresh {
                 self?.total = 0
                 self?.pageNum = 1

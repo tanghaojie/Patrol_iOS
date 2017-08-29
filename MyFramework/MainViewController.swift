@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import SnapKit
 
 class MainViewController: UIViewController, AGSMapViewLayerDelegate {
 
@@ -37,6 +38,10 @@ class MainViewController: UIViewController, AGSMapViewLayerDelegate {
         
         JTLocationManager.instance.startUpdatingLocation()
         JTLocationManager.instance.startUpdatingHeading()
+    }
+    
+    deinit {
+        print("--release MainViewController")
     }
     
     func selfDismiss() {
@@ -84,8 +89,8 @@ extension MainViewController {
     private func setupMapView(){
         
         SCGISUtility.registerESRI()
-
-        mapView.frame = CGRect(x: 0, y: 0, width: kScreenWidth, height: kScrennHeight - kMainBottomTabBarHeight)
+        
+        //mapView.frame = CGRect(x: 0, y: 0, width: kScreenWidth, height: kScrennHeight - kMainBottomTabBarHeight)
         mapView.layerDelegate = self
         mapView.gridLineWidth = 10
         mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
@@ -111,6 +116,12 @@ extension MainViewController {
         }
 
         self.view.addSubview(mapView)
+        mapView.snp.makeConstraints({ (make) in
+            make.top.equalTo(0)
+            make.left.equalTo(0)
+            make.right.equalTo(0)
+            make.bottom.equalTo(-kMainBottomTabBarHeight)
+        })
         
         setupLayerButton(pView : mapView)
         setupAddEventButton(pView : mapView)
@@ -232,7 +243,8 @@ extension MainViewController {
     }
     
     private func setupLocationButton(pView : UIView) {
-        let btn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: pView.frame.height - 40 - 20, width: 40, height: 40))
+        //let btn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: kScrennHeight - 40 - 20, width: 40, height: 40))
+        let btn = UIButton()
         btn.backgroundColor = .white
         btn.layer.cornerRadius = 20
         btn.layer.masksToBounds = true
@@ -240,20 +252,26 @@ extension MainViewController {
         btn.setImage(img, for: .normal)
         btn.addTarget(self, action: #selector(locationButtonClicked), for: .touchUpInside)
         pView.addSubview(btn)
+        btn.snp.makeConstraints({ (make) in
+            make.width.equalTo(40)
+            make.height.equalTo(40)
+            make.right.equalTo(-20)
+            make.bottom.equalTo(-20)
+        })
+        pView.bringSubview(toFront: btn)
     }
     
     func locationButtonClicked() {
         let location = JTLocationManager.instance.location
         if let loca = location {
             let point = AGSPoint(location: loca)
-            self.mapView.zoom(toScale: 10000, withCenter: point, animated: true)
+            self.mapView.center(at: point, animated: true)
             self.mapView.locationDisplay.autoPanMode = .default
         }
     }
     
     private func setupBottomBar(){
-        let frame = CGRect(x: 0, y: kScrennHeight - kMainBottomTabBarHeight, width: kScreenWidth, height: kMainBottomTabBarHeight)
-        
+
         let titles = ["任务","事件","我的"]
         let images = ["task","event","my"]
         let task: (() -> ())? = { [weak self] in
@@ -268,8 +286,16 @@ extension MainViewController {
         
         let jumps = [ task , event , home ]
 
-        let customTBV = JTTabbarView(frame: frame, titles: titles , images : images ,jumps : jumps)
+        //let frame = CGRect(x: 0, y: kScrennHeight - kMainBottomTabBarHeight, width: kScreenWidth, height: kMainBottomTabBarHeight)
+        //let customTBV = JTTabbarView(frame: frame, titles: titles , images : images ,jumps : jumps)
+        let customTBV = JTTabbarView(width: Int(kScreenWidth), height: Int(kMainBottomTabBarHeight), titles: titles , images : images ,jumps : jumps)
         self.view.addSubview(customTBV)
+        customTBV.snp.makeConstraints({ (make) in
+            make.bottom.equalTo(0)
+            make.left.equalTo(0)
+            make.right.equalTo(0)
+            make.height.equalTo(kMainBottomTabBarHeight)
+        })
     }
 }
 
@@ -441,6 +467,8 @@ extension MainViewController {
             }
         }
     }
+    
+   
     
     private func getLocations_Dic() -> [Dictionary<String,Any>]? {
         let count = locationWithDate.count

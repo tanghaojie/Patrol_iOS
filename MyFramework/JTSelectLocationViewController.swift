@@ -54,7 +54,7 @@ extension JTSelectLocationViewController {
         mapView.maxScale = maxScale
         mapView.minScale = minScale
         
-        //mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
+        mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
         
         let scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DLG, token: nil, cacheType: SCGISTilemapCacheTypeSqliteDB)
         if(scgisTilemapServerLayer != nil){
