@@ -243,6 +243,7 @@ extension EventReportSBViewController {
     private func setModel(){
         eventModel.eventName = eventName.text
         if eventModel.location == nil {
+
             eventModel.location = JTLocationManager.instance.location?.coordinate
         }
         eventModel.address = strLocation.text

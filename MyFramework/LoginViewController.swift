@@ -89,7 +89,8 @@ extension LoginViewController: LoginDelegate {
             loginInfo?.config = Config(id: -1)
             
             //self.saveDefaultUsernamePassword(username: user!, password: pass!)
-            self.present(MainViewController(), animated: true, completion: nil)
+            let main = MainViewController()
+            self.present(main, animated: true, completion: nil)
             return
         }
         
@@ -106,10 +107,10 @@ extension LoginViewController: LoginDelegate {
     }
     
     fileprivate func registeButtonClick() {
-        let sb = UIStoryboard(name: "Regist", bundle: nil)
-        let vc = sb.instantiateViewController(withIdentifier: "RegistViewController") as! RegistViewController
-        vc.delegate = self
-        self.present(vc, animated: true, completion: nil)
+//        let sb = UIStoryboard(name: "Regist", bundle: nil)
+//        let vc = sb.instantiateViewController(withIdentifier: "RegistViewController") as! RegistViewController
+//        vc.delegate = self
+//        self.present(vc, animated: true, completion: nil)
     }
     
     fileprivate func settingButtonClick() {
@@ -240,7 +241,9 @@ extension LoginViewController {
                         }
                         
                         self?.saveDefaultUsernamePassword(username: user!, password: pass!)
-                        self?.present(MainViewController(), animated: true, completion: nil)
+                        
+                        let main = MainViewController()
+                        self?.present(main, animated: true, completion: nil)
                     }else{
                         // running there must be webapi error
                         self?.activity.stopAnimating()

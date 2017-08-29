@@ -14,6 +14,7 @@ class JTSelectLocationViewController: UIViewController {
     fileprivate var completeFunc: ((Double,Double) -> Void)?
     fileprivate let minScale: Double = 5300
     fileprivate let maxScale: Double = 2900
+    //fileprivate var jtAGSLocationDisplayDataSource: JTAGSLocationDisplayDataSource? = JTAGSLocationDisplayDataSource()
 
     init(_ complete: ((Double,Double) -> Void)?){
         self.completeFunc = complete
@@ -28,6 +29,10 @@ class JTSelectLocationViewController: UIViewController {
         super.viewDidLoad()
 
         setupUI()
+    }
+    
+    deinit {
+        print("----release JTSelectLocationViewController")
     }
 
 }
@@ -53,9 +58,7 @@ extension JTSelectLocationViewController {
         mapView.gridLineWidth = 10
         mapView.maxScale = maxScale
         mapView.minScale = minScale
-        
-        mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
-        
+
         let scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DLG, token: nil, cacheType: SCGISTilemapCacheTypeSqliteDB)
         if(scgisTilemapServerLayer != nil){
             self.mapView.addMapLayer(scgisTilemapServerLayer)
@@ -91,10 +94,10 @@ extension JTSelectLocationViewController {
     }
     
     internal func locationButtonClicked() {
-        let location = JTLocationManager.instance.location
+        weak var location = JTLocationManager.instance.location
         if let loca = location {
             let point = AGSPoint(location: loca)
-            self.mapView.zoom(toScale: minScale, withCenter: point, animated: true)
+            self.mapView.center(at: point, animated: true)
         }
     }
     

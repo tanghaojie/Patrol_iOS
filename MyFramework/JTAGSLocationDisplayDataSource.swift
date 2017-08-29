@@ -16,33 +16,36 @@ class JTAGSLocationDisplayDataSource: NSObject, AGSLocationDisplayDataSource, CL
     var isStarted: Bool
     var error: Error!
     
-    let locationManager = JTLocationManager.instance
-    
     private override init() {
         isStarted = false
         
         super.init()
         
-        self.locationManager.delegate = self
+        JTLocationManager.instance.delegate = self
+    }
+    
+    deinit {
+        print("----release JTAGSLocationDisplayDataSource")
     }
     
     func start() {
-        locationManager.startUpdatingLocation()
-        locationManager.startUpdatingHeading()
+        JTLocationManager.instance.startUpdatingLocation()
+        JTLocationManager.instance.startUpdatingHeading()
         self.delegate.locationDisplayDataSourceStarted(self)
         
         isStarted = true
     }
     
     func stop() {
-        locationManager.stopUpdatingLocation()
-        locationManager.stopUpdatingHeading()
+        JTLocationManager.instance.stopUpdatingLocation()
+        JTLocationManager.instance.stopUpdatingHeading()
         self.delegate.locationDisplayDataSourceStopped(self)
         
         isStarted = false
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
         let location = locations.last
         let agsLocation = AGSLocation(clLocation: location)
         
@@ -53,10 +56,5 @@ class JTAGSLocationDisplayDataSource: NSObject, AGSLocationDisplayDataSource, CL
         
         self.delegate.locationDisplayDataSource(self, didUpdateWithHeading: newHeading.trueHeading)
     }
-    
-    
-    
-
-
-    
+   
 }

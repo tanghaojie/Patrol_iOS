@@ -12,21 +12,21 @@ import SnapKit
 
 class MainViewController: UIViewController, AGSMapViewLayerDelegate {
 
-    var mapView: AGSMapView! = AGSMapView()
+    fileprivate var mapView: AGSMapView! = AGSMapView()
     
-    var scgisTilemapServerLayer_DLG: SCGISTilemapServerLayer!
-    var scgisTilemapServerLayer_DOM: SCGISTilemapServerLayer!
-    var featureLayer: AGSFeatureLayer!
+    fileprivate var scgisTilemapServerLayer_DLG: SCGISTilemapServerLayer!
+    fileprivate var scgisTilemapServerLayer_DOM: SCGISTilemapServerLayer!
+    fileprivate var featureLayer: AGSFeatureLayer!
     
-    var layerBtn: UIButton!
-    var layerView: UIView!
+    fileprivate var layerBtn: UIButton!
+    fileprivate var layerView: UIView!
     
-    let dark = UIColor(red: 73, green: 73, blue: 75)
-    let normal = UIColor(red: 142, green: 142, blue: 144)
+    fileprivate let dark = UIColor(red: 73, green: 73, blue: 75)
+    fileprivate let normal = UIColor(red: 142, green: 142, blue: 144)
     
-    var timer1s: Timer!
-    var timer10s: Timer!
-    
+    fileprivate var timer1s: Timer!
+    fileprivate var timer10s: Timer!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -36,8 +36,8 @@ class MainViewController: UIViewController, AGSMapViewLayerDelegate {
         timer10s = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(timer10Fire), userInfo: nil, repeats: true)
         timer1s = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timer1Fire), userInfo: nil, repeats: true)
         
-        JTLocationManager.instance.startUpdatingLocation()
-        JTLocationManager.instance.startUpdatingHeading()
+        //JTLocationManager.instance.startUpdatingLocation()
+        //JTLocationManager.instance.startUpdatingHeading()
     }
     
     deinit {
@@ -50,11 +50,11 @@ class MainViewController: UIViewController, AGSMapViewLayerDelegate {
         timer10s.invalidate()
         timer10s = nil
         
-        JTLocationManager.instance.stopUpdatingHeading()
-        JTLocationManager.instance.stopUpdatingLocation()
+        //JTLocationManager.instance.stopUpdatingHeading()
+        //JTLocationManager.instance.stopUpdatingLocation()
 
-        self.dismiss(animated: true) {
-            self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true) { [weak self] () in
+            self?.dismiss(animated: true, completion: nil)
         }
     }
 
@@ -90,9 +90,10 @@ extension MainViewController {
         
         SCGISUtility.registerESRI()
         
-        //mapView.frame = CGRect(x: 0, y: 0, width: kScreenWidth, height: kScrennHeight - kMainBottomTabBarHeight)
+        mapView.frame = CGRect(x: 0, y: 0, width: kScreenWidth, height: kScrennHeight - kMainBottomTabBarHeight)
         mapView.layerDelegate = self
         mapView.gridLineWidth = 10
+        
         mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
 
         self.scgisTilemapServerLayer_DLG = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DLG, token: nil, cacheType: SCGISTilemapCacheTypeSqliteDB)
@@ -116,12 +117,12 @@ extension MainViewController {
         }
 
         self.view.addSubview(mapView)
-        mapView.snp.makeConstraints({ (make) in
-            make.top.equalTo(0)
-            make.left.equalTo(0)
-            make.right.equalTo(0)
-            make.bottom.equalTo(-kMainBottomTabBarHeight)
-        })
+//        mapView.snp.makeConstraints({ (make) in
+//            make.left.equalTo(0)
+//            make.right.equalTo(0)
+//            make.top.equalTo(0)
+//            make.bottom.equalTo(-kMainBottomTabBarHeight)
+//        })
         
         setupLayerButton(pView : mapView)
         setupAddEventButton(pView : mapView)
@@ -243,8 +244,8 @@ extension MainViewController {
     }
     
     private func setupLocationButton(pView : UIView) {
-        //let btn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: kScrennHeight - 40 - 20, width: 40, height: 40))
-        let btn = UIButton()
+        let btn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: self.mapView.frame.height - 40 - 20, width: 40, height: 40))
+        //let btn = UIButton()
         btn.backgroundColor = .white
         btn.layer.cornerRadius = 20
         btn.layer.masksToBounds = true
@@ -252,12 +253,12 @@ extension MainViewController {
         btn.setImage(img, for: .normal)
         btn.addTarget(self, action: #selector(locationButtonClicked), for: .touchUpInside)
         pView.addSubview(btn)
-        btn.snp.makeConstraints({ (make) in
-            make.width.equalTo(40)
-            make.height.equalTo(40)
-            make.right.equalTo(-20)
-            make.bottom.equalTo(-20)
-        })
+//        btn.snp.makeConstraints({ (make) in
+//            make.width.equalTo(40)
+//            make.height.equalTo(40)
+//            make.right.equalTo(-20)
+//            make.bottom.equalTo(-20)
+//        })
         pView.bringSubview(toFront: btn)
     }
     
@@ -286,16 +287,16 @@ extension MainViewController {
         
         let jumps = [ task , event , home ]
 
-        //let frame = CGRect(x: 0, y: kScrennHeight - kMainBottomTabBarHeight, width: kScreenWidth, height: kMainBottomTabBarHeight)
-        //let customTBV = JTTabbarView(frame: frame, titles: titles , images : images ,jumps : jumps)
-        let customTBV = JTTabbarView(width: Int(kScreenWidth), height: Int(kMainBottomTabBarHeight), titles: titles , images : images ,jumps : jumps)
+        let frame = CGRect(x: 0, y: kScrennHeight - kMainBottomTabBarHeight, width: kScreenWidth, height: kMainBottomTabBarHeight)
+        let customTBV = JTTabbarView(frame: frame, titles: titles , images : images ,jumps : jumps)
+        //let customTBV = JTTabbarView(width: Int(kScreenWidth), height: Int(kMainBottomTabBarHeight), titles: titles , images : images ,jumps : jumps)
         self.view.addSubview(customTBV)
-        customTBV.snp.makeConstraints({ (make) in
-            make.bottom.equalTo(0)
-            make.left.equalTo(0)
-            make.right.equalTo(0)
-            make.height.equalTo(kMainBottomTabBarHeight)
-        })
+//        customTBV.snp.makeConstraints({ (make) in
+//            make.bottom.equalTo(0)
+//            make.left.equalTo(0)
+//            make.right.equalTo(0)
+//            make.height.equalTo(kMainBottomTabBarHeight)
+//        })
     }
 }
 
@@ -309,9 +310,9 @@ extension MainViewController {
 
         self.mapView.zoom(to: envelop, animated: false)
 
-        if !self.mapView.locationDisplay.isDataSourceStarted {
+        //if !self.mapView.locationDisplay.isDataSourceStarted {
             self.mapView.locationDisplay.startDataSource()
-        }
+        //}
         self.mapView.locationDisplay.autoPanMode = .default
     }
 

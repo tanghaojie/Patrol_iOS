@@ -10,5 +10,7 @@ import Foundation
 
 var dangerLock = NSLock()
 
-let locationArrayMax = 180
+//let jtAGSLocationDisplayDataSource = JTAGSLocationDisplayDataSource()
+
+let locationArrayMax = 300
 var locationWithDate = [TCoordinate]()

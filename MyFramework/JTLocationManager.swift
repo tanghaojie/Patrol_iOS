@@ -14,7 +14,6 @@ class JTLocationManager: CLLocationManager {
     
     private override init(){
         super.init()
-
         self.requestAlwaysAuthorization()
         self.desiredAccuracy = kCLLocationAccuracyBestForNavigation
     
@@ -22,6 +21,10 @@ class JTLocationManager: CLLocationManager {
         if #available(iOS 9.0, *) {
             self.allowsBackgroundLocationUpdates = true
         }
+    }
+    
+    deinit {
+        print("----release JTLocationManager")
     }
  
 }
