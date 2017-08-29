@@ -53,6 +53,10 @@ class EventDealSBViewController: UIViewController, JTViewControllerInteractiveTr
         self.event = event
     }
     
+    deinit {
+        print("--release EventDealSBViewController")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -89,10 +93,6 @@ class EventDealSBViewController: UIViewController, JTViewControllerInteractiveTr
                 }
             }
         }
-    }
-    
-    deinit {
-        print("---released EventDealSBViewController")
     }
 
 }

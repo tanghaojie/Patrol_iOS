@@ -30,11 +30,11 @@ class JTShowLocationViewController: UIViewController {
         setPictureMarkerSymbol()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        self.mapView.zoom(toScale: 10000, withCenter: self.point, animated: true)
-    }
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        
+//        self.mapView.zoom(toScale: 10000, withCenter: self.point, animated: true)
+//    }
 
 }
 
@@ -57,7 +57,8 @@ extension JTShowLocationViewController {
 
         mapView.gridLineWidth = 10
         graphicslayer.isVisible = true
-        //mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
+        mapView.layerDelegate = self
+        mapView.locationDisplay.dataSource = JTAGSLocationDisplayDataSource.instance
 
         let scgisTilemapServerLayer = SCGISTilemapServerLayer(serviceUrlStr: scgisTiledMap_DLG, token: nil, cacheType: SCGISTilemapCacheTypeSqliteDB)
         if(scgisTilemapServerLayer != nil){
@@ -110,5 +111,15 @@ extension JTShowLocationViewController {
         self.graphicslayer.addGraphic(graphic)
     }
 
+}
+
+extension JTShowLocationViewController: AGSMapViewLayerDelegate {
+    
+    func mapViewDidLoad(_ mapView: AGSMapView!) {
+        self.mapView.zoom(toScale: 10000, animated: true)
+        self.mapView.locationDisplay.startDataSource()
+        self.mapView.locationDisplay.autoPanMode = .default
+    }
+    
 }
 
