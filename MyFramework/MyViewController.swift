@@ -325,9 +325,8 @@ extension MyViewController: UITableViewDelegate, UITableViewDataSource {
                 return
             }
 
-            let view = self.presentingViewController
-            guard let mView = view else { return }
-            var main = mView as? MainViewController
+            weak var view = self.presentingViewController
+            weak var main = view as? MainViewController
             main?.selfDismiss()
             main = nil
         }
