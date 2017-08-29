@@ -270,7 +270,7 @@ extension MyViewController: UITableViewDelegate, UITableViewDataSource {
                 self?.cacheActivityIndicatorView.isHidden = false
                 self?.cacheActivityIndicatorView.startAnimating()
                 
-                DispatchQueue.global().async {
+                DispatchQueue.global().async { [weak self] in
                     let fileManager = FileManager.default
                     let cache = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
                     let nSubPaths = fileManager.subpaths(atPath: cache!)
@@ -282,8 +282,10 @@ extension MyViewController: UITableViewDelegate, UITableViewDataSource {
                             }
                         }
                     }
+                    DispatchQueue.main.async { [weak self] in
+                        self?.getCacheAndShowUI()
+                    }
                 }
-                self?.getCacheAndShowUI()
             }
             let actionCancel = UIAlertAction(title: "取消", style: .cancel, handler: nil)
             actionController.addAction(actionCancel)
@@ -369,7 +371,7 @@ extension MyViewController: UIImagePickerControllerDelegate, UINavigationControl
         let date = getDateFormatter(dateFormatter: "yyyy-MM-dd+HH:mm:ss").string(from: Date().addingTimeInterval(kTimeInteval))
         let compressedImage = Image.instance.compressImage(originalImg: image, resolution: 300)
         if let cImg = compressedImage {
-            Image.instance.uploadImages(images: [cImg], prid: "\(loginInfo?.userId ?? 1)", typenum: "0", actualtime: date){ [weak self] (prid) in
+            Image.instance.uploadImages(images: [cImg], prid: "\(loginInfo?.userId ?? -1)", typenum: "0", actualtime: date){ [weak self] (prid) in
                 self?.HeadPortrait()
             }
         } else {
