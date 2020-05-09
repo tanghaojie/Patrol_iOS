@@ -78,11 +78,11 @@ extension JTShowLocationViewController {
         backBtn.setImage(img, for: .normal)
         backBtn.contentVerticalAlignment = .top
         backBtn.contentHorizontalAlignment = .left
-        backBtn.addTarget(self, action: #selector(self.backButtonAction), for: UIControlEvents.touchUpInside)
+        backBtn.addTarget(self, action: #selector(self.backButtonAction), for: UIControl.Event.touchUpInside)
         self.view.addSubview(backBtn)
     }
     
-    internal func backButtonAction() {
+    @objc internal func backButtonAction() {
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -98,7 +98,7 @@ extension JTShowLocationViewController {
         self.view.addSubview(btn)
     }
     
-    internal func locationButtonClicked() {
+    @objc internal func locationButtonClicked() {
         let location = self.mapView.locationDisplay.location
         if let loca = location {
             self.mapView.center(at: loca.point, animated: true)

@@ -55,7 +55,7 @@ class JTViewControllerInteractiveTransition: UIPercentDrivenInteractiveTransitio
         self.fromVc?.view.addGestureRecognizer(self.pan)
     }
 
-    internal func panGestureRecognizer(_ pan: UIPanGestureRecognizer) {
+    @objc internal func panGestureRecognizer(_ pan: UIPanGestureRecognizer) {
         let state = pan.state
         switch state {
         case .began:

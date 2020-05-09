@@ -74,7 +74,7 @@ extension MainViewController {
         self.view.addGestureRecognizer(tap)
     }
     
-    internal func viewTap(tapGestureRecognizer: UITapGestureRecognizer) {
+    @objc internal func viewTap(tapGestureRecognizer: UITapGestureRecognizer) {
         if let layerV = self.layerView {
             let location = tapGestureRecognizer.location(in: layerV)
             let w = layerV.frame.width
@@ -129,6 +129,11 @@ extension MainViewController {
         setupLocationButton(pView: mapView)
     }
     
+    override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
+        viewControllerToPresent.modalPresentationStyle = .fullScreen
+        super.present(viewControllerToPresent, animated: flag, completion: completion)
+    }
+    
     private func setupLayerButton(pView : UIView){
         self.layerBtn = UIButton(frame: CGRect(x: kScreenWidth - 20 - 40, y: 120, width: 40, height: 40))
         self.layerBtn?.backgroundColor = .clear
@@ -139,7 +144,7 @@ extension MainViewController {
         pView.addSubview(self.layerBtn!)
     }
     
-    internal func layerButtonAction() {
+    @objc internal func layerButtonAction() {
         setupLayerSelectView()
     }
     
@@ -194,7 +199,7 @@ extension MainViewController {
         self.view.addSubview(self.layerView!)
     }
     
-    func layerBtn1Action(btn: UIButton) {
+    @objc func layerBtn1Action(btn: UIButton) {
         scgisTilemapServerLayer_DLG.isVisible = !scgisTilemapServerLayer_DLG.isVisible
         //btn.backgroundColor = scgisTilemapServerLayer_DLG.isVisible ? dark : normal
         if scgisTilemapServerLayer_DLG.isVisible {
@@ -206,7 +211,7 @@ extension MainViewController {
         }
     }
 
-    func layerBtn2Action(btn: UIButton) {
+    @objc func layerBtn2Action(btn: UIButton) {
         featureLayer.isVisible = !featureLayer.isVisible
         //btn.backgroundColor = featureLayer.isVisible ? dark : normal
         if featureLayer.isVisible {
@@ -218,7 +223,7 @@ extension MainViewController {
         }
     }
     
-    func layerBtn3Action(btn: UIButton) {
+    @objc func layerBtn3Action(btn: UIButton) {
         scgisTilemapServerLayer_DOM.isVisible = !scgisTilemapServerLayer_DOM.isVisible
         //btn.backgroundColor = scgisTilemapServerLayer_DOM.isVisible ? dark : normal
         if scgisTilemapServerLayer_DOM.isVisible {
@@ -239,7 +244,7 @@ extension MainViewController {
         pView.addSubview(btn)
     }
     
-    func addEventButtonClicked() {
+    @objc func addEventButtonClicked() {
         self.present(EventReportViewController(reportSuccessFunc: nil), animated: true, completion: nil)
     }
     
@@ -259,10 +264,10 @@ extension MainViewController {
 //            make.right.equalTo(-20)
 //            make.bottom.equalTo(-20)
 //        })
-        pView.bringSubview(toFront: btn)
+        pView.bringSubviewToFront(btn)
     }
     
-    func locationButtonClicked() {
+    @objc func locationButtonClicked() {
         let location = JTLocationManager.instance.location
         if let loca = location {
             let point = AGSPoint(location: loca)
@@ -339,7 +344,7 @@ extension MainViewController{
                 if(data?.isEmpty)!{
                     return
                 }
-                let json = JSON(data : data!)
+                let json = (try? JSON(data : data!))!
                 let nStatus = json["status"].int
                 let ndata = json["data"]
                 if let status = nStatus{
@@ -482,7 +487,7 @@ extension MainViewController {
             let tl = locationWithDate[index]
             let df = getDateFormatter(dateFormatter: "HH:mm:ss")
             let strTime = df.string(from: tl.time)
-            let xTime = strTime.characters.split(separator: ":").map(String.init)
+            let xTime = strTime.split(separator: ":").map(String.init)
             let hour = Int(xTime[0])
             let minute = Int(xTime[1])
             let second = Int(xTime[2])

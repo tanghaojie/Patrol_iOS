@@ -25,7 +25,7 @@ class JTDismissAnimatedTransitioning: NSObject, UIViewControllerAnimatedTransiti
         toView.alpha = 0.2
 
         containerView.addSubview(toView)
-        containerView.sendSubview(toBack: toView)
+        containerView.sendSubviewToBack(toView)
         
         UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
             fromViewController.view.frame = fromViewController.view.frame.offsetBy(dx: fromViewController.view.frame.width, dy: 0)

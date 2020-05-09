@@ -18,7 +18,7 @@ class EventOverViewViewController: UIViewController, UIGestureRecognizerDelegate
     
     fileprivate let navigationTitle_Default = "事件"
     fileprivate let navigationTitle_Loading = "加载中"
-    fileprivate let titleActivity = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+    fileprivate let titleActivity = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     fileprivate let titleLabel = UILabel()
     
     fileprivate let pageSize = 10
@@ -35,7 +35,7 @@ class EventOverViewViewController: UIViewController, UIGestureRecognizerDelegate
         tableView.delegate = self
         tableView.dataSource = self
         
-        self.tableView.mj_header.beginRefreshing()
+        self.tableView.mj_header!.beginRefreshing()
     }
     
     deinit {
@@ -79,7 +79,7 @@ extension EventOverViewViewController {
         self.tableView.keyboardDismissMode = .onDrag
         self.tableView.tableFooterView = UIView()
         self.registCell()
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyle.none
+        self.tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
         self.view = tableView
     }
     
@@ -92,11 +92,11 @@ extension EventOverViewViewController {
         self.tableViewHeader.setTitle("下拉刷新", for: .idle)
         self.tableViewHeader.setTitle("释放刷新", for: .pulling)
         self.tableViewHeader.setTitle("刷新中...", for: .refreshing)
-        self.tableViewHeader.lastUpdatedTimeLabel.text = "上次刷新"
+        self.tableViewHeader.lastUpdatedTimeLabel!.text = "上次刷新"
         self.tableViewHeader.activityIndicatorViewStyle = .gray
     }
     
-    internal func headerRefresh() {
+    @objc internal func headerRefresh() {
         getData(refresh: true)
     }
     
@@ -112,24 +112,24 @@ extension EventOverViewViewController {
         self.tableViewFooter.setTitle("没有更多数据", for: .noMoreData)
     }
     
-    internal func footerRefresh() {
+    @objc internal func footerRefresh() {
         getData(refresh: false)
     }
     
     fileprivate func endRefreshing() {
-        self.tableView.mj_header.endRefreshing()
-        if self.tableView.mj_footer.state != .noMoreData {
-            self.tableView.mj_footer.endRefreshing()
+        self.tableView.mj_header!.endRefreshing()
+        if self.tableView.mj_footer!.state != .noMoreData {
+            self.tableView.mj_footer!.endRefreshing()
         }
     }
     
     private func setupBackButton() {
         let img = UIImage(named: "leftArrow")?.withRenderingMode(.alwaysOriginal)
-        let leftBtn = UIBarButtonItem(image: img, style: UIBarButtonItemStyle.plain, target: self, action: #selector(backButtonAction))
+        let leftBtn = UIBarButtonItem(image: img, style: UIBarButtonItem.Style.plain, target: self, action: #selector(backButtonAction))
         self.navigationItem.leftBarButtonItem = leftBtn;
     }
     
-    internal func backButtonAction() {
+    @objc internal func backButtonAction() {
         let navi = self.navigationController
         navi?.dismiss(animated: true, completion: nil)
     }
@@ -140,9 +140,14 @@ extension EventOverViewViewController {
         self.navigationItem.rightBarButtonItem = rightBtn
     }
     
-    internal func rightBarButtonClicked() {
+    override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
+        viewControllerToPresent.modalPresentationStyle = .fullScreen
+        super.present(viewControllerToPresent, animated: flag, completion: completion)
+    }
+    
+    @objc internal func rightBarButtonClicked() {
         self.present(EventReportViewController(reportSuccessFunc: { [weak self] () in
-            self?.tableView.mj_header.beginRefreshing()
+            self?.tableView.mj_header!.beginRefreshing()
         }), animated: true, completion: nil)
     }
     
@@ -215,7 +220,7 @@ extension EventOverViewViewController: UITableViewDelegate, UITableViewDataSourc
         
         let eventDetail = EventDetailViewController(data)
         eventDetail.dealSuccess = { [weak self] () in
-            self?.tableView.mj_header.beginRefreshing()
+            self?.tableView.mj_header!.beginRefreshing()
         }
         
         navi?.pushViewController(eventDetail, animated: true)
@@ -246,7 +251,7 @@ extension EventOverViewViewController {
                 self?.total = 0
                 self?.pageNum = 1
                 self?.events = [JSON_Event]()
-                self?.tableView.mj_footer.state = .idle
+                self?.tableView.mj_footer!.state = .idle
             }
             
             self?.total = eventList.total
@@ -258,7 +263,7 @@ extension EventOverViewViewController {
             }
             let page = ceil(Double((self?.total)!) / Double((self?.pageSize)!))
             if Double((self?.pageNum)!) > page {
-                self?.tableView.mj_footer.state = .noMoreData
+                self?.tableView.mj_footer!.state = .noMoreData
             }
             self?.endRefreshing()
         })
@@ -291,13 +296,13 @@ extension EventOverViewViewController {
                     return
                 }
                 
-                let json = JSON(data : data!)
+                let json = (try? JSON(data : data!))!
                 
                 let eventList = JSON_EventList(json)
                 if(eventList.status != 0){
                     if let msg = eventList.msg {
                         if let xself = self {
-                            AlertWithUIAlertAction(view: xself, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
+                            AlertWithUIAlertAction(view: xself, title: msg, message: "", preferredStyle: UIAlertController.Style.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
                         }
                     }
                     self?.endRefreshing()

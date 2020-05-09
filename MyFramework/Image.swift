@@ -18,7 +18,7 @@ class Image {
         for image in images {
             let nCompressedImg = compressFunc(image)
             if let compressedImg = nCompressedImg {
-                let nDataImage = UIImageJPEGRepresentation(compressedImg, 1.0)
+                let nDataImage = compressedImg.jpegData(compressionQuality: 1.0)
                 if let dataImage = nDataImage {
                     let date = Date().addingTimeInterval(TimeInterval(TimeZone.current.secondsFromGMT()))
                     let dateStr = getDateFormatter(dateFormatter: "yyyyMMddHHmmss").string(from: date)
@@ -191,7 +191,7 @@ class Image {
                 if statusCode != 200 {
                     return
                 }
-                let json = JSON(data : data!)
+                let json = (try? JSON(data : data!))!
                 let nStatus = json["status"].int
                 if let status = nStatus {
                     if status != 0 {
@@ -244,7 +244,7 @@ class Image {
             let httpResponse = urlResponse as! HTTPURLResponse
             let statusCode = httpResponse.statusCode
             if statusCode != 200 { return }
-            let json = JSON(data : data!)
+            let json = (try? JSON(data : data!))!
             let nStatus = json["status"].int
             guard let status = nStatus else { return }
             if status != 0 { return }
@@ -263,11 +263,11 @@ class Image {
         var body = Data()
         let data: Data
         let format: String
-        if UIImageJPEGRepresentation(image, 1.0) != nil {
-            data = UIImageJPEGRepresentation(image, 1.0)!
+        if image.jpegData(compressionQuality: 1.0) != nil {
+            data = image.jpegData(compressionQuality: 1.0)!
             format = "Content-Type: image/jpeg\r\n"
         } else {
-            data = UIImagePNGRepresentation(image)!
+            data = image.pngData()!
             format = "Content-Type: image/png\r\n"
         }
         body.append("--\(boundary)\r\n".data(using: .utf8)!)
@@ -303,7 +303,7 @@ class Image {
             if data1 == nil || (data1?.isEmpty)!{
                 return
             }
-            let json = JSON(data : data1!)
+            let json = (try? JSON(data : data1!))!
             if json == JSON.null {
                 return
             }
@@ -350,7 +350,7 @@ class Image {
         URLSession.shared.dataTask(with: urlRequest){ (data1, response, error) in
             if error != nil { return }
             if data1 == nil || (data1?.isEmpty)!{ return }
-            let json = JSON(data : data1!)
+            let json = (try? JSON(data : data1!))!
             if json == JSON.null { return }
             let data = json["data"]
             if data == JSON.null { return }

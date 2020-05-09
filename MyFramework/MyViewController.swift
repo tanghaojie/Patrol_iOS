@@ -98,17 +98,17 @@ extension MyViewController {
         return headView
     }
     
-    internal func headPotraitAction() {
+    @objc internal func headPotraitAction() {
         addImageAction()
     }
     
     private func setupBackButton(){
         let img = UIImage(named: "leftArrow")?.withRenderingMode(.alwaysOriginal)
-        let leftBtn = UIBarButtonItem(image: img, style: UIBarButtonItemStyle.plain, target: self, action: #selector(backButtonAction))
+        let leftBtn = UIBarButtonItem(image: img, style: UIBarButtonItem.Style.plain, target: self, action: #selector(backButtonAction))
         self.navigationItem.leftBarButtonItem = leftBtn;
     }
     
-    func backButtonAction(){
+    @objc func backButtonAction(){
         let navi = self.navigationController
         navi?.dismiss(animated: true, completion: nil)
     }
@@ -239,7 +239,7 @@ extension MyViewController: UITableViewDelegate, UITableViewDataSource {
             self.cacheSizeLabel.textColor = UIColor(red: 113, green: 122, blue: 132)
             self.cacheSizeLabel.textAlignment = NSTextAlignment.right
             
-            self.cacheActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+            self.cacheActivityIndicatorView = UIActivityIndicatorView(style: .gray)
             self.cacheActivityIndicatorView.frame = cacheSizeLabel.frame
             self.cacheActivityIndicatorView.startAnimating()
             self.cacheSizeLabel.isHidden = true
@@ -247,7 +247,7 @@ extension MyViewController: UITableViewDelegate, UITableViewDataSource {
             cell?.addSubview(cacheTextLabel)
             cell?.addSubview(cacheSizeLabel)
             cell?.addSubview(cacheActivityIndicatorView)
-            cell?.selectionStyle = UITableViewCellSelectionStyle.none
+            cell?.selectionStyle = UITableViewCell.SelectionStyle.none
             
             getCacheAndShowUI()
         } else if indexPath.section == 1 && indexPath.row == 0 {
@@ -256,7 +256,7 @@ extension MyViewController: UITableViewDelegate, UITableViewDataSource {
             cell?.textLabel?.textAlignment = NSTextAlignment.center
             cell?.textLabel?.font = UIFont.boldSystemFont(ofSize: 18)
             cell?.textLabel?.textColor = .white
-            cell?.selectionStyle = UITableViewCellSelectionStyle.none
+            cell?.selectionStyle = UITableViewCell.SelectionStyle.none
         }
         return cell!
     }
@@ -304,17 +304,17 @@ extension MyViewController: UITableViewDelegate, UITableViewDataSource {
             urlRequest.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
 
             var response : URLResponse?
-            let data = try? NSURLConnection.sendSynchronousRequest(urlRequest, returning: &response)
+            let data = (try? NSURLConnection.sendSynchronousRequest(urlRequest, returning: &response))!
             guard let _ = response else {
                 AlertWithNoButton(view: self, title: "退出失败，请重试", message: nil, preferredStyle: .alert, showTime: 1)
                 return
             }
-            if data == nil || data!.isEmpty {
+            if data == nil || data.isEmpty {
                 AlertWithNoButton(view: self, title: "退出失败，请重试", message: nil, preferredStyle: .alert, showTime: 1)
                 return
             }
             
-            let json = JSON(data : data!)
+            let json = (try? JSON(data : data))!
             let nStatus = json["status"].int
             let nMsg = json["msg"].string
             
@@ -366,8 +366,8 @@ extension MyViewController: UIImagePickerControllerDelegate, UINavigationControl
         self.navigationController?.present(actionController, animated: true, completion: nil)
     }
     
-    internal func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+    internal func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let image = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
         let date = getDateFormatter(dateFormatter: "yyyy-MM-dd+HH:mm:ss").string(from: Date().addingTimeInterval(kTimeInteval))
         let compressedImage = Image.instance.compressImage(originalImg: image, resolution: 300)
         if let cImg = compressedImage {
@@ -375,7 +375,7 @@ extension MyViewController: UIImagePickerControllerDelegate, UINavigationControl
                 self?.HeadPortrait()
             }
         } else {
-            AlertWithUIAlertAction(view: self, title: msg_UploadFailed, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
+            AlertWithUIAlertAction(view: self, title: msg_UploadFailed, message: "", preferredStyle: UIAlertController.Style.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
         }
         picker.dismiss(animated: true, completion: nil)
     }

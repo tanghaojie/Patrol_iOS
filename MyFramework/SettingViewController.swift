@@ -29,12 +29,12 @@ class SettingViewController: UIViewController {
     @IBAction func confirmTouchUpInSide(_ sender: Any) {
         let ns = self.serviceAddress.text
         if ns == nil || ns!.isEmpty {
-            AlertWithNoButton(view: self, title: msg_Error, message: msg_PleaseEnterServiceAddress, preferredStyle: UIAlertControllerStyle.alert, showTime: 1)
+            AlertWithNoButton(view: self, title: msg_Error, message: msg_PleaseEnterServiceAddress, preferredStyle: UIAlertController.Style.alert, showTime: 1)
             return
         } else {
             let address = ns!
             if !checkServiceAddress(address: address) {
-                AlertWithNoButton(view: self, title: msg_Error, message: msg_NetworkOrAddressError, preferredStyle: UIAlertControllerStyle.alert, showTime: 1)
+                AlertWithNoButton(view: self, title: msg_Error, message: msg_NetworkOrAddressError, preferredStyle: UIAlertController.Style.alert, showTime: 1)
                 return
             }
             url_Main = address

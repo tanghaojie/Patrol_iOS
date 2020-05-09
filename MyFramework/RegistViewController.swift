@@ -204,7 +204,7 @@ extension RegistViewController{
                     return
                 }
                 
-                let json = JSON(data : data!)
+                let json = (try? JSON(data : data!))!
                 let nStatus = json["status"].int
                 let nMsg = json["msg"].string
                 
@@ -212,7 +212,7 @@ extension RegistViewController{
                     if(status != 0){
                         if let msg = nMsg{
                             if let xself = self {
-                                AlertWithUIAlertAction(view: xself, title: msg_Remind, message: msg, preferredStyle: .alert , uiAlertAction: UIAlertAction(title: msg_OK, style: UIAlertActionStyle.default, handler: nil))
+                                AlertWithUIAlertAction(view: xself, title: msg_Remind, message: msg, preferredStyle: .alert , uiAlertAction: UIAlertAction(title: msg_OK, style: UIAlertAction.Style.default, handler: nil))
                             }
                         }
                         self?.activity.stopAnimating()
@@ -221,7 +221,7 @@ extension RegistViewController{
                         return
                     }
                     if let xself = self {
-                        AlertWithUIAlertAction(view: xself, title: msg_Remind, message: msg_RegistSuccess, preferredStyle: .alert , uiAlertAction: UIAlertAction(title: msg_OK, style: UIAlertActionStyle.default, handler: { [weak self] (alertAction: UIAlertAction) -> Void in
+                        AlertWithUIAlertAction(view: xself, title: msg_Remind, message: msg_RegistSuccess, preferredStyle: .alert , uiAlertAction: UIAlertAction(title: msg_OK, style: UIAlertAction.Style.default, handler: { [weak self] (alertAction: UIAlertAction) -> Void in
                                                 self?.delegate?.clearUsernamePassword()
                                                 self?.dismiss(animated: true, completion: nil)
                                            }))
@@ -245,7 +245,7 @@ extension RegistViewController{
                 let httpResponse = urlResponse as! HTTPURLResponse
                 let statusCode = httpResponse.statusCode
                 if(statusCode == 200 && error == nil && !(data?.isEmpty)!){
-                    let json = JSON(data : data!)
+                    let json = (try? JSON(data : data!))!
                     let nStatus = json["status"].int
                     let nMsg = json["msg"].string
                     
@@ -282,7 +282,7 @@ extension RegistViewController : UITextViewDelegate , UITextFieldDelegate {
         self.department.delegate = self
         self.remark.delegate = self
         
-        activity = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        activity = UIActivityIndicatorView(style: .whiteLarge)
         activity.center = btnRegist.center
         self.view.addSubview(activity)
     }

@@ -26,7 +26,7 @@ class TaskSBViewController: UIViewController {
     
     fileprivate let navigationTitle_Default = "任务"
     fileprivate let navigationTitle_Loading = "加载中"
-    let titleActivity = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+    let titleActivity = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     let titleLabel = UILabel()
 
     var taskModel : TaskModel = TaskModel(isStarted: false, tid: -1, uid: -1, tName: "", tType: "", tLineCode: "", startTime: Date(), remark: "")
@@ -67,7 +67,7 @@ class TaskSBViewController: UIViewController {
         endBtnTouchUpInSide()
     }
     
-    func backButtonAction(){
+    @objc func backButtonAction(){
         let navi = self.navigationController
         navi?.dismiss(animated: true, completion: nil)
     }
@@ -124,7 +124,7 @@ extension TaskSBViewController{
                     return
                 }
                 
-                let json = JSON(data : data!)
+                let json = (try? JSON(data : data!))!
                 let nStatus = json["status"].int
                 let nMsg = json["msg"].string
                 let ndata = json["data"]
@@ -241,7 +241,7 @@ extension TaskSBViewController{
                     return
                 }
                 
-                let json = JSON(data : data!)
+                let json = (try? JSON(data : data!))!
                 let nStatus = json["status"].int
                 let nMsg = json["msg"].string
                 let ndata = json["data"]
@@ -328,7 +328,7 @@ extension TaskSBViewController{
                     return
                 }
                 
-                let json = JSON(data : data!)
+                let json = (try? JSON(data : data!))!
                 let nStatus = json["status"].int
                 let nMsg = json["msg"].string
                 
@@ -407,9 +407,9 @@ extension TaskSBViewController{
         self.taskStop.isHidden = true
         self.taskStartLabel.isHidden = true
         
-        self.view.bringSubview(toFront: self.taskTypeTableView)
+        self.view.bringSubviewToFront(self.taskTypeTableView)
 
-        self.view.bringSubview(toFront: taskStart)
+        self.view.bringSubviewToFront(taskStart)
         
         setupSuperViewJT()
     }
@@ -432,7 +432,7 @@ extension TaskSBViewController{
     
     private func setupBackButton(){
         let img = UIImage(named: "leftArrow")?.withRenderingMode(.alwaysOriginal)
-        let leftBtn = UIBarButtonItem(image: img, style: UIBarButtonItemStyle.plain, target: self, action: #selector(backButtonAction))
+        let leftBtn = UIBarButtonItem(image: img, style: UIBarButtonItem.Style.plain, target: self, action: #selector(backButtonAction))
         self.navigationItem.leftBarButtonItem = leftBtn;
     }
     
@@ -573,7 +573,7 @@ extension TaskSBViewController: UITableViewDataSource , UITableViewDelegate{
     
     func switchTaskTypeTable(){
         if(self.taskTypeTableView.isHidden){
-            self.view.bringSubview(toFront: taskTypeTableView)
+            self.view.bringSubviewToFront(taskTypeTableView)
             UIView.animate(withDuration: 0.5, animations: { [weak self] in
                 self?.taskTypeTableView?.isHidden = false
             })
@@ -586,7 +586,7 @@ extension TaskSBViewController: UITableViewDataSource , UITableViewDelegate{
     
     func switchTaskLineTable(){
         if(self.taskLineTableView.isHidden){
-            self.view.bringSubview(toFront: taskLineTableView)
+            self.view.bringSubviewToFront(taskLineTableView)
             UIView.animate(withDuration: 0.5, animations: { [weak self] in
                 self?.taskLineTableView?.isHidden = false
             })

@@ -41,7 +41,7 @@ class Config{
                     printLog(message: log_ServerNoResponse + url_Config)
                 }
                 
-                let json = JSON(data : data)
+                let json = (try? JSON(data : data))!
                 let nStatus = json["status"].int
                 let nMsg = json["msg"].string
                 let data = json["data"]

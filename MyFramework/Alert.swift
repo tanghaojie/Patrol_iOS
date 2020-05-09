@@ -48,7 +48,7 @@ let msg_PleaseEnterServiceAddress = "请输入服务地址"
 let msg_NetworkOrAddressError = "网络连接或地址错误"
 
 
-public func AlertWithNoButton(view : UIViewController, title : String , message : String? , preferredStyle : UIAlertControllerStyle , showTime : TimeInterval){
+public func AlertWithNoButton(view : UIViewController, title : String , message : String? , preferredStyle : UIAlertController.Style , showTime : TimeInterval){
     let alert = UIAlertController(title: title, message: message, preferredStyle: preferredStyle)
     view.present(alert, animated: true, completion: nil)
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + showTime){
@@ -56,7 +56,7 @@ public func AlertWithNoButton(view : UIViewController, title : String , message 
     }
 }
 
-public func AlertWithUIAlertAction(view : UIViewController, title : String , message : String? , preferredStyle : UIAlertControllerStyle ,uiAlertAction: UIAlertAction){
+public func AlertWithUIAlertAction(view : UIViewController, title : String , message : String? , preferredStyle : UIAlertController.Style ,uiAlertAction: UIAlertAction){
     
     let alert = UIAlertController(title: title, message: message, preferredStyle: preferredStyle)
     alert.addAction(uiAlertAction)

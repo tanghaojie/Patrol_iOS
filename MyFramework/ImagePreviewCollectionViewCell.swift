@@ -63,13 +63,13 @@ class ImagePreviewCollectionViewCell: UICollectionViewCell {
         return CGSize(width: width/ratio, height: height/ratio)
     }
     
-    func tapSingleDid(_ ges:UITapGestureRecognizer){
+    @objc func tapSingleDid(_ ges:UITapGestureRecognizer){
         if let nav = self.responderViewController()?.navigationController{
             nav.setNavigationBarHidden(!nav.isNavigationBarHidden, animated: true)
         }
     }
     
-    func tapDoubleDid(_ ges:UITapGestureRecognizer){
+    @objc func tapDoubleDid(_ ges:UITapGestureRecognizer){
         if let nav = self.responderViewController()?.navigationController{
             nav.setNavigationBarHidden(true, animated: true)
         }

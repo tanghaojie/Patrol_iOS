@@ -31,7 +31,7 @@ class JTNavigationControllerAnimatedTransitioning: NSObject, UIViewControllerAni
         fromViewController.view.alpha = 1
         
         containerView.addSubview(toView)
-        containerView.sendSubview(toBack: toView)
+        containerView.sendSubviewToBack(toView)
         
         UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
             let x = (self.reverse ? 1 : -1 ) * fromView.frame.width

@@ -60,9 +60,14 @@ extension LoginViewController {
         password.delegate = self
         password.addTarget(self, action: #selector(passwordEditingEvents(_:)), for: .allEditingEvents)
         
-        activity = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        activity = UIActivityIndicatorView(style: .whiteLarge)
         activity.center = login.center
         self.view.addSubview(activity)
+    }
+    
+    override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
+        viewControllerToPresent.modalPresentationStyle = .fullScreen
+        super.present(viewControllerToPresent, animated: flag, completion: completion)
     }
 
 }
@@ -130,12 +135,12 @@ extension LoginViewController: LoginDelegate {
         return true
     }
     
-    func usernameEditingEvents(_ textField: UITextField){
-        self.login.isEnabled = (textField.text?.characters.count)!>0 && (password.text?.characters.count)!>0
+    @objc func usernameEditingEvents(_ textField: UITextField){
+        self.login.isEnabled = (textField.text?.count)!>0 && (password.text?.count)!>0
     }
     
-    func passwordEditingEvents(_ textField: UITextField){
-        self.login.isEnabled = (textField.text?.characters.count)!>0 && (username.text?.characters.count)!>0
+    @objc func passwordEditingEvents(_ textField: UITextField){
+        self.login.isEnabled = (textField.text?.count)!>0 && (username.text?.count)!>0
     }
 }
 
@@ -199,7 +204,7 @@ extension LoginViewController {
                     return
                 }
                 
-                let json = JSON(data : data!)
+                let json = (try? JSON(data : data!))!
                 let nStatus = json["status"].int
                 let nMsg = json["msg"].string
                 let data = json["data"]

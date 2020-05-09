@@ -1,18 +1,24 @@
 PODS:
-  - MJRefresh (3.1.12)
-  - SnapKit (3.2.0)
-  - SwiftyJSON (3.1.4)
+  - MJRefresh (3.4.1)
+  - SnapKit (4.2.0)
+  - SwiftyJSON (5.0.0)
 
 DEPENDENCIES:
   - MJRefresh
-  - SnapKit (~> 3.2.0)
+  - SnapKit
   - SwiftyJSON
 
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - MJRefresh
+    - SnapKit
+    - SwiftyJSON
+
 SPEC CHECKSUMS:
-  MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
-  SnapKit: 1ca44df72cfa543218d177cb8aab029d10d86ea7
-  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
+  MJRefresh: 3153c59a363159092c08b2177ec3a7d09f90bfaf
+  SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
+  SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: 8ebe4a9f543c4b472dd3b20e6ec3fec2cac5da38
+PODFILE CHECKSUM: a934753093fed0bf6ea58f5e88702cf11623581b
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.9.1

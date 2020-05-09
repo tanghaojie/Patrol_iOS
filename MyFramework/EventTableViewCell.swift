@@ -31,7 +31,7 @@ class EventTableViewCell: UITableViewCell {
 
     var data: JSON_Event!
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         setupUI()
@@ -159,7 +159,7 @@ extension EventTableViewCell {
         mainViewTextView.isUserInteractionEnabled = false
         //mainViewTextView.backgroundColor = UIColor(red: 255, green: 255, blue: 255)
         mainViewTextView.textContainer.lineFragmentPadding = 0
-        mainViewTextView.textContainerInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        mainViewTextView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         mainViewTextView.font = UIFont.systemFont(ofSize: 16)
         mainViewTextView.textColor = UIColor(red: 84, green: 84, blue: 84)
         mainView.addSubview(mainViewTextView)

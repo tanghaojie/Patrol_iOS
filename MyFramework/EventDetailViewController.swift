@@ -25,7 +25,7 @@ class EventDetailViewController: UIViewController, JTViewControllerInteractiveTr
     
     fileprivate let navigationTitle_Default = "事件详情"
     fileprivate let navigationTitle_Loading = "加载中"
-    fileprivate let titleActivity = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+    fileprivate let titleActivity = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     fileprivate let titleLabel = UILabel()
     fileprivate var event: JSON_Event?
     
@@ -62,7 +62,7 @@ class EventDetailViewController: UIViewController, JTViewControllerInteractiveTr
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
-        self.tableView.mj_header.beginRefreshing()
+        self.tableView.mj_header!.beginRefreshing()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -108,9 +108,9 @@ extension EventDetailViewController {
         self.registCell()
         self.tableView.backgroundColor = .white
         self.tableView.allowsSelection = false
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyle.singleLine
+        self.tableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
         self.tableView.estimatedRowHeight = 50
-        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.rowHeight = UITableView.automaticDimension
         self.view = tableView
         self.tableView.contentInset = UIEdgeInsets(top: EventDetailViewController.navigationItemIncrease, left: 0, bottom: 0, right: 0)
     }
@@ -124,25 +124,25 @@ extension EventDetailViewController {
         self.tableViewHeader.setTitle("下拉刷新", for: .idle)
         self.tableViewHeader.setTitle("释放刷新", for: .pulling)
         self.tableViewHeader.setTitle("刷新中...", for: .refreshing)
-        self.tableViewHeader.lastUpdatedTimeLabel.text = "上次刷新"
+        self.tableViewHeader.lastUpdatedTimeLabel!.text = "上次刷新"
         self.tableViewHeader.activityIndicatorViewStyle = .gray
     }
     
-    internal func headerRefresh() {
+    @objc internal func headerRefresh() {
         getData(eventId: (self.event?.id)!)
     }
 
     fileprivate func endRefreshing() {
-        self.tableView.mj_header.endRefreshing()
+        self.tableView.mj_header!.endRefreshing()
     }
     
     private func setupBackButton() {
         let img = UIImage(named: "leftArrow")?.withRenderingMode(.alwaysOriginal)
-        self.leftBtn = UIBarButtonItem(image: img, style: UIBarButtonItemStyle.plain, target: self, action: #selector(backButtonAction))
+        self.leftBtn = UIBarButtonItem(image: img, style: UIBarButtonItem.Style.plain, target: self, action: #selector(backButtonAction))
         self.navigationItem.leftBarButtonItem = self.leftBtn;
     }
     
-    internal func backButtonAction() {
+    @objc internal func backButtonAction() {
         setupNavigationbar(isBig: false)
 
         let navi = self.navigationController
@@ -157,17 +157,17 @@ extension EventDetailViewController {
         }
     }
     
-    internal func rightBarButtonClicked() {
+    @objc internal func rightBarButtonClicked() {
         let sb = UIStoryboard(name: "EventDealSB", bundle: nil)
         let vc = sb.instantiateViewController(withIdentifier: "EventDealSBViewController") as! EventDealSBViewController
         vc.setEvent(self.event)
         setupNavigationbar(isBig: false)
         vc.dealSuccess = { [weak self] () in
-            self?.tableView.mj_header.endRefreshingCompletionBlock = { [weak self] in
+            self?.tableView.mj_header!.endRefreshingCompletionBlock = { [weak self] in
                 self?.navigationItem.rightBarButtonItem = nil
-                self?.tableView.mj_header.endRefreshingCompletionBlock = nil
+                self?.tableView.mj_header!.endRefreshingCompletionBlock = nil
             }
-            self?.tableView.mj_header.beginRefreshing()
+            self?.tableView.mj_header!.beginRefreshing()
             if let fun = self?.dealSuccess {
                 fun()
             }
@@ -250,7 +250,12 @@ extension EventDetailViewController {
         }
     }
     
-    internal func tapSubNavigationbar(tap: UITapGestureRecognizer) {
+    override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
+        viewControllerToPresent.modalPresentationStyle = .fullScreen
+        super.present(viewControllerToPresent, animated: flag, completion: completion)
+    }
+    
+    @objc internal func tapSubNavigationbar(tap: UITapGestureRecognizer) {
         let lo = tap.location(in: self.tableView)
         if lo.y <= 0 && lo.y >= -30 {
             if let e = self.event {
@@ -264,7 +269,6 @@ extension EventDetailViewController {
             }
         }
     }
-
 }
 
 extension EventDetailViewController: UITableViewDelegate, UITableViewDataSource {
@@ -313,7 +317,7 @@ extension EventDetailViewController {
             if(processList.status != 0){
                 if let msg = processList.msg {
                     if let xself = self {
-                        AlertWithUIAlertAction(view: xself, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
+                        AlertWithUIAlertAction(view: xself, title: msg, message: "", preferredStyle: UIAlertController.Style.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
                     }
                 }
                 self?.endRefreshing()
@@ -366,7 +370,7 @@ extension EventDetailViewController {
                     return
                 }
 
-                let json = JSON(data : data!)
+                let json = (try? JSON(data : data!))!
                 if let com = complete {
                     com(json)
                 }

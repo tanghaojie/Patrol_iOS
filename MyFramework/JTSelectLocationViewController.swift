@@ -73,11 +73,11 @@ extension JTSelectLocationViewController {
         backBtn.setImage(img, for: .normal)
         backBtn.contentVerticalAlignment = .top
         backBtn.contentHorizontalAlignment = .left
-        backBtn.addTarget(self, action: #selector(self.backButtonAction), for: UIControlEvents.touchUpInside)
+        backBtn.addTarget(self, action: #selector(self.backButtonAction), for: UIControl.Event.touchUpInside)
         self.view.addSubview(backBtn)
     }
     
-    internal func backButtonAction() {
+    @objc internal func backButtonAction() {
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -93,7 +93,7 @@ extension JTSelectLocationViewController {
         self.view.addSubview(btn)
     }
     
-    internal func locationButtonClicked() {
+    @objc internal func locationButtonClicked() {
         weak var location = JTLocationManager.instance.location
         if let loca = location {
             let point = AGSPoint(location: loca)
@@ -130,7 +130,7 @@ extension JTSelectLocationViewController {
         self.view.addSubview(btn)
     }
     
-    internal func okButtonAction() {
+    @objc internal func okButtonAction() {
         if let com = self.completeFunc {
             let p = mapView.toMapPoint(self.mapView.center)
             if let point = p {

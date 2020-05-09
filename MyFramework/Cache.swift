@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-let cacheDirName = "PatrolCache"
+public let cacheDirName = "PatrolCache"
 
 public func getCacheDirPath(dirName: String = cacheDirName) -> String {
     let full = "\(cachePath ?? "")/\(dirName)"
@@ -44,7 +44,7 @@ public func cacheImages(images: [UIImage], typenum: String, prid: String, isCove
     for index in 0..<count {
         let image = images[index]
         let fullPath = fullDir.appending("/\(index)")
-        if let imgData = UIImageJPEGRepresentation(image, 1) {
+        if let imgData = image.jpegData(compressionQuality: 1) {
             try? imgData.write(to: URL.init(fileURLWithPath: fullPath), options: Data.WritingOptions.atomic)
         }
     }

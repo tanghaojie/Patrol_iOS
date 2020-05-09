@@ -19,7 +19,7 @@ class THJTableViewCell: UITableViewCell {
     var imageViewContainer: UIView!
     var line5: UILabel!
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         setupUI()
@@ -221,7 +221,7 @@ extension THJTableViewCell {
         }
     }
     
-    func imageViewTap(_ recognizer: UITapGestureRecognizer){
+    @objc func imageViewTap(_ recognizer: UITapGestureRecognizer){
         
         var imgs = [UIImage]()
         for subView in imageViewContainer.subviews {

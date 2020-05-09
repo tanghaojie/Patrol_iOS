@@ -33,7 +33,7 @@ class EventReportSBViewController: UIViewController {
     fileprivate let navigationTitle_Loading = "请稍后"
     fileprivate let defaultAddImageAccessibilityIdentifier = "de_add_image_iden"
     fileprivate let collectionViewCellIdentifier = "collectionViewCellIdentifier"
-    fileprivate let titleActivity = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+    fileprivate let titleActivity = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     fileprivate let titleLabel = UILabel()
     fileprivate let defaultAddImage = UIImage(named: "addImage")
     fileprivate let collectionViewCellHeight = 85
@@ -158,7 +158,7 @@ extension EventReportSBViewController {
                     self?.setLoading(isLoading: false)
                     return
                 }
-                let json = JSON(data : data!)
+                let json = (try? JSON(data : data!))!
                 let nStatus = json["status"].int
                 let nMsg = json["msg"].string
                 let data = json["data"]
@@ -167,7 +167,7 @@ extension EventReportSBViewController {
                     if(status != 0){
                         if let msg = nMsg{
                             if let xself = self {
-                                AlertWithUIAlertAction(view: xself, title: msg, message: "", preferredStyle: UIAlertControllerStyle.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
+                                AlertWithUIAlertAction(view: xself, title: msg, message: "", preferredStyle: UIAlertController.Style.alert, uiAlertAction: UIAlertAction(title: msg_OK, style: .default, handler: nil))
                             }
                         }
                         self?.setLoading(isLoading: false)
@@ -347,11 +347,11 @@ extension EventReportSBViewController {
     
     private func setupBackButton(){
         let img = UIImage(named: "leftArrow")?.withRenderingMode(.alwaysOriginal)
-        let leftBtn = UIBarButtonItem(image: img, style: UIBarButtonItemStyle.plain, target: self, action: #selector(backButtonAction))
+        let leftBtn = UIBarButtonItem(image: img, style: UIBarButtonItem.Style.plain, target: self, action: #selector(backButtonAction))
         self.navigationItem.leftBarButtonItem = leftBtn;
     }
     
-    func backButtonAction(){
+    @objc func backButtonAction(){
         let navi = self.navigationController
         navi?.dismiss(animated: true, completion: nil)
     }
@@ -403,7 +403,7 @@ extension EventReportSBViewController: UITableViewDataSource , UITableViewDelega
             return
         }
         if(self.eventTypeTableView.isHidden){
-            self.view.bringSubview(toFront: eventTypeTableView)
+            self.view.bringSubviewToFront(eventTypeTableView)
             UIView.animate(withDuration: 0.5, animations: { [weak self] in
                 self?.eventTypeTableView?.isHidden = false
             })
@@ -422,7 +422,7 @@ extension EventReportSBViewController: UITableViewDataSource , UITableViewDelega
             return
         }
         if(self.eventLevelTableView.isHidden){
-            self.view.bringSubview(toFront: eventLevelTableView)
+            self.view.bringSubviewToFront(eventLevelTableView)
             UIView.animate(withDuration: 0.5, animations: { [weak self] in
                 self?.eventLevelTableView?.isHidden = false
             })
@@ -586,9 +586,8 @@ extension EventReportSBViewController: UICollectionViewDelegate, UICollectionVie
         longPress.minimumPressDuration = 0.8
         self.eventImage.addGestureRecognizer(longPress)
     }
-    
-    internal func collectionViewLongPress(longPressGestureRecognizer: UILongPressGestureRecognizer){
-        if longPressGestureRecognizer.state == UIGestureRecognizerState.began {
+    @objc internal func collectionViewLongPress(longPressGestureRecognizer: UILongPressGestureRecognizer){
+        if longPressGestureRecognizer.state == UIGestureRecognizer.State.began {
             let actionController = UIAlertController(title: "", message: "警告", preferredStyle: .actionSheet)
             let location = longPressGestureRecognizer.location(in: self.eventImage)
             let nIndexPath = self.eventImage.indexPathForItem(at: location)
@@ -649,8 +648,8 @@ extension EventReportSBViewController: UIImagePickerControllerDelegate, UINaviga
         self.navigationController?.present(actionController, animated: true, completion: nil)
     }
     
-    internal func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+    internal func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let image = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
         imageArray.removeLastObject()
         imageArray.add(image)
         if imageArray.count < maxImageCount {
