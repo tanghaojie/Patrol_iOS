@@ -650,7 +650,7 @@ extension TaskSBViewController: UITableViewDataSource , UITableViewDelegate{
     }
     
     func setSelection(taskTypeCode : String){
-        let index = loginInfo?.config?.taskType.index(where: { (iTType) -> Bool in
+        let index = loginInfo?.config?.taskType.firstIndex(where: { (iTType) -> Bool in
             return iTType.code == taskTypeCode
         })
         if let iindex = index{
@@ -659,7 +659,7 @@ extension TaskSBViewController: UITableViewDataSource , UITableViewDelegate{
     }
     
     func setSelection(taskLineCode : String){
-        let index = loginInfo?.config?.taskLine.index(where: { (iTType) -> Bool in
+        let index = loginInfo?.config?.taskLine.firstIndex(where: { (iTType) -> Bool in
             return iTType.code == taskLineCode
         })
         if let iindex = index{

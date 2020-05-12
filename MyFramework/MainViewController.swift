@@ -36,8 +36,8 @@ class MainViewController: UIViewController, AGSMapViewLayerDelegate {
         timer10s = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(timer10Fire), userInfo: nil, repeats: true)
         timer1s = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timer1Fire), userInfo: nil, repeats: true)
         
-        //JTLocationManager.instance.startUpdatingLocation()
-        //JTLocationManager.instance.startUpdatingHeading()
+        JTLocationManager.instance.startUpdatingLocation()
+        JTLocationManager.instance.startUpdatingHeading()
     }
     
     deinit {

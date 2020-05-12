@@ -61,7 +61,6 @@ class EventDetailViewController: UIViewController, JTViewControllerInteractiveTr
         
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        
         self.tableView.mj_header!.beginRefreshing()
     }
     

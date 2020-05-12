@@ -15,6 +15,7 @@ class JTLocationManager: CLLocationManager {
     private override init(){
         super.init()
         self.requestAlwaysAuthorization()
+        self.requestWhenInUseAuthorization()
         self.desiredAccuracy = kCLLocationAccuracyBestForNavigation
     
         self.pausesLocationUpdatesAutomatically = false

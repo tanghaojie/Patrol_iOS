@@ -504,7 +504,7 @@ extension EventReportSBViewController: UITableViewDataSource , UITableViewDelega
     }
     
     fileprivate func setEventTypeSelection(eventTypeCode : String){
-        let index = loginInfo?.config?.eventType.index(where: { (iTType) -> Bool in
+        let index = loginInfo?.config?.eventType.firstIndex(where: { (iTType) -> Bool in
             return iTType.code == eventTypeCode
         })
         if let iindex = index{
@@ -513,7 +513,7 @@ extension EventReportSBViewController: UITableViewDataSource , UITableViewDelega
     }
     
     fileprivate func setEventLevelSelection(eventLevelCode : String){
-        let index = loginInfo?.config?.eventLevel.index(where: { (iTType) -> Bool in
+        let index = loginInfo?.config?.eventLevel.firstIndex(where: { (iTType) -> Bool in
             return iTType.code == eventLevelCode
         })
         if let iindex = index{

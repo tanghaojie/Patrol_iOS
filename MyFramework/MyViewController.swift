@@ -304,15 +304,17 @@ extension MyViewController: UITableViewDelegate, UITableViewDataSource {
             urlRequest.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
 
             var response : URLResponse?
-            let data = (try? NSURLConnection.sendSynchronousRequest(urlRequest, returning: &response))!
+            let ndata = try? NSURLConnection.sendSynchronousRequest(urlRequest, returning: &response)
             guard let _ = response else {
                 AlertWithNoButton(view: self, title: "退出失败，请重试", message: nil, preferredStyle: .alert, showTime: 1)
                 return
             }
-            if data == nil || data.isEmpty {
+            if ndata == nil || ndata?.isEmpty ?? true {
                 AlertWithNoButton(view: self, title: "退出失败，请重试", message: nil, preferredStyle: .alert, showTime: 1)
                 return
             }
+            
+            let data = ndata!
             
             let json = (try? JSON(data : data))!
             let nStatus = json["status"].int
